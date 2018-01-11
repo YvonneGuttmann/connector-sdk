@@ -1,0 +1,30 @@
+{
+  "name": "connectors",
+  "version": "1.0.1",
+  "outpost": ">=1.5.0",
+  "submodules": [
+    "logstash@1.4.5"
+  ],
+  "scripts": {
+    "install": "install.js",
+    "configure": "configure.js",
+    "start": "start.js",
+    "stop": "stop.js"
+  },
+  "schema": {
+    "configure": {
+      "accessToken": {"type": "string", "title": "Access Token", "required": true},
+      "connectorName": {"type": "string", "title": "Connector Name", "required": true},
+      "connectorPoolSize": {"type": "number", "title": "Connector Pool Size", "default": 10, "minimum": 1, "maximum": 50, "required": true},
+      "relayUrl": {"type": "string", "title": "Relay Url", "default": "https://relaybus.capriza.com", "required": true},
+      "apiUrl": {"type": "string", "title": "API Url", "default": "https://api.capriza.com", "required": true},
+      "napiUrl": {"type": "string", "title": "NAPI Url", "default": "https://napi.capriza.com", "required": true},
+      "ecEnvPrivateKey": {"type": "string", "title": "Environment EC Private Key File", "default": "${outpost.opconfig.root}/share/runtime/security/rtenv.key", "required": true},
+      "rsaEnvPrivateKey": {"type": "string", "title": "Environment RSA Private Key File", "default": "${outpost.opconfig.root}/share/runtime/security/private.pem", "required": true},
+      "shipLogs": {"type": "boolean", "title": "Ship Logs to Capriza?", "default": true, "required": true},
+      "shipLogsOutput": {"type": "string", "title": "Ship Logs Output", "default": "ws://fortitude.capriza.com:443?ssl=true&serializer=json_logstash&path=/logs/ws/", "required": true},
+      "shipLogsExtraFields": {"type": "string", "title": "Ship Logs Extra Fields (key1=val1,key2=val2...)", "default": "environment=customers", "required": false},
+      "resourcesPath": {"type": "string", "title": "Resources Path", "required": false}
+    }
+  }
+}

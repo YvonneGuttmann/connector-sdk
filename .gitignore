@@ -1,0 +1,9 @@
+.idea
+.vscode
+node_modules/
+config.json
+build/
+npm-debug.log
+**resources.json
+**dev_rfc.trc
+log/

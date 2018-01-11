@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+    <style>
+        .center{
+            text-align:center;
+        }
+        #approvalList {
+            width: 100%;
+        }
+        #approvalList > table {
+            text-align: center;
+            height: 70%;
+            font-family: monospace;
+            border: 1px solid grey;
+            table-layout: fixed;
+            margin: 30px;
+        }
+        #approvalList table{
+            border-spacing: 0;
+            table-layout: fixed;
+        }
+        #approvalList > table td {
+            border-bottom: 1px solid grey;
+            border-top: 1px solid grey;
+            padding: 5px;
+            border-spacing: 0;
+            width: 1000px;
+        }
+        #approvalList > table col:nth-child(2n + 1) {
+            background-color: rgb(230,230,230);
+        }
+        #approvalList > table td td {
+            border: 0;
+        }
+        #approvalList > table td th {
+            border-bottom: 1px solid grey;
+        }
+        #log {
+            height: 20%;
+            position:fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgb(50,50,50);
+            color: white;
+            overflow: auto;
+            font-family: monospace;
+        }
+        #log p {
+            margin: 2px;
+        }
+        button {
+            padding: 10px;
+        }
+        #status {
+            font-family: monospace;
+            background-color: lightgoldenrodyellow;
+        }
+        #status.ok {
+            background-color: lightseagreen;
+        }
+        #status img {
+            height: 100px;
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="center">
+        Business Logic Test
+    </h1>
+    <button id="fetch" onclick="fetchData()">fetch</button>
+    <br>
+    <div id="status"></div>
+    <div id="approvalList"><table></table></div>
+    <div id="log"></div>
+    <br><br><br><br>
+    <br><br><br><br>
+    <br><br><br><br>
+
+</body>
+<script>
+    var url = location.href;
+    var data;
+    var okImage = "data:image/png;base64,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";
+    var copyImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAVoHAAFaBwEqucq/AAAAB3RJTUUH4QscBxQ4fzDC/wAAAmZJREFUOMu1lDtoFVEQhr85u/cRb0IUY8A3YhIwUbSzMJUWolhahBRaRWOh2IiFjZWFNhFERAsRG7GwVEuLKCgIvhIhPkGsYhFJuI/s7vktNsndvSba6JSzc775559h4R+HtSa6z4piDMBaYNtyNYAJZjE+IOLv15olYWtlRwMCEUSOU4mBjNkWqAALPQcCcX+uwN2+UTF1w/LAnSMCAxdhiaNU8JSBMeDHxM0mb+CECD0WO9YLjlQiJmW83DUi3t6yFLjvuHANXOw46mEHEHijS0Zsyk9QTKCcoMjx3ole4HToGZVRX1JYTABYHYi9847bMmpO1BqOn+vqtB8c1palsWspODYe10OeFTwngXbIAFelS3BArUN8rkQgw8+UUODZAAwBQVZpAA/KCe+aLTJLqUQ5wzu9ccyga02di94Q4FfY9m+RVbh4DwKQsRUoWJQC05Wx6KgZSMVMZgWFi8cZC6QqdAyTKFVpzc/IPMnMdQg3/gW48FgmmPuG7++hT54LQCnX1Ph6/zUTA93LAZsjC9GJsVsQu05cb51PSrgKFLLHLePNpm5c5m3Gw/zIBYMIqFZWETy9xMdz43a+1fwrg6KnjzaiZYCZLuaNacELJwZNaKXd5pSpFdjsYsCshzsOtoee3kBM39ujHFbgrY4TtM0HtCk9q5W3XPQ0qiFPnDgEJC1a2kwMyHgFqJTwPDZmXM7DFmMBhl7ZI+BRNvewXwBdwFngcmLUgoW7PTyZ+duUU2A1EGEgzgD18R5lDzmNeRB0JEY9CmiUPdo/lTd5SWHsqJoYAzbzhzCQE18KnqSU8P/jFze4+PQrtTcQAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE3LTExLTI4VDA3OjIwOjU2LTA1OjAw5aJC8QAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNy0xMS0yOFQwNzoyMDo1Ni0wNTowMJT/+k0AAAAZdEVYdFNvZnR3YXJlAHd3dy5pbmtzY2FwZS5vcmeb7jwaAAAAAElFTkSuQmCC"
+
+    function fetchData(){
+        fetch (url + "fetchData")
+            .then (res => res.text())
+            .then (res => {
+                res = JSON.parse(res);
+                data = res.data;
+                createData ();
+                if (res.validationResult && res.validationResult.errors && res.validationResult.errors.length > 0){
+                    createValidationTable (res.validationResult.errors);
+                }
+                else {
+                    document.querySelector ("#status").innerHTML = `<p><img src=${okImage}></p><p>Schema Validation Passed!!!</p>`;
+                }
+
+            });
+    }
+
+    function getApproval(approvalId){
+        var approval = data.find(app => app.private.id == approvalId);
+        fetch (url + "getApproval",
+            {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'text/plain'
+                },
+                body: JSON.stringify(approval)
+            })
+            .then (res => res.text())
+            .then (res => {
+                //createTable(res)
+                if (res == JSON.stringify(approval)){
+                    document.querySelector ("#status").innerHTML = "getApproval result is OK!"
+                }
+                else {
+                    document.querySelector ("#status").innerHTML = "Error in getApproval, or not identical to approval record: \n" + res;
+                }
+            });
+    }
+
+    function approve(id){
+        var approval = data.find(app => app.private.id == id);
+        var username = prompt("Enter username: ");
+        var password = prompt("Enter password: ");
+        fetch (url + "approve",
+            {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'text/plain'
+                },
+                body: JSON.stringify({approval, credentials: {username, password}})
+            })
+            .then (res => res.text())
+            .then (res => document.querySelector("#status").innerHTML = `<p>${res}</p>`);
+    }
+    function reject(id){
+        var approval = data.find(app => app.private.id == id);
+        var rejectionReason = prompt("Enter rejection reason: ");
+        var username = prompt("Enter username: ");
+        var password = prompt("Enter password: ");
+        fetch (url + "reject",
+            {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'text/plain'
+                },
+                body: JSON.stringify({approval, credentials: {username, password}, rejectionReason})
+            })
+            .then (res => res.text())
+            .then (res => document.querySelector("#status").innerHTML = `<p>${res}</p>`);
+    }
+
+    function downloadAttachment(attachmentId){
+
+        var approval = data.find (approval => {
+
+            if (approval.private.attachmentIds) {
+                return approval.private.attachmentIds.indexOf(attachmentId) != -1 ;
+            }
+
+        });
+        fetch (url + "downloadAttachment",
+            {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'text/plain'
+                },
+                body: JSON.stringify({approval, attachmentId: decodeURI(attachmentId)})
+            })
+            .then (res => res.text())
+            .then (res => {
+                var res = JSON.parse(res);
+                var arr = Object.keys (res.data).map (key => res.data[key]);
+                var dataAsUint = Uint8Array.from(arr);
+                var blob = new Blob([dataAsUint], {type: "octet/stream"});
+                var url = window.URL.createObjectURL(blob);
+                var anchor = document.createElement('a');
+                document.body.appendChild(anchor);
+                anchor.href = url;
+                anchor.download = attachmentId;
+                anchor.click();
+//                document.body.removeChild(anchor);
+                //document.querySelector("#status").innerHTML = `<p>${res}</p>`
+            });
+    }
+
+    function createData(){
+        createTable(data, document.querySelector("#approvalList table"), true);
+    }
+
+    function createValidationTable (tableData){
+        var table = document.createElement ("table");
+        createTable (tableData, table);
+        document.querySelector ("#status").innerHTML = table.outerHTML;
+    }
+
+    function createTable(res, table, addActions, tableName){
+        var innerTable = "";
+        res = typeof res == "string" ? JSON.parse(res) : res;
+        res = Array.isArray(res) ? res : [res];
+        res.forEach ((approval, index) => {
+            if (index == 0){ //build headers
+                if (addActions || tableName == "attachments") innerTable += "<col><tr><th></th>";
+                Object.keys(approval).forEach (fieldKey => {
+                    innerTable = "<col>" + innerTable;
+                    innerTable += `<th>${fieldKey}</th>`;
+                });
+                innerTable += "</tr>";
+            }
+
+            if (addActions) innerTable += `<tr><td><button title="Copy JSON to clipboard" onclick=copyJSON('${approval.private.id}')><img src=${copyImage}></button><button onclick=getApproval('${approval.private.id}')>getApproval</button><button onclick=approve('${approval.private.id}')>Approve</button><button onclick=reject('${approval.private.id}')>Reject</button></td>`;
+            else if (tableName == "attachments") innerTable += `<tr><td><button onclick=downloadAttachment('${encodeURI(approval.id)}')>download</button></td>`
+            Object.keys(approval).forEach(fieldKey => {
+                if (!approval[fieldKey])
+                    innerTable += `<td></td>`;
+                else if (typeof approval[fieldKey] == "object" || typeof approval[fieldKey] == "array") {
+                    var cellTable = document.createElement("table");
+                    createTable(approval[fieldKey], cellTable, null, fieldKey);
+                    innerTable += `<td>${cellTable.outerHTML}</td>`;
+                }
+                else innerTable += `<td>${approval[fieldKey]}</td>`;
+            });
+
+            innerTable += "</tr>";
+        });
+
+        table.innerHTML = innerTable;
+    }
+
+    function getConsole(){
+        fetch (url + "getConsoleLog")
+            .then (res => res.text())
+            .then (res => {
+                var logs = JSON.parse(res);
+                var logsHTML = ""
+                logs.forEach(line => logsHTML += `<p>${line}</p>`);
+                var logsDiv = document.querySelector("#log");
+                logsDiv.innerHTML += logsHTML;
+                logsDiv.scrollTop = logsDiv.scrollHeight;
+            });
+    }
+
+    function copyJSON(approvalId){
+        var approval = data.find (item => item.private.id == approvalId);
+
+        var textArea = document.createElement("textarea");
+        textArea.style.position = 'fixed';
+        textArea.style.top = 0;
+        textArea.style.left = 0;
+        textArea.style.width = '2em';
+        textArea.style.height = '2em';
+        textArea.style.padding = 0;
+        textArea.style.border = 'none';
+        textArea.style.outline = 'none';
+        textArea.style.background = 'transparent';
+        textArea.value = JSON.stringify(approval);
+
+        document.body.appendChild(textArea);
+
+        textArea.select();
+
+        try {
+            var successful = document.execCommand('copy');
+            var msg = successful ? 'successful' : 'unsuccessful';
+            console.log('Copying text command was ' + msg);
+        } catch (err) {
+            console.log('Oops, unable to copy');
+        }
+
+        document.body.removeChild(textArea);
+    }
+    setInterval (getConsole, 3000);
+</script>
+</html>
