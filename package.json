@@ -1,7 +1,7 @@
 {
-  "name": "base-connector",
+  "name": "connector-controller",
   "version": "1.0.0",
-  "description": "Capriza connectors",
+  "description": "Capriza connectors controller",
   "main": "index.js",
   "directories": {
     "test": "test"
