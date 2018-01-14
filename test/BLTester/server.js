@@ -7,7 +7,9 @@ logger.log = logger.info;
 logger.level = 'trace';
 var jslt = require ("jslt");
 var argv = require('minimist')(process.argv.slice(2));
-var config = require (`../../../dev-configs/${argv.bl}.json`);
+var path = require ("path");
+var blName = process.cwd().substring(Math.max(process.cwd().lastIndexOf("/") + 1, process.cwd().lastIndexOf("\\") + 1));
+var config = require (path.resolve(`../dev-configs/${blName}.json`));
 var template = config.jslt;
 var jslt = new (require ("jslt"))(template);
 jslt.setTemplate(template);
@@ -26,7 +28,7 @@ process.on('uncaughtException', function(error) {
 
 const PORT=8080;
 
-fs.readFile('./index.html', function (err, html) {
+fs.readFile(`${path.resolve(__dirname)}/index.html`, function (err, html) {
 
     if (err) throw err;
 
