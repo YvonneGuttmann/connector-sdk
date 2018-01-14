@@ -8,8 +8,6 @@ export OUTPOST_DIR="node_modules/connector-controller/outpost"
 rm -rf build
 mkdir -p build/connector
 
-cd build
-
 cp -rf  ${OUTPOST_DIR}/module/* build/
 cp -f   ./build.sh build/
 cp -rf  ./package.json build/connector/
@@ -19,6 +17,7 @@ cp -rf  ./lib build/connector/
 cp -rf  ./resources build/connector/
 cp -rf  ./doc build/connector/
 
+cd build
 wget https://nodejs.org/dist/${NODE_VER}/${NODE_VER_NAME}.tar.gz
 tar xvzf ${NODE_VER_NAME}.tar.gz
 cp ${NODE_VER_NAME}/bin/node .
