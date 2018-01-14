@@ -4,7 +4,7 @@ var log = msg => console.log(`[Business-Logic-Tester] ${msg}`);
 
 //var blPath = `../../../business-logic/${argv.bl}`;
 //fse.copySync(`${blPath}/resources.json`, "../../resources.json");
-var bl = require (`${process.pwd}`);
+var bl = require (`${process.cwd()}`);
 
 //1. make sure the bl exposes methods: "fetch, getApproval, approve, reject"
 var unimplementedActions = ["fetch", "getApproval", "approve", "reject"].filter (action => !Object.keys(bl).includes(action));
