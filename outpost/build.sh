@@ -22,6 +22,9 @@ wget https://nodejs.org/dist/${NODE_VER}/${NODE_VER_NAME}.tar.gz
 tar xvzf ${NODE_VER_NAME}.tar.gz
 cp ${NODE_VER_NAME}/bin/node .
 
+./node ./${NODE_VER_NAME}/bin/npm install deepmerge@2.0.1
+./node jsonMerger.js ${OUTPOST_DIR}/module/module.json ../module.json module.json
+
 cd connector
 ../node ../${NODE_VER_NAME}/bin/npm install --production
 
