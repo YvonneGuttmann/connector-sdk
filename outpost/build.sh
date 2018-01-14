@@ -23,7 +23,7 @@ tar xvzf ${NODE_VER_NAME}.tar.gz
 cp ${NODE_VER_NAME}/bin/node .
 
 cd connector
-../${NODE_VER_NAME}/bin/npm install --production
+../node ../${NODE_VER_NAME}/bin/npm install --production
 
 if [ -f build.sh ]; then
     /bin/bash build.sh
