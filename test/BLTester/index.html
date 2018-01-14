@@ -162,15 +162,26 @@
             .then (res => document.querySelector("#status").innerHTML = `<p>${res}</p>`);
     }
 
+    function findApprovalByAttachment(attachmentId){
+        function findApprovalByAttachmentRecursive (obj){
+            if (Array.isArray(obj))
+                return (obj.find (subObj => findApprovalByAttachmentRecursive(subObj, attachmentId)));
+            if (typeof obj == "object"){
+                if ("mediaType" in obj && "id" in obj && obj.id == attachmentId)
+                    return true;
+                return Object.values(obj).find(subObj => findApprovalByAttachmentRecursive(subObj, attachmentId))
+            }
+        }
+
+        var approvalFound = data.find (findApprovalByAttachmentRecursive);
+
+        return approvalFound;
+    }
+
     function downloadAttachment(attachmentId){
 
-        var approval = data.find (approval => {
-
-            if (approval.private.attachmentIds) {
-                return approval.private.attachmentIds.indexOf(attachmentId) != -1 ;
-            }
-
-        });
+        var approval = findApprovalByAttachment(attachmentId);
+        if (!approval) alert("didn't find the approval of the attachment");
         fetch (url + "downloadAttachment",
             {
                 method: 'post',
@@ -224,8 +235,10 @@
             if (addActions) innerTable += `<tr><td><button title="Copy JSON to clipboard" onclick=copyJSON('${approval.private.id}')><img src=${copyImage}></button><button onclick=getApproval('${approval.private.id}')>getApproval</button><button onclick=approve('${approval.private.id}')>Approve</button><button onclick=reject('${approval.private.id}')>Reject</button></td>`;
             else if (tableName == "attachments") innerTable += `<tr><td><button onclick=downloadAttachment('${encodeURI(approval.id)}')>download</button></td>`
             Object.keys(approval).forEach(fieldKey => {
-                if (!approval[fieldKey])
-                    innerTable += `<td></td>`;
+                if (approval[fieldKey] === undefined)
+                    innerTable += `<td>undefined</td>`;
+                else if (approval[fieldKey] === null)
+                    innerTable += `<td>null</td>`;
                 else if (typeof approval[fieldKey] == "object" || typeof approval[fieldKey] == "array") {
                     var cellTable = document.createElement("table");
                     createTable(approval[fieldKey], cellTable, null, fieldKey);

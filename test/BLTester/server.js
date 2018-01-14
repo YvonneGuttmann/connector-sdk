@@ -50,7 +50,7 @@ fs.readFile('./index.html', function (err, html) {
                         for (i in data) {
                             var approval = data[i];
                             if (!approval.schemaId) {
-                                validationResult = {errors: [{error: `approval ${approval.private.id} has no schemaId`}]};
+                                validationResult = {errors: [{error: `approval ${approval.private.id} has no schemaId:\n${JSON.stringify()}`}]};
                                 break;
                             }
                             validationResult = validate(approval, approval.schemaId);

@@ -11,12 +11,6 @@ rm -rf node_modules
 mkdir -p build/connector
 
 cd build
-wget https://nodejs.org/dist/${NODE_VER}/${NODE_VER_NAME}.tar.gz
-tar xvzf ${NODE_VER_NAME}.tar.gz
-cp ${NODE_VER_NAME}/bin/node .
-
-cd ../
-echo pwd
 
 ./build/${NODE_VER_NAME}/bin/npm install --production
 
@@ -28,7 +22,12 @@ cp -rf  ./bin build/connector/
 cp -rf  ./lib build/connector/
 cp -rf  ./resources build/connector/
 cp -rf  ./doc build/connector/
-cp -rf  ./node_modules build/connector/
+
+wget https://nodejs.org/dist/${NODE_VER}/${NODE_VER_NAME}.tar.gz
+tar xvzf ${NODE_VER_NAME}.tar.gz
+cp ${NODE_VER_NAME}/bin/node .
+
+cd ../
 
 cd build
 rm -rf ${NODE_VER_NAME}*
