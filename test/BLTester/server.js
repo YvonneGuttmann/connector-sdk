@@ -55,14 +55,14 @@ fs.readFile(`${path.resolve(__dirname)}/index.html`, function (err, html) {
                                 validationResult = {errors: [{error: `approval ${approval.private.id} has no schemaId:\n${JSON.stringify()}`}]};
                                 break;
                             }
-                            validationResult = validate(approval, approval.schemaId);
+                            validationResult = validate(JSON.parse(JSON.stringify(approval)), approval.schemaId);
                             if (validationResult.errors.length > 0) break;
                         }
                         res.write(JSON.stringify({data, validationResult}));
                         return res.end();
                     })
                     .catch (err => {
-                        res.write(JSON.stringify(err));
+                        res.write(JSON.stringify({data: [], validationResult: {errors: [{error: err}]}}));
                         return res.end();
                     });
             }
