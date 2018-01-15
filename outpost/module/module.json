@@ -13,7 +13,7 @@
     "configure": {
       "_controller" : {
         "apiUrl": {"type": "string", "title": "API Url", "default": "https://approvalsdev.capriza.com/v1", "required": true},
-        "caprizaCreds": {"type": "string", "title": "Capriza Credentials File", "default": "/etc/capriza/creds", "required": true}
+        "creds": {"type": "string", "title": "Capriza Credentials File", "default": "/etc/capriza/creds.json", "required": true}
       }
     }
   }
