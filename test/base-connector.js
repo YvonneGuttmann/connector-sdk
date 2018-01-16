@@ -6,7 +6,7 @@ chai.use( require ("chai-as-promised") );
 
 var Logger = require ("../lib/log").Logger;
 var loggerFactory = new Logger("console");
-var logger = loggerFactory.create({component: "test/base-connector.js"});
+var logger = loggerFactory.create({component: "test/connector-controller"});
 var theConfig = {};
 mock('../lib/config', { getConfig() { return theConfig }});
 var Connector = require ("../lib/connector").Connector;
