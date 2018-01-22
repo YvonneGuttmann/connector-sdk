@@ -3,7 +3,7 @@ const util = require("util");
 try {
   var config = require("./config.json");
 } catch (e) {
-  return outpost.fail("rtgwconfig.json file does not exist");
+  return outpost.fail("config.json file does not exist");
 }
 
 outpost.script("logstash", null, function(err) {
