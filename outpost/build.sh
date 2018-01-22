@@ -26,11 +26,15 @@ cd connector
 ../node ../${NODE_VER_NAME}/bin/npm install --production
 cd ../
 
-./node ./connector/${OUTPOST_DIR}/jsonMerger.js ./connector/${OUTPOST_DIR}/module/module.json ../module.json module.json
+./node ./connector/${OUTPOST_DIR}/jsonMerger.js ./connector/${OUTPOST_DIR}/module/module.json ../package.json module.json
+
+rm -rf ${NODE_VER_NAME}*
+
+tar czvf connector.tar.gz .
 
 cd ../
-rm -rf ${NODE_VER_NAME}*
-cd ../
+
+
 
 
 
