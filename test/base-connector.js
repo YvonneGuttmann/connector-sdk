@@ -16,11 +16,8 @@ describe ("approve / reject", function (){
     beforeEach (function (){
         var newApproval = {private: {id: "approval1", approver: "approver1"}};
         connector = {
+            config: {},
             BL : {
-                schema: {
-                    id: "schema",
-                    version: "1.0.0"
-                },
                 getApproval(){
                     return newApproval;
                 },
@@ -35,8 +32,11 @@ describe ("approve / reject", function (){
             _addApprovalData(){
                 return Connector.prototype._addApprovalData.apply (this, arguments);
             },
-            _createApprovalSignature(){
-                return Connector.prototype._createApprovalSignature.apply (this, arguments);
+            _createApprovalFingerprints(){
+                return Connector.prototype._createApprovalFingerprints.apply (this, arguments);
+            },
+            _compareActionFingerPrints(){
+                return Connector.prototype._compareActionFingerPrints.apply (this, arguments);
             },
             async getApproval () {
                 return Connector.prototype.getApproval.apply (this, arguments);
@@ -48,15 +48,17 @@ describe ("approve / reject", function (){
                 return Connector.prototype.reject.apply (this, arguments);
             }
         }
+    })
+
+    it ("~1 should fail on bad validation (the approval has changed)", function (done){
+
         var backendApproval = {private: {id: "approval1", approver: "approver1", a: "a"}};
         connector._addApprovalData(backendApproval);
         backendApproval.id = "caprizaId1";
         connector.signatureList = [backendApproval];
-    })
 
-    it ("~1 should fail on bad validation (the approval has changed)", function (done){
-        connector.approve({approval: {id: "caprizaId1", private: {id: "approval1"}}}, {logger})
-            .then(() => done("approve should have failed due to signature mismatch"))
+        connector.approve({approval: {id: "caprizaId1", private: {id: "approval1"}, metaData: {fingerprints: {}}}}, {logger})
+            .then(() => done("approve should have failed due to fingerprint mismatch"))
             .catch (err => {
                 err.should.have.property ('details', "Approve failed for approval 'approval1'. approval doesn't match latest backend approval");
                 err.approvalSyncResult[0].should.be.an('object');
@@ -69,7 +71,7 @@ describe ("approve / reject", function (){
         var approval = {private: {id: "approval1", approver: "approver1"}};
         connector._addApprovalData(approval);
         approval.id = "caprizaId1";
-        connector.signatureList.push(approval);
+        connector.signatureList = [approval];
         connector.approve({approval}, {logger})
             .then (res => {
                 res.should.deep.include ({id: "caprizaId1",syncver:undefined, deleted: true});
@@ -78,47 +80,47 @@ describe ("approve / reject", function (){
     });
 });
 
-describe ("Signature Object", function (){
+describe ("Fingerprint Object", function (){
     it ("~1 return same hash if object is the same)", function (){
         var obj = {approval: {id: "caprizaId1", requester: "Roie Uziel", private: {id: "approval1"}}};
         var obj2 = {approval: {id: "caprizaId1", requester: "Roie Uziel", private: {id: "approval1"}}};
 
-        expect(connector._createApprovalSignature(obj)).to.equal(connector._createApprovalSignature(obj2));
+        expect(connector._createApprovalFingerprints(obj)).to.deep.equal(connector._createApprovalFingerprints(obj2));
     });
 
     it ("~2 return different hash if object changed)", function (){
         var obj = {approval: {id: "caprizaId1", requester: "Roie Uziel", private: {id: "approval1"}}};
-        var h1 = connector._createApprovalSignature(obj);
+        var h1 = connector._createApprovalFingerprints(obj);
         obj.approval.requester = "John Doe";
 
-        expect(h1).not.to.equal(connector._createApprovalSignature(obj));
+        expect(h1).not.to.equal(connector._createApprovalFingerprints(obj));
     });
 
-    describe ("When signatureTemplate is configured", function (){
+    describe ("When actionFingerprint is configured", function (){
 
         beforeEach (function (){
-            theConfig.signatureTemplate = {
-                "signatureTemplate":{
+            theConfig.actionFingerprint = {
+                "actionFingerprint":{
                     "id": "{{approval.id}}",
                 }
             };
         });
 
 
-        it ("~3 return same hash if object changed but signatureTemplate returned same object)", function (){
+        it ("~3 return same hash if object changed but actionFingerprint returned same object)", function (){
             var obj = {approval: {id: "caprizaId1", requester: "Roie Uziel", private: {id: "approval1"}}};
-            var h1 = connector._createApprovalSignature(obj);
+            var h1 = connector._createApprovalFingerprints(obj);
             obj.approval.requester = "John Doe";
 
-            expect(h1).to.equal(connector._createApprovalSignature(obj));
+            expect(h1.action).to.equal(connector._createApprovalFingerprints(obj).action);
         });
 
-        it ("~4 return different hash if object changed but signatureTemplate returned different object)", function (){
+        it ("~4 return different hash if object changed but actionFingerprint returned different object)", function (){
             var obj = {approval: {id: "caprizaId1", requester: "Roie Uziel", private: {id: "approval1"}}};
-            var h1 = connector._createApprovalSignature(obj);
+            var h1 = connector._createApprovalFingerprints(obj);
             obj.approval.id = "caprizaId2";
 
-            expect(h1).not.to.equal(connector._createApprovalSignature(obj));
+            expect(h1.action).not.to.equal(connector._createApprovalFingerprints(obj).action);
         });
     });
 
