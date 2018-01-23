@@ -57,7 +57,7 @@ describe ("approve / reject", function (){
         backendApproval.id = "caprizaId1";
         connector.signatureList = [backendApproval];
 
-        connector.approve({approval: {id: "caprizaId1", private: {id: "approval1"}, metaData: {fingerprints: {}}}}, {logger})
+        connector.approve({approval: {id: "caprizaId1", private: {id: "approval1"}, metadata: {fingerprints: {}}}}, {logger})
             .then(() => done("approve should have failed due to fingerprint mismatch"))
             .catch (err => {
                 err.should.have.property ('details', "Approve failed for approval 'approval1'. approval doesn't match latest backend approval");

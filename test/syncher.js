@@ -18,13 +18,13 @@ describe ("syncher", function (){
             {private: {id: "2"}, public: {attr1: "attr1", attr2: "attr2", attr3: [{id: "line1", line_attr1: "line_attr1"}, {id: "line2", line_attr1: "line_attr2"}]}},
             {private: {id: "3"}, public: {attr1: "attr1", attr2: "attr2", attr3: [{id: "line1", line_attr1: "line_attr1"}, {id: "line2", line_attr1: "line_attr2"}]}},
             {private: {id: "4"}, public: {attr1: "attr1", attr2: "attr2", attr3: [{id: "line1", line_attr1: "line_attr1"}, {id: "line2", line_attr1: "line_attr2"}]}}
-        ].map ((approval,index) => Object.assign(approval, {metaData: {fingerprints : {sync: hash (approval)}}}, {id: (index + 1) + ""}));
+        ].map ((approval,index) => Object.assign(approval, {metadata: {fingerprints : {sync: hash (approval)}}}, {id: (index + 1) + ""}));
 
         var mockHashList = [
-            {id: "2", private: {id: "2"}, metaData: mockApprovals[1].metaData},
-            {id: "3", private: {id: "3"},metaData: mockApprovals[2].metaData},
-            {id: "4", private: {id: "4"},metaData: mockApprovals[2].metaData},
-            {id: "5", private: {id: "5"},metaData: mockApprovals[2].metaData}
+            {id: "2", private: {id: "2"}, metadata: mockApprovals[1].metadata},
+            {id: "3", private: {id: "3"},metadata: mockApprovals[2].metadata},
+            {id: "4", private: {id: "4"},metadata: mockApprovals[2].metadata},
+            {id: "5", private: {id: "5"},metadata: mockApprovals[2].metadata}
         ]
 
         var expected = {
