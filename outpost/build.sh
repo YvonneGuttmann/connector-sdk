@@ -20,17 +20,17 @@ cp -rf  ./doc build/connector/
 cd build
 wget https://nodejs.org/dist/${NODE_VER}/${NODE_VER_NAME}.tar.gz
 tar xvzf ${NODE_VER_NAME}.tar.gz
-cp ${NODE_VER_NAME}/bin/node .
+cp ${NODE_VER_NAME}/bin/node ./connector
 
 cd connector
-../node ../${NODE_VER_NAME}/bin/npm install --production
+./node ../${NODE_VER_NAME}/bin/npm install --production
 cd ../
 
-./node ./connector/${OUTPOST_DIR}/jsonMerger.js ./connector/${OUTPOST_DIR}/module/module.json ../package.json module.json
+${NODE_VER_NAME}/bin/node ./connector/${OUTPOST_DIR}/jsonMerger.js ./connector/${OUTPOST_DIR}/module/module.json ../package.json module.json
 
 rm -rf ${NODE_VER_NAME}*
 
-tar czvf connector.tar.gz .
+tar --exclude='./connector.tar.gz' czvf connector.tar.gz .
 
 cd ../
 

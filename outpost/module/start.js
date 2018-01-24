@@ -10,7 +10,7 @@ name = `${name}@${version}`;
 
   outpost.log(`Starting connector ${name}`);
 
-  outpost.monitor({ name , cmd: "./node", args: ["connector/node_modules/connector-controller/start.js"] }, function(err) {
+  outpost.monitor({ name , cmd: "./node", cwd: "connector", args: ["node_modules/connector-controller/start.js"] }, function(err) {
     if (err) {
       outpost.fail(name + " failed to start: " + err);
     } else {
