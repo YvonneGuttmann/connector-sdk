@@ -1,25 +1,21 @@
 const util = require("util");
+var {name, version} = require ("./module.json");
 
-try {
-  var config = require("./config.json");
-} catch (e) {
-  return outpost.fail("config.json file does not exist");
-}
+name = `${name}@${version}`;
+// outpost.script("logstash", null, function(err) {
+//   if (err) {
+//     outpost.fail("failed to start logstash: " + err);
+//     return;
+//   }
 
-outpost.script("logstash", null, function(err) {
-  if (err) {
-    outpost.fail("failed to start logstash: " + err);
-    return;
-  }
+  outpost.log(`Starting connector ${name}`);
 
-  outpost.log(`Starting connector ${config.connectorName}`);
-
-  outpost.monitor({ name: config.connectorName, cmd: "./node", args: ["index.js"] }, function(err) {
+  outpost.monitor({ name , cmd: "./node", args: ["connector/node_modules/connector-controller/start.js"] }, function(err) {
     if (err) {
-      outpost.fail(config.connectorName + " failed to start: " + err);
+      outpost.fail(name + " failed to start: " + err);
     } else {
-      outpost.log(config.connectorName + " started");
+      outpost.log(name + " started");
       outpost.done();
     }
   });
-});
+// });

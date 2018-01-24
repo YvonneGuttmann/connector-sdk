@@ -1,4 +1,11 @@
 const fs = require("fs");
-
-fs.writeFileSync("config.json", JSON.stringify(outpost.config, null, 2));
+var url = require ("url");
+var server = url.parse(outpost.opconfig.fortitude);
+var config = {
+    controllerConfig: {
+        apiUrl: server.href.replace(server.path, ""),
+        creds: outpost.config._controller.creds
+    }
+}
+fs.writeFileSync("config.json", JSON.stringify(config, null, 2));
 outpost.done();

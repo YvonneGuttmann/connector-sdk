@@ -4,7 +4,6 @@ var exitHook = require('async-exit-hook');
 var ComManager = require ("./lib/com.js").ComManager;
 var Connector = require ("./lib/connector.js").Connector;
 var Logger = require ("./lib/log").Logger;
-var Configuration = require('./lib/config');
 
 //logger
 var loggerFactory;
@@ -43,6 +42,6 @@ function callLoop(timeout = 0){
 }
 
 //4. bootstrap connector
-com.start().then(()=>connector.init({ Configuration: Configuration, logger: logger, com: com })).then(callLoop).catch(err=>logger.error(`Could not start connector \n ${err.stack}`));
+com.start().then(callLoop).catch(err=>logger.error(`Could not start connector \n ${err.stack}`));
 
 
