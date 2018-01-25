@@ -11,14 +11,14 @@
   },
   "author": "Doron Oded",
   "dependencies": {
-    "async-exit-hook": "^2.0.1",
-    "axios": "^0.17.1",
+    "async-exit-hook": "2.0.1",
+    "axios": "0.17.1",
     "jslt": "git+https://git@github.com/capriza/jslt.git",
-    "logrotator": "^1.1.0",
-    "minimist": "^1.2.0",
-    "object-hash": "^1.2.0",
-    "path": "^0.12.7",
-    "pino": "^4.10.2"
+    "logrotator": "1.1.0",
+    "minimist": "1.2.0",
+    "object-hash": "1.2.0",
+    "path": "0.12.7",
+    "pino": "4.10.2"
   },
   "devDependencies": {
     "capriza-schema": "git+ssh://git@git.assembla.com:caprizaportfolio/capriza-ng.7.git",

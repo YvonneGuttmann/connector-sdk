@@ -1,7 +1,6 @@
 {
   "outpost": ">=1.5.0",
   "submodules": [
-    "logstash@1.4.5"
   ],
   "scripts": {
     "install": "install.js",
@@ -11,9 +10,8 @@
   },
   "schema": {
     "configure": {
-      "_controller" : {
-        "apiUrl": {"type": "string", "title": "API Url", "default": "https://approvalsdev.capriza.com/v1", "required": true},
-        "caprizaCreds": {"type": "string", "title": "Capriza Credentials File", "default": "/etc/capriza/creds", "required": true}
+      "controllerConfig" : {
+        "creds": {"type": "string", "title": "Capriza Credentials File", "default": "/etc/capriza/creds.json", "required": true}
       }
     }
   }
