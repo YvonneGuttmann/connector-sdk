@@ -10,7 +10,7 @@ var argv = require('minimist')(process.argv.slice(2));
 var path = require ("path");
 var blName = process.cwd().substring(Math.max(process.cwd().lastIndexOf("/") + 1, process.cwd().lastIndexOf("\\") + 1));
 var config = require (path.resolve(`../dev-configs/${blName}.json`));
-var template = config.schemaTransformer;
+var template = config.controllerConfig.schemaTransformer;
 var jslt = new (require ("jslt"))(template);
 jslt.setTemplate(template);
 var old_write = process.stdout.write;
