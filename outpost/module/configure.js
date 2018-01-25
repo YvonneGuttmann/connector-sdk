@@ -4,8 +4,8 @@ var server = url.parse(outpost.opconfig.fortitude);
 var config = {
     controllerConfig: {
         apiUrl: server.href.replace(server.path, ""),
-        creds: outpost.config._controller.creds
+        creds: outpost.config.controllerConfig.creds
     }
 }
-fs.writeFileSync("config.json", JSON.stringify(config, null, 2));
+fs.writeFileSync("connector/config.json", JSON.stringify(config, null, 2));
 outpost.done();
