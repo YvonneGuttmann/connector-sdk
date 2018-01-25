@@ -187,6 +187,6 @@ module.exports = {
     },
 
     async initBL(){
-        await bl.init({config.blConfig, logger});
+        await bl.init({config: config.blConfig, logger});
     }
 };
