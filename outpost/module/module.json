@@ -10,7 +10,7 @@
   },
   "schema": {
     "configure": {
-      "connectorController" : {
+      "controllerConfig" : {
         "creds": {"type": "string", "title": "Capriza Credentials File", "default": "/etc/capriza/creds.json", "required": true}
       }
     }

@@ -30,7 +30,7 @@ ${NODE_VER_NAME}/bin/node ./connector/${OUTPOST_DIR}/jsonMerger.js ./connector/$
 
 rm -rf ${NODE_VER_NAME}*
 
-tar --exclude='./connector.tar.gz' czvf connector.tar.gz .
+tar --exclude='./connector.tar.gz' -czvf connector.tar.gz .
 
 cd ../
 
