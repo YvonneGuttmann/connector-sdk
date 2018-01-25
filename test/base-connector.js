@@ -99,10 +99,10 @@ describe ("Fingerprint Object", function (){
     describe ("When actionFingerprint is configured", function (){
 
         beforeEach (function (){
-            theConfig.actionFingerprint = {
-                "actionFingerprint":{
-                    "id": "{{approval.id}}",
-                }
+            connector.config = {
+                    "actionFingerprint": {
+                        "id": "{{approval.id}}"
+                    }
             };
         });
 
