@@ -9,7 +9,7 @@ var jslt = require ("jslt");
 var argv = require('minimist')(process.argv.slice(2));
 var path = require ("path");
 var blName = process.cwd().substring(Math.max(process.cwd().lastIndexOf("/") + 1, process.cwd().lastIndexOf("\\") + 1));
-var config = require (path.resolve(`../dev-configs/${blName}.json`));
+var config = require ("../../lib/config").getConfiguration({logger});
 var template = config.controllerConfig.schemaTransformer;
 var jslt = new (require ("jslt"))(template);
 jslt.setTemplate(template);
