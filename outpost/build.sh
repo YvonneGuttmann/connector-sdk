@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PLATFORM=`node -e "console.log(require('os').platform())"`
-export NODE_VER="v8.9.1"
+export NODE_VER="v8.9.4"
 export NODE_VER_NAME="node-${NODE_VER}-${PLATFORM}-x64"
 export OUTPOST_DIR="node_modules/connector-controller/outpost"
 
@@ -29,8 +29,6 @@ cd ../
 ${NODE_VER_NAME}/bin/node ./connector/${OUTPOST_DIR}/jsonMerger.js ./connector/${OUTPOST_DIR}/module/module.json ../package.json module.json
 
 rm -rf ${NODE_VER_NAME}*
-
-tar --exclude='./connector.tar.gz' -czvf connector.tar.gz .
 
 cd ../
 
