@@ -148,7 +148,12 @@ fs.readFile(`${path.resolve(__dirname)}/index.html`, function (err, html) {
             if ("authenticate" in bl){
                 return bl.authenticate(JSON.parse(req.body), {logger})
                     .then(data => {
-                        res.write(`Success`);
+                        if(data){
+                            res.write(`Success`);
+                        }
+                        else {
+                            res.write(`Failed`);
+                        }
                         return res.end();
                     })
                     .catch (err => {
