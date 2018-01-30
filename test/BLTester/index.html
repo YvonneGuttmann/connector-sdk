@@ -73,6 +73,7 @@
         Business Logic Test
     </h1>
     <button id="fetch" onclick="fetchData()">fetch</button>
+    <button id="authenticate" onclick="authenticate()">authenticate</button>
     <br>
     <div id="status"></div>
     <div id="approvalList"><table></table></div>
@@ -157,6 +158,22 @@
                     'Content-Type': 'text/plain'
                 },
                 body: JSON.stringify({approval, credentials: {username, password}, rejectionReason})
+            })
+            .then (res => res.text())
+            .then (res => document.querySelector("#status").innerHTML = `<p>${res}</p>`);
+    }
+
+    function authenticate(){
+        var username = prompt("Enter username: ");
+        var password = prompt("Enter password: ");
+        fetch (url + "authenticate",
+            {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'text/plain'
+                },
+                body: JSON.stringify({credentials: {username, password}})
             })
             .then (res => res.text())
             .then (res => document.querySelector("#status").innerHTML = `<p>${res}</p>`);

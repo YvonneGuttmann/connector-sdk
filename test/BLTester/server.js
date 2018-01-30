@@ -142,7 +142,23 @@ fs.readFile(`${path.resolve(__dirname)}/index.html`, function (err, html) {
             res.write(JSON.stringify(consoleCacher.slice(consoleCacherSentIndex)));
             consoleCacherSentIndex = consoleCacher.length ? consoleCacher.length : consoleCacher.length - 1;
             res.end();
-        }
+        },
+        "/authenticate": function (req, res){
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            if ("authenticate" in bl){
+                return bl.authenticate(JSON.parse(req.body), {logger})
+                    .then(data => {
+                        res.write(`Success`);
+                        return res.end();
+                    })
+                    .catch (err => {
+                        res.write(`Error - ${err.message}`);
+                        return res.end();
+                    });
+            }
+            res.write("authenticate() function is unimplemented");
+            res.end();
+        },
     }
 
     function getBody(req, res) {
