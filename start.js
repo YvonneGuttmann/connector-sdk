@@ -30,18 +30,7 @@ exitHook(callback => {
     com.stop().catch().then(connector.stop.bind(connector)).then(()=>logger.info(`Bye bye`)).then(()=>process.exit());
 });
 
-var loopTimer;
-function callLoop(timeout = 0){
-    if (loopTimer) return;
-
-    loopTimer = setTimeout(async ()=>{
-        await com.pollForTask();
-        loopTimer = null;
-        callLoop();
-    }, timeout)
-}
-
 //4. bootstrap connector
-com.start().then(callLoop).catch(err=>logger.error(`Could not start connector \n ${err.stack}`));
-
-
+com.start()
+	.then(() => com.pollForTask())
+	.catch(err=>logger.error(`Could not start connector ${err.message}`));
