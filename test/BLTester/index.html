@@ -173,7 +173,7 @@
                     'Accept': 'application/json, text/plain, */*',
                     'Content-Type': 'text/plain'
                 },
-                body: JSON.stringify({credentials: {username, password}})
+                body: JSON.stringify({username, password})
             })
             .then (res => res.text())
             .then (res => document.querySelector("#status").innerHTML = `<p>${res}</p>`);
