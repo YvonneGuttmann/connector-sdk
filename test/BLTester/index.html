@@ -180,11 +180,12 @@
     }
 
     function findApprovalByAttachment(attachmentId){
+        attachmentId = decodeURIComponent(attachmentId);
         function findApprovalByAttachmentRecursive (obj){
             if (Array.isArray(obj))
                 return (obj.find (subObj => findApprovalByAttachmentRecursive(subObj, attachmentId)));
             if (typeof obj == "object"){
-                if ("mediaType" in obj && "id" in obj && obj.id == attachmentId)
+                if ("mediaType" in obj && "id" in obj && obj.id == attachmentId )
                     return true;
                 return Object.values(obj).find(subObj => findApprovalByAttachmentRecursive(subObj, attachmentId))
             }
