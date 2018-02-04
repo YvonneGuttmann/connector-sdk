@@ -1,6 +1,6 @@
 {
   "name": "connector-controller",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Capriza connectors controller",
   "main": "index.js",
   "directories": {
@@ -17,6 +17,7 @@
     "jslt": "git+https://git@github.com/capriza/jslt.git",
     "logrotator": "1.1.0",
     "minimist": "1.2.0",
+    "mustache": "2.3.0",
     "object-hash": "1.2.0",
     "path": "0.12.7",
     "pino": "4.10.2"

@@ -1,7 +1,7 @@
 {
-  "outpost": ">=1.5.0",
-  "submodules": [
-  ],
+  "name": "{{name}}",
+  "version": "{{version}}",
+  "outpost": ">=3.0.0",
   "scripts": {
     "install": "install.js",
     "configure": "configure.js",
@@ -10,6 +10,25 @@
   },
   "schema": {
     "configure": {
+      "caprizaConfig": {"type": "string", "title": "Capriza Configuration File", "required": true, "default": "/etc/capriza/{{name}}/caprizaConfig.json"},
+      "systemConfig": {"type": "string", "title": "System Configuration File", "required": true, "default": "/etc/capriza/{{name}}/systemConfig.json"},
+      "transformer": {"type": "string", "title": "Schema Transformer", "required": false, "default": "{{transformer}}"},
+      "fingerprint": {"type": "string", "title": "Action Fingerprint", "required": false, "default": "{{fingerprint}}"},
+      "blConfig": {"type": "string", "title": "Business Logic Configuration", "required": false, "default": "{{blConfig}}"}
     }
+  },
+  "form": {
+    "configure": [
+      { "type": "fieldset",
+        "expandable": false,
+        "items": [
+          "caprizaConfig",
+          "systemConfig",
+          {"key": "transformer", "type": "textarea"},
+          {"key": "fingerprint", "type": "textarea"},
+          {"key": "blConfig", "type": "textarea"}
+        ]
+      }
+    ]
   }
 }
