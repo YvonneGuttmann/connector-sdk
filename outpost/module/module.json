@@ -10,7 +10,7 @@
   },
   "schema": {
     "configure": {
-      "caprizaConfig": {"type": "string", "title": "Capriza Configuration File", "required": true, "default": "/etc/capriza/{{name}}/caprizaConfig.json"},
+      "connectorId": {"type": "string", "title": "Connector ID", "required": true},
       "systemConfig": {"type": "string", "title": "System Configuration File", "required": true, "default": "/etc/capriza/{{name}}/systemConfig.json"},
       "transformer": {"type": "string", "title": "Schema Transformer", "required": false, "default": "{{transformer}}"},
       "fingerprint": {"type": "string", "title": "Action Fingerprint", "required": false, "default": "{{fingerprint}}"},
@@ -22,7 +22,7 @@
       { "type": "fieldset",
         "expandable": false,
         "items": [
-          "caprizaConfig",
+          "connectorId",
           "systemConfig",
           {"key": "transformer", "type": "textarea"},
           {"key": "fingerprint", "type": "textarea"},

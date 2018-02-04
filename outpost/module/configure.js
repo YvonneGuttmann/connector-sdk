@@ -5,8 +5,15 @@ let transformer = (outpost.config.transformer || "").trim();
 let fingerprint = (outpost.config.fingerprint || "").trim();
 let blConfig = (outpost.config.blConfig || "").trim();
 
+let [apiKey, apiSecret] = outpost.opconfig.auth.split(":");
 let config = {
-  caprizaConfig: outpost.config.caprizaConfig,
+  caprizaConfig: {
+    connectorId: outpost.config.connectorId,
+    creds: {
+      apiKey: apiKey,
+      apiSecret: apiSecret
+    }
+  },
   systemConfig: outpost.config.systemConfig,
   controllerConfig: {
     schemaTransformer: transformer ? JSON.parse(transformer) : vanilla.controllerConfig.schemaTransformer,
