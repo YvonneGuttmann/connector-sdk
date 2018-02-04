@@ -1,4 +1,5 @@
 const util = require("util");
+const fs = require ("fs");
 var {name, version} = require ("./module.json");
 
 name = `${name}@${version}`;
@@ -9,6 +10,31 @@ name = `${name}@${version}`;
 //   }
 
   outpost.log(`Starting connector ${name}`);
+
+  try {
+    var prefix = "./connector/node_modules/.bin/.prestart";
+    var files = fs.readdirSync(prefix);
+    var origLogger = outpost.log;
+    files.forEach (file => {
+      try {
+          outpost.log = msg => origLogger(`[${file}] ${msg}`);
+          require(`${prefix}/${file}`);
+      }
+      catch (ex){
+          throw new Error (`Error running prestart script ${prefix}/${file}): ${ex.message}`);
+      }
+      finally {
+          outpost.log = origLogger;
+      }
+    });
+
+  }
+  catch (ex){
+    if (ex.code !== "ENOENT"){
+        outpost.fail (`Error running prestart scripts: ${ex.message}`);
+        return;
+    }
+  }
 
   outpost.monitor({ name , cmd: "./node", cwd: "connector", args: ["node_modules/connector-controller/start.js"] }, function(err) {
     if (err) {
