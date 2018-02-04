@@ -7,9 +7,9 @@ let moduleJsonTpl = fs.readFileSync(`module.json`, "utf8");
 let view = {
   name: packageJson.name,
   version: packageJson.version,
-  transformer: JSON.stringify(configJson.controllerConfig.schemaTransformer, null, 2).replace(/\n/g, "\\n"),
-  fingerprint: JSON.stringify(configJson.controllerConfig.actionFingerprint, null, 2).replace(/\n/g, "\\n"),
-  blConfig: JSON.stringify(configJson.blConfig, null, 2).replace(/\n/g, "\\n")
+  transformer: configJson.controllerConfig.schemaTransformer ? JSON.stringify(configJson.controllerConfig.schemaTransformer, null, 2).replace(/\n/g, "\\n") : undefined,
+  fingerprint: configJson.controllerConfig.actionFingerprint ? JSON.stringify(configJson.controllerConfig.actionFingerprint, null, 2).replace(/\n/g, "\\n") : undefined,
+  blConfig: configJson.blConfig ? JSON.stringify(configJson.blConfig, null, 2).replace(/\n/g, "\\n") : undefined
 }
 
 let moduleJson = mustache.render(moduleJsonTpl, view);
