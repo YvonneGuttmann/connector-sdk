@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-let vanilla = require("connector/resources/_vanilla.json");
+let vanilla = require("./connector/resources/_vanilla.json");
 let transformer = (outpost.config.transformer || "").trim();
 let fingerprint = (outpost.config.fingerprint || "").trim();
 let blConfig = (outpost.config.blConfig || "").trim();
