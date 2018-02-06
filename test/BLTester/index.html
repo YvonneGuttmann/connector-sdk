@@ -140,7 +140,7 @@
                     'Accept': 'application/json, text/plain, */*',
                     'Content-Type': 'text/plain'
                 },
-                body: JSON.stringify({approval, credentials: {volatile: {username, password}}})
+                body: JSON.stringify({approval, credentials: {username, password}})
             })
             .then (res => res.text())
             .then (res => document.querySelector("#status").innerHTML = `<p>${res}</p>`);
@@ -157,7 +157,7 @@
                     'Accept': 'application/json, text/plain, */*',
                     'Content-Type': 'text/plain'
                 },
-                body: JSON.stringify({approval, credentials: {volatile: {username, password}}, rejectionReason})
+                body: JSON.stringify({approval, credentials: {username, password}, rejectionReason})
             })
             .then (res => res.text())
             .then (res => document.querySelector("#status").innerHTML = `<p>${res}</p>`);
