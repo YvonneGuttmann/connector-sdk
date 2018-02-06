@@ -12,10 +12,6 @@ else loggerFactory = new Logger ("file");                  //in production write
 
 var logger = loggerFactory.create({component: "index.js"});
 
-process.on('uncaughtException', function(error) {
-    logger.error(error);
-});
-
 //1. create an instance of the connector according to the configuration
 logger.info ("Initiating connector instance");
 var connector = new Connector ();
@@ -24,11 +20,13 @@ var connector = new Connector ();
 logger.info ("Initiating com instance");
 var com = new ComManager(connector,{ logger });
 
-//3. On Exit hook
+//3. On Exit hook and exceptions:
 exitHook(callback => {
     logger.info(`Stopping connector...`);
     com.stop().catch().then(connector.stop.bind(connector)).then(()=>logger.info(`Bye bye`)).then(()=>process.exit());
 });
+exitHook.uncaughtExceptionHandler(err => logger.error (`Caught global exception: ${err.stack}`));
+exitHook.unhandledRejectionHandler(err => logger.error (`Caught global async rejection: ${err.stack}`));
 
 //4. bootstrap connector
 com.start()
