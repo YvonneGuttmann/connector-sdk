@@ -62,7 +62,7 @@ fs.readFile(`${path.resolve(__dirname)}/index.html`, function (err, html) {
                         return res.end();
                     })
                     .catch (err => {
-                        res.write(JSON.stringify({data: [], validationResult: {errors: [{error: err}]}}));
+                        res.write(JSON.stringify({data: [], validationResult: {errors: [{error: err ? err.stack || err : ""}]}}));
                         return res.end();
                     });
             }
