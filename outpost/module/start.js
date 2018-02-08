@@ -36,6 +36,8 @@ name = `${name}@${version}`;
     }
   }
 
+  process.env["CONTROLLER_TITLE"] = name;
+
   outpost.monitor({ name , cmd: "./node", cwd: "connector", args: ["node_modules/connector-controller/start.js"], env: process.env }, function(err) {
     if (err) {
       outpost.fail(name + " failed to start: " + err);

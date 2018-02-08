@@ -5,6 +5,8 @@ var ComManager = require ("./lib/com.js").ComManager;
 var Connector = require ("./lib/connector.js").Connector;
 var Logger = require ("./lib/log").Logger;
 
+if (process.env["CONTROLLER_TITLE"]) process.title = process.env["CONTROLLER_TITLE"];
+
 //logger
 var loggerFactory;
 if ("dev" in argv) loggerFactory = new Logger("console");  //in dev mode write log to console
