@@ -16,11 +16,12 @@ Drivers does not contain business logic, and does not depend on the connector us
 Drivers does not have a predefined API.
 
 ###Business Logic (BL) Connector
-A stateless object that contains the business logic of a one or more use-cases (e.g. expense approval, PO approval).
+A node module that exports an object that contains the business logic of a one or more use-cases (e.g. expense approval, PO approval).
 The *BL connector* may use one or more *Drivers*, to implement the use-case.
 The *BL Connector* should implement the following interface:
 
-* **init(options)** - Will be called by the controller connector when the process starts. Meant to allow initialization of the business logic if necessary.
+* **init(options)** - Will be called by the controller connector when the process starts. Meant to allow initialization of the business logic if necessary. The options parameter includes: {"config", "logger"} properties. 
+* **stop()** - Will be called before the connector is stopped.
 * **fetch(options)** - Connects to the source system, and fetches the data relevant for the use-case(s).
 * **getApproval(approval, options)** - Fetches a single **"PENDING"** approval record, given an already fetched approval (for validation comparison). The method should return only ***pending*** approvals, otherwise return null.
 * **approve(data, options)** - Performs the approve action in the source system given approval data and the approver credentials (if needed). the *data* input object is assumed to follow this structure {approval, credentials}
@@ -30,10 +31,28 @@ The *BL Connector* should implement the following interface:
 Important guidelines for the *BL Connector*:
 
 * **Logging** - All of the *BL connector* methods receives "options" parameter that contains ***logger*** property based on pino npm pacakge. 
-* **Stateless** - The *BL Connector* should be stateless. Meaning each function from the former list should create a session to the source system, perform the action and then close the session and release any memory that was used.
 * **Approval Id** - Both **fetch()** and **getApproval()** functions should return an id field of type string in the *private* section of the approval. This id should uniqly identify the approval in the source system, per approver (In case the same approval can be approved by several approvers, it should be reflected in the id of the approval). In case the "real" source system id of the approval comprises of several fields, these should be added to the private section of the approval (see [*Schema*](https://caprizaportfolio.assembla.com/spaces/capriza-ng/git-7/source))
 * **Approver** - Both **fetch()** and **getApproval()** functions should return an approver field of type string in the *private* section of the approval. The approver identifies the approver user of this approval. It should match the mapping of the source user id and the capriza user id.
 * **Approvals 'pending' status** - Both **fetch()** and **getApproval()** should return approvals with 'pending' status.
+
+####Module Structure:
+Connector should contain this minimum file structure:
+
+  
+    /index.js  
+    /package.json  
+    /lib  
+        /lib/connector.js  
+    /resources  
+        /resources/config.json 
+
+####Configuration
+The *BL connector* can (and should) use a configuration file (json). The *BL connector* is assumed to use 2 types of configurations:
+* **blConfig** - "Private" configuration of the connector (e.g. source system types, fields..). This configuration is saved on the cloud, and given to the controller at run-time.
+* **systemConfig** - Configuration that contains system/environment "sensitive" information (e.g. system url, integration user credentials..). This configuration should be placed manually on the connector's machine.
+     
+\* See "Deployment section for more configuration details. 
+    
 
 ###Connector Controller
 The *Connector Controller* is a generic wrapper for each connector that uses a single *BL Connector* to implement one or more use-cases in a specific system, and fulfill the *Backend* tasks:
@@ -49,11 +68,39 @@ The *Connector Controller* is a generic wrapper for each connector that uses a s
     * **sourceUserId** - Signature (hash) that represents the source system user (based on the "approver" field in the private section of the approval).
     * **signature** - An object with 2 hash results: (1) sync: the hash result (string) of the whole approval object; (2) action: the hash result (string) of the partial approval object that is "sensitive" to change for approve/reject actions (configured in the config using jslt template).
     * **deleted** - An optional flag that would mark an approval as deleted (relevant for sync).
-  
-    
-    Final approval structure (root level): 
-        {id, syncver, signature, sourceUserId, schemaId, public, private, [deleted]}
+
+
+   Final approval structure (root level):
+   
+    {id, syncver, signature, sourceUserId, schemaId, public, private, [deleted]}
+        
+####configuration
+The controller has its own configuration "controllerConfig", that includes 2 types of configurations: "controllerConfig", "caprizaConfig".
+* **controllerConfig** - Includes configuration for the controller:
+    * **JSLT template** - A library that enables transformations of JSON objects according to a *JSLT Template*. The controller uses JSLT to enable transformation of the JSON data exported by the *BL Connector* to a JSON object that is sent to the Capriza's
+                          backend allowing for complex operators (e.g 1:1 field mapping, aggregation functions, logic operators and more..).
+                          The JSL template is a part of the controller configuration.
+    * **maxConcurrentTasks** - A number that limits the number of concurrent tasks the connector would do at runtime. If the controller has reached its limit, it would stop pulling tasks, until a task is completed.
+
+* **caprizaConfig** - Contains the Capriza (backend) API keys, secret, and urls. This file is auto-generated on deployment using *Fortitude* (see below) for production deployment. For develpment purposes, this file should be manually created on the machine, and it's path should be mentioned in the config.json of the connector.
+Example:
+
+
+    {
+        "connectorId": "xxxx-xxxx-xxxx-xxxxxxx-xxxxx",
+        "apiUrl": "https://approvals.capriza.com",
+        "creds": {
+            "apiKey":       "<Environment API key>",
+            "apiSecret":    "<Environment API secret>"
+        }
+    }
+       
+
+\* See "Deployment section for more configuration details.
 
 ###COM component
 Handles the communication with the *Backend* server, Pulls tasks and delegates these to the *Connector Controller*.
+
+###Deployment
+Connector deployment is done using [outpost](https://www.npmjs.com/package/outpost). 
               
