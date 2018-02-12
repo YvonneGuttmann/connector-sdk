@@ -18,7 +18,7 @@ Drivers does not have a predefined API.
 ###Business Logic (BL) Connector
 A node module that exports an object that contains the business logic of a one or more use-cases (e.g. expense approval, PO approval).
 The *BL connector* may use one or more *Drivers*, to implement the use-case.
-The *BL Connector* should implement the following interface:
+The *BL connector* should implement the following interface:
 
 * **init(options)** - Will be called by the controller connector when the process starts. Meant to allow initialization of the business logic if necessary. The options parameter includes: {"config", "logger"} properties. 
 * **stop()** - Will be called before the connector is stopped.
@@ -27,6 +27,10 @@ The *BL Connector* should implement the following interface:
 * **approve(data, options)** - Performs the approve action in the source system given approval data and the approver credentials (if needed). the *data* input object is assumed to follow this structure {approval, credentials}
 * **reject(data, options)** - Performs the reject action in the source system given approval data, the approver credentials (if needed), and a rejection reason (as string). the *data* input object is assumed to follow this structure {approval, credentials, rejectionReason}.
 * **downloadAttachment(data, options)** - Downloads the attachment and returns a Uint8Array of binary data.
+
+The *BL connector* can expose settings for the controller under "settings" key in the exported object.   
+supported settings:  
+* **selfValidation** - If true, the controller wouldn't validate the approval (using getApproval()) before calling approve / reject. The validation should be performed by the BL itself.
 
 Important guidelines for the *BL Connector*:
 
