@@ -5,18 +5,18 @@ var ComManager = require ("./lib/com.js").ComManager;
 var Connector = require ("./lib/connector.js").Connector;
 var Logger = require ("./lib/log").Logger;
 
-
-if (process.env["CONTROLLER_TITLE"]) process.title = process.env["CONTROLLER_TITLE"] || path.basename(process.cwd());
+process.title = process.env["CONTROLLER_TITLE"] || path.basename(process.cwd());
 
 //logger
 var loggerFactory;
 if ("dev" in argv) loggerFactory = new Logger("console");  //in dev mode write log to console
 else loggerFactory = new Logger ("file");                  //in production write log to file
 
-var logger = loggerFactory.create({component: "index.js", module: "connector", name: `${process.title}`});
+var logger = loggerFactory.create({}).child({component: "index.js", module: "connectors", connector: process.title});
 
 //1. get configuration
 var config = require('./lib/config').getConfiguration({logger: logger.child({component: "config"})});
+logger = logger.child ({connectorId: config.controllerConfig.connectorId});
 
 //2. create an instance of the connector according to the configuration
 logger.info ("Initiating connector instance");
