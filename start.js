@@ -12,7 +12,7 @@ var loggerFactory;
 if ("dev" in argv) loggerFactory = new Logger("console");  //in dev mode write log to console
 else loggerFactory = new Logger ("file");                  //in production write log to file
 
-var logger = loggerFactory.create({}).child({component: "index.js", module: "connectors", connector: process.title});
+var logger = loggerFactory.create({}).child({component: "index.js", module: "connectors"});
 
 //1. get configuration
 var config = require('./lib/config').getConfiguration({logger: logger.child({component: "config"})});
