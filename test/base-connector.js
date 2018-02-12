@@ -18,6 +18,7 @@ describe ("approve / reject", function (){
         connector = {
             config: {},
             BL : {
+                settings: {},
                 getApproval(){
                     return newApproval;
                 },
@@ -37,6 +38,9 @@ describe ("approve / reject", function (){
             },
             _compareActionFingerPrints(){
                 return Connector.prototype._compareActionFingerPrints.apply (this, arguments);
+            },
+            async _performAction() {
+                return Connector.prototype._performAction.apply(this, arguments);
             },
             async getApproval () {
                 return Connector.prototype.getApproval.apply (this, arguments);
@@ -60,9 +64,7 @@ describe ("approve / reject", function (){
         connector.approve({approval: {id: "caprizaId1", private: {id: "approval1"}, metadata: {fingerprints: {}}}}, {logger})
             .then(() => done("approve should have failed due to fingerprint mismatch"))
             .catch (err => {
-                err.should.have.property ('details', "Approve failed for approval 'approval1'. approval doesn't match latest backend approval");
-                err.approvalSyncResult[0].should.be.an('object');
-                err.approvalSyncResult[0].should.have.property ('id',"caprizaId1");
+                err.should.have.property ('details', "Action failed! approval doesn't match latest backend approval");
                 done();
             });
     });
