@@ -26,6 +26,16 @@ process.on('uncaughtException', function(error) {
     logger.error(error);
 });
 
+process.on("SIGTERM", async() => {
+	await bl.stop();
+	process.exit();
+});
+
+process.on("SIGINT", async() => {
+	await bl.stop();
+	process.exit();
+});
+
 const PORT=8080;
 
 fs.readFile(`${path.resolve(__dirname)}/index.html`, function (err, html) {
