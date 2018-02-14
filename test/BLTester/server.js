@@ -26,11 +26,6 @@ process.on('uncaughtException', function(error) {
     logger.error(error);
 });
 
-process.on("SIGTERM", async() => {
-	await bl.stop();
-	process.exit();
-});
-
 process.on("SIGINT", async() => {
 	await bl.stop();
 	process.exit();
