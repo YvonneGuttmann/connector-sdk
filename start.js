@@ -35,6 +35,18 @@ exitHook.uncaughtExceptionHandler(err => logger.error (`Caught global exception:
 exitHook.unhandledRejectionHandler(err => logger.error (`Caught global async rejection: ${err.stack}`));
 
 //5. bootstrap connector
-com.start()
-	.then(() => com.pollForTask())
-	.catch(err=>logger.error(`Could not start connector ${err.message}`));
+async function run(attempts){
+    try {
+        await com.start();
+    }
+    catch (ex) {
+        logger.error(`[Attempt ${attempts}] Could not start connector: ${ex.stack || ex}`);
+        if (attempts <= 20) {
+            var nextAttempt = attempts * 10 * 1000;
+            logger.info (`Trying to start connector again in ${nextAttempt / 1000}s...`);
+            setTimeout (() => run(++attempts), nextAttempt);
+        }
+        else process.exit(1);
+    }
+}
+run (1); //1st attempt

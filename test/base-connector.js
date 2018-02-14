@@ -11,7 +11,16 @@ var theConfig = {};
 mock('../lib/config', { getConfig() { return theConfig }});
 var Connector = require ("../lib/connector").Connector;
 var connector;
-
+var powerset = (array) => { // O(2^n)
+    const results = [[]];
+    for (const value of array) {
+        const copy = [...results]; // See note below.
+        for (const prefix of copy) {
+            results.push(prefix.concat(value));
+        }
+    }
+    return results;
+};
 describe ("approve / reject", function (){
     beforeEach (function (){
         var newApproval = {private: {id: "approval1", approver: "approver1"}};
@@ -62,7 +71,8 @@ describe ("approve / reject", function (){
         connector.signatureList = [backendApproval];
 
         connector.approve({approval: {id: "caprizaId1", private: {id: "approval1"}, metadata: {fingerprints: {}}}}, {logger})
-            .then(() => done("approve should have failed due to fingerprint mismatch"))
+            .then(() =>
+                done("approve should have failed due to fingerprint mismatch"))
             .catch (err => {
                 err.should.have.property ('details', "Action failed! approval doesn't match latest backend approval");
                 done();
@@ -124,6 +134,46 @@ describe ("Fingerprint Object", function (){
 
             expect(h1.action).not.to.equal(connector._createApprovalFingerprints(obj).action);
         });
+    });
+
+});
+
+describe ("BL Validation", function (){
+    var requiredMethods = ['init', 'stop', 'fetch', 'approve', 'reject', 'downloadAttachment'];
+    var allCombinations = powerset(requiredMethods);
+
+    it ("~1 should fail BL validation if one of the required methods is missing (without getApprovals)", function (){
+        allCombinations.forEach (blCombo => {
+            var bl = blCombo.reduce ( (bl, method) => Object.assign(bl, {[method]: () => null}), {});
+            var mockConnector = {
+                logger: console,
+                BL: bl
+            }
+            var comboShouldFail = blCombo.join(",") !== requiredMethods.join(",");
+            if (comboShouldFail)
+                expect (() => Connector.prototype.validateBL.apply(mockConnector)).to.throw();
+        });
+    });
+
+    it ("~2 should fail if getApproval method is missing without selfValidation=true in the bl settings", function (){
+        var mockConnector = {
+            logger: console,
+            BL: requiredMethods.reduce ( (bl, method) => Object.assign (bl, {[method]: () => null}), {} )
+        }
+        expect (() => Connector.prototype.validateBL.apply(mockConnector)).to.throw(/'getApproval' method is missing in the BL Connector/);
+
+    });
+
+    it ("~3 should pass if getApproval method is missing with selfValidation=true in the bl settings", function (){
+        var mockConnector = {
+            logger: console,
+            BL: Object.assign (
+                {settings: {selfValidation: true}},
+                requiredMethods.reduce ( (bl, method) => Object.assign (bl, {[method]: () => null}), {} )
+            )
+        }
+        expect (() => Connector.prototype.validateBL.apply(mockConnector)).to.not.throw(/'getApproval' method is missing in the BL Connector/);
+
     });
 
 });
