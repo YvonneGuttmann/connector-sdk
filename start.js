@@ -20,7 +20,7 @@ logger = logger.child ({connectorId: config.controllerConfig.connectorId});
 
 //2. create an instance of the connector according to the configuration
 logger.info ("Initiating connector instance");
-var connector = new Connector ();
+var connector = new Connector ({logger});
 
 //3. create com service
 logger.info ("Initiating com instance");
