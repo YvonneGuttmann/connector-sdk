@@ -46,7 +46,7 @@ async function run(attempts){
             logger.info (`Trying to start connector again in ${nextAttempt / 1000}s...`);
             setTimeout (() => run(++attempts), nextAttempt);
         }
-        else process.exit(1);
+        else process.exit(2);
     }
 }
 run (1); //1st attempt
