@@ -12,12 +12,7 @@
     "configure": {
       "connectorId": {"type": "string", "title": "Connector ID", "required": true},
       "systemConfig": {"type": "string", "title": "System Configuration File", "required": true, "default": "/etc/capriza/{{name}}/systemConfig.json"},
-      {{#transformer}}
-      "transformer": {"type": "string", "title": "Schema Transformer", "required": false, "default": {{{transformer}}} },
-      {{/transformer}}
-      {{#fingerprint}}
-      "fingerprint": {"type": "string", "title": "Action Fingerprint", "required": false, "default": {{{fingerprint}}} },
-      {{/fingerprint}}
+      "controllerConfig": {"type": "string", "title": "Controller Configuration File", "required": true, "default": {{{controllerConfig}}} },
       "blConfig": {"type": "string", "title": "Business Logic Configuration", "required": false, "default": {{{blConfig}}} }
     }
   },
@@ -28,12 +23,7 @@
         "items": [
           "connectorId",
           "systemConfig",
-          {{#transformer}}
-          {"key": "transformer", "type": "textarea"},
-          {{/transformer}}
-          {{#fingerprint}}
-          {"key": "fingerprint", "type": "textarea"},
-          {{/fingerprint}}
+          {"key": "controllerConfig", "type": "textarea"},
           {"key": "blConfig", "type": "textarea"}
         ]
       }
