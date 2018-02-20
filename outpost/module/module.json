@@ -1,6 +1,11 @@
 {
   "name": "{{name}}",
   "version": "{{version}}",
+  "verMajor": {{verMajor}},
+  "verMinor": {{verMinor}},
+  "verPatch": {{verPatch}},
+  "verTag": "{{verTag}}",
+  "author": "{{author}}",
   "outpost": ">=3.0.0",
   "scripts": {
     "install": "install.js",
