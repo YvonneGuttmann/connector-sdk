@@ -31,6 +31,7 @@ The *BL connector* should implement the following interface:
 The *BL connector* can expose settings for the controller under "settings" key in the exported object.   
 supported settings:  
 * **selfValidation** - If true, the controller wouldn't validate the approval (using getApproval()) before calling approve / reject. The validation should be performed by the BL itself.
+* **disableMiniSync** - If true, the controller wouldn't perform mini-sync (using getApproval()) after calling approve / reject. Instead it would mark the approval as "deleted".
 
 Important guidelines for the *BL Connector*:
 
