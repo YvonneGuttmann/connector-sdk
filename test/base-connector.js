@@ -155,7 +155,7 @@ describe ("BL Validation", function (){
         });
     });
 
-    it ("~2 should fail if getApproval method is missing without selfValidation=true in the bl settings", function (){
+    it ("~2 should fail if getApproval method is missing without selfValidation=false, disableMiniSync=false in the bl settings", function (){
         var mockConnector = {
             logger: console,
             BL: Object.assign ({settings: {}}, requiredMethods.reduce ( (bl, method) => Object.assign (bl, {[method]: () => null}), {} ))
@@ -164,7 +164,7 @@ describe ("BL Validation", function (){
 
     });
 
-    it ("~3 should fail if getApproval method is missing with selfValidation=true in the bl settings", function (){
+    it ("~3 should fail if getApproval method is missing with selfValidation=true, disableMiniSync=false in the bl settings", function (){
         var mockConnector = {
             logger: console,
             BL: Object.assign (
@@ -172,11 +172,11 @@ describe ("BL Validation", function (){
                 requiredMethods.reduce ( (bl, method) => Object.assign (bl, {[method]: () => null}), {} )
             )
         }
-        expect (() => Connector.prototype.validateBL.apply(mockConnector)).to.not.throw(/'getApproval' method is missing in the BL Connector/);
+        expect (() => Connector.prototype.validateBL.apply(mockConnector)).to.throw(/'getApproval' method is missing in the BL Connector/);
 
     });
 
-    it ("~4 should fail if getApproval method is missing with disableMiniSync=true in the bl settings", function (){
+    it ("~4 should fail if getApproval method is missing with selfValidation=false, disableMiniSync=true in the bl settings", function (){
         var mockConnector = {
             logger: console,
             BL: Object.assign (
@@ -184,19 +184,19 @@ describe ("BL Validation", function (){
                 requiredMethods.reduce ( (bl, method) => Object.assign (bl, {[method]: () => null}), {} )
             )
         }
-        expect (() => Connector.prototype.validateBL.apply(mockConnector)).to.not.throw(/'getApproval' method is missing in the BL Connector/);
+        expect (() => Connector.prototype.validateBL.apply(mockConnector)).to.throw(/'getApproval' method is missing in the BL Connector/);
 
     });
 
-    it ("~5 should fail if getApproval method is missing with disableMiniSync=false && selfValidation = false in the bl settings", function (){
+    it ("~5 should pass if getApproval method is missing with disableMiniSync=true && selfValidation = true in the bl settings", function (){
         var mockConnector = {
             logger: console,
             BL: Object.assign (
-                {settings: {}},
+                {settings: {disableMiniSync: true, selfValidation: true}},
                 requiredMethods.reduce ( (bl, method) => Object.assign (bl, {[method]: () => null}), {} )
             )
         }
-        expect (() => Connector.prototype.validateBL.apply(mockConnector)).to.throw(/'getApproval' method is missing in the BL Connector/);
+        expect (() => Connector.prototype.validateBL.apply(mockConnector)).to.not.throw(/'getApproval' method is missing in the BL Connector/);
 
     });
 
