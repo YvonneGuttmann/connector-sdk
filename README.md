@@ -90,6 +90,7 @@ The controller has its own configuration "controllerConfig", that includes 2 typ
     * **memoryMaxLowerLimit** - Maximum memory usage (rss memory, in MB) the node process may reach before starting to shut down the process (draining tasks), by not pulling any more tasks, finish the current active tasks, and kill the process. Default: 1000 (1 GB). 
     * **memoryMaxUpperLimit** - Maximum memory usage (rss memory, in MB) the node process may reach before killing the process without draining of tasks. Default: 1500 (1.5 GB).
     * **maxConcurrentTasks** - A number that limits the number of concurrent tasks the connector would do at runtime. If the controller has reached its limit, it would stop pulling tasks, until a task is completed. Default: 5.
+    * **taskTimeout** - Fails task if it wasn't completed in this time (in ms). Default: 30 * 60 * 1000 (30 min).
 
 * **caprizaConfig** - Contains the Capriza (backend) API keys, secret, and urls. This file is auto-generated on deployment using *Fortitude* (see below) for production deployment. For develpment purposes, this file should be manually created on the machine, and it's path should be mentioned in the config.json of the connector.
 Example:
