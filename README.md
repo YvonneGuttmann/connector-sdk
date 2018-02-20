@@ -83,8 +83,13 @@ The controller has its own configuration "controllerConfig", that includes 2 typ
 * **controllerConfig** - Includes configuration for the controller:
     * **JSLT template** - A library that enables transformations of JSON objects according to a *JSLT Template*. The controller uses JSLT to enable transformation of the JSON data exported by the *BL Connector* to a JSON object that is sent to the Capriza's
                           backend allowing for complex operators (e.g 1:1 field mapping, aggregation functions, logic operators and more..).
-                          The JSL template is a part of the controller configuration.
-    * **maxConcurrentTasks** - A number that limits the number of concurrent tasks the connector would do at runtime. If the controller has reached its limit, it would stop pulling tasks, until a task is completed.
+                          The JSL template is a part of the controller configuration.  
+    * **bulkSize** - Send updates on approvals to the backend in bulks of this size (in string length). Default: 100,000.
+    * **taskProgressInterval** - Update the progress of a task to the backend in intervals of this length (in ms). Default: 30,000 (30 s).
+    * **monitorMemoryInterval** - Check the memory usage of the process in intervals of this length (in ms). Default: 5 * 60 * 1000 (5 min).
+    * **memoryMaxLowerLimit** - Maximum memory usage (rss memory, in MB) the node process may reach before starting to shut down the process (draining tasks), by not pulling any more tasks, finish the current active tasks, and kill the process. Default: 1000 (1 GB). 
+    * **memoryMaxUpperLimit** - Maximum memory usage (rss memory, in MB) the node process may reach before killing the process without draining of tasks. Default: 1500 (1.5 GB).
+    * **maxConcurrentTasks** - A number that limits the number of concurrent tasks the connector would do at runtime. If the controller has reached its limit, it would stop pulling tasks, until a task is completed. Default: 5.
 
 * **caprizaConfig** - Contains the Capriza (backend) API keys, secret, and urls. This file is auto-generated on deployment using *Fortitude* (see below) for production deployment. For develpment purposes, this file should be manually created on the machine, and it's path should be mentioned in the config.json of the connector.
 Example:
