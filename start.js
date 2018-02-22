@@ -6,13 +6,14 @@ var Connector = require ("./lib/connector.js").Connector;
 var Logger = require ("./lib/log").Logger;
 
 process.title = process.env["CONTROLLER_TITLE"] || path.basename(process.cwd());
+var [connectorName, connectorVersion] = process.title.split("@");
 
 //logger
 var loggerFactory;
 if ("dev" in argv) loggerFactory = new Logger("console");  //in dev mode write log to console
 else loggerFactory = new Logger ("file");                  //in production write log to file
 
-var logger = loggerFactory.create({}).child({component: "index.js", module: "connectors"});
+var logger = loggerFactory.create({}).child({component: "index.js", module: "connectors", connectorName: connectorName, connectorVersion: connectorVersion});
 
 //1. get configuration
 var config = require('./lib/config').getConfiguration({logger: logger.child({component: "config"})});
