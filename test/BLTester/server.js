@@ -27,8 +27,10 @@ process.on('uncaughtException', function(error) {
 });
 
 process.on("SIGINT", async() => {
-	await bl.stop();
-	process.exit();
+    if (this.exit) return;
+    this.exit = true;
+    await bl.stop();
+    process.exit();
 });
 
 const PORT=8080;
