@@ -20,18 +20,18 @@ A node module that exports an object that contains the business logic of a one o
 The *BL connector* may use one or more *Drivers*, to implement the use-case.
 The *BL connector* should implement the following interface:
 
-* **init(options)** - Will be called by the controller connector when the process starts. Meant to allow initialization of the business logic if necessary. The options parameter includes: {"config", "logger"} properties. 
-* **stop()** - Will be called before the connector is stopped.
-* **fetch(options)** - Connects to the source system, and fetches the data relevant for the use-case(s).
-* **getApproval(approval, options)** - Fetches a single **"PENDING"** approval record, given an already fetched approval (for validation comparison). The method should return only ***pending*** approvals, otherwise return null.
-* **approve(data, options)** - Performs the approve action in the source system given approval data and the approver credentials (if needed). the *data* input object is assumed to follow this structure {approval, credentials}
-* **reject(data, options)** - Performs the reject action in the source system given approval data, the approver credentials (if needed), and a rejection reason (as string). the *data* input object is assumed to follow this structure {approval, credentials, rejectionReason}.
-* **downloadAttachment(data, options)** - Downloads the attachment and returns a Uint8Array of binary data.
+* **`init(options)`** - Will be called by the controller connector when the process starts. Meant to allow initialization of the business logic if necessary. The options parameter includes: {"config", "logger"} properties. 
+* **`stop()`** - Will be called before the connector is stopped.
+* **`fetch(options)`** - Connects to the source system, and fetches the data relevant for the use-case(s).
+* **`getApproval(approval, options)`** - Fetches a single **"PENDING"** approval record, given an already fetched approval (for validation comparison). The method should return only ***pending*** approvals, otherwise return null.
+* **`approve(data, options)`** - Performs the approve action in the source system given approval data and the approver credentials (if needed). the *data* input object is assumed to follow this structure {approval, credentials}
+* **`reject(data, options)`** - Performs the reject action in the source system given approval data, the approver credentials (if needed), and a rejection reason (as string). the *data* input object is assumed to follow this structure {approval, credentials, rejectionReason}.
+* **`downloadAttachment(data, options)`** - Downloads the attachment and returns a Uint8Array of binary data.
 
 The *BL connector* can expose settings for the controller under "settings" key in the exported object.   
-supported settings:  
-* **selfValidation** - If true, the controller wouldn't validate the approval (using getApproval()) before calling approve / reject. The validation should be performed by the BL itself.  
-* **disableMiniSync** - If true, the controller wouldn't perform mini-sync (using getApproval()) after calling approve / reject. Instead it would mark the approval as "deleted".
+supported settings:   
+* `selfValidation` - If true, the controller wouldn't validate the approval (using getApproval()) before calling approve / reject. The validation should be performed by the BL itself.  
+* `disableMiniSync` - If true, the controller wouldn't perform mini-sync (using getApproval()) after calling approve / reject. Instead it would mark the approval as "deleted".
 
 Important guidelines for the *BL Connector*:
 
@@ -53,8 +53,8 @@ Connector should contain this minimum file structure:
 
 ####Configuration
 The *BL connector* can (and should) use a configuration file (json). The *BL connector* is assumed to use 2 types of configurations:  
-* **blConfig** - "Private" configuration of the connector (e.g. source system types, fields..). This configuration is saved on the cloud, and given to the controller at run-time.  
-* **systemConfig** - Configuration that contains system/environment "sensitive" information (e.g. system url, integration user credentials..). This configuration should be placed manually on the connector's machine.  
+* **`blConfig`** - "Private" configuration of the connector (e.g. source system types, fields..). This configuration is saved on the cloud, and given to the controller at run-time.  
+* **`systemConfig`** - Configuration that contains system/environment "sensitive" information (e.g. system url, integration user credentials..). This configuration should be placed manually on the connector's machine.  
      
 \* See "Deployment section for more configuration details. 
 
@@ -80,12 +80,12 @@ The *Connector Controller* is a generic wrapper for each connector that uses a s
 * **Hash** - After each **fetch()** call, the *Connector Controller* Creates an object (approval) signature using a hash function, for easy comparison between approvals, in later syncs. In addition, there is an options to prepare a different hash on partial approval data for the approve/reject actions (under actionSignatureTemplate key in the config).
 * **Approve/Reject** - Given an approve/reject task, the *Connector Controller* will first check the validity of the received approval (by using the **getApproval()** function of the *BL Connector*). If the approval is still valid, it will call the **approve/reject** function of the *BL Connector*. Then, it will re-fetch the approval and perform "sync" for that specific approval in order to update the backend with the latest status of this approval.
 * **Added Data for each approval** - The Connector Controller extends each approval object with:
-    * **id** - A UUID given by the backend to approvals sent (new approvals wouldn't have an id).
-    * **syncver** - Sync version represents the version of the record in the backend DB at the time it was send to the connector, it should be returned as is to the backend (new approvals wouldn't have an id).
-    * **schemaId** - The data schema id of the approval.
-    * **sourceUserId** - Signature (hash) that represents the source system user (based on the "approver" field in the private section of the approval).
-    * **signature** - An object with 2 hash results: (1) sync: the hash result (string) of the whole approval object; (2) action: the hash result (string) of the partial approval object that is "sensitive" to change for approve/reject actions (configured in the config using jslt template).
-    * **deleted** - An optional flag that would mark an approval as deleted (relevant for sync).
+    * **`id`** - A UUID given by the backend to approvals sent (new approvals wouldn't have an id).
+    * **`syncver`** - Sync version represents the version of the record in the backend DB at the time it was send to the connector, it should be returned as is to the backend (new approvals wouldn't have an id).
+    * **`schemaId`** - The data schema id of the approval.
+    * **`sourceUserId`** - Signature (hash) that represents the source system user (based on the "approver" field in the private section of the approval).
+    * **`signature`** - An object with 2 hash results: (1) sync: the hash result (string) of the whole approval object; (2) action: the hash result (string) of the partial approval object that is "sensitive" to change for approve/reject actions (configured in the config using jslt template).
+    * **`deleted`** - An optional flag that would mark an approval as deleted (relevant for sync).
 
 
 Final approval structure (root level):  
@@ -96,19 +96,19 @@ Final approval structure (root level):
         
 ####configuration
 The controller has its own configuration "controllerConfig", that includes 2 types of configurations: "controllerConfig", "caprizaConfig".  
-* **controllerConfig** - Includes configuration for the controller:  
-    * **JSLT template** - A library that enables transformations of JSON objects according to a *JSLT Template*. The controller uses JSLT to enable transformation of the JSON data exported by the *BL Connector* to a JSON object that is sent to the Capriza's
+* **`controllerConfig`** - Includes configuration for the controller:  
+    * **`schemaTransformer`** - Relies on the [JSLT](https://github.com/capriza/jslt) library that enables transformations of JSON objects according to a *JSLT Template*. The controller uses JSLT to enable transformation of the JSON data exported by the *BL Connector* to a JSON object that is sent to the Capriza's
                           backend allowing for complex operators (e.g 1:1 field mapping, aggregation functions, logic operators and more..).
-                          The JSL template is a part of the controller configuration.    
-    * **bulkSize** - Send updates on approvals to the backend in bulks of this size (in string length). Default: 100,000.  
-    * **taskProgressInterval** - Update the progress of a task to the backend in intervals of this length (in ms). Default: 30,000 (30 s).  
-    * **monitorMemoryInterval** - Check the memory usage of the process in intervals of this length (in ms). Default: 5 * 60 * 1000 (5 min).  
-    * **memoryMaxLowerLimit** - Maximum memory usage (rss memory, in MB) the node process may reach before starting to shut down the process (draining tasks), by not pulling any more tasks, finish the current active tasks, and kill the process. Default: 1000 (1 GB).   
-    * **memoryMaxUpperLimit** - Maximum memory usage (rss memory, in MB) the node process may reach before killing the process without draining of tasks. Default: 1500 (1.5 GB).  
-    * **maxConcurrentTasks** - A number that limits the number of concurrent tasks the connector would do at runtime. If the controller has reached its limit, it would stop pulling tasks, until a task is completed. Default: 5.  
-    * **taskTimeout** - Fails task if it wasn't completed in this time (in ms). Default: 30 * 60 * 1000 (30 min).  
+                          The JSLT template is a part of the controller configuration.    
+    * **`bulkSize`** - Send updates on approvals to the backend in bulks of this size (in string length). Default: 100,000.  
+    * **`taskProgressInterval`** - Update the progress of a task to the backend in intervals of this length (in ms). Default: 30,000 (30 s).  
+    * **`monitorMemoryInterval`** - Check the memory usage of the process in intervals of this length (in ms). Default: 5 * 60 * 1000 (5 min).  
+    * **`memoryMaxLowerLimit`** - Maximum memory usage (rss memory, in MB) the node process may reach before starting to shut down the process (draining tasks), by not pulling any more tasks, finish the current active tasks, and kill the process. Default: 1000 (1 GB).   
+    * **`memoryMaxUpperLimit`** - Maximum memory usage (rss memory, in MB) the node process may reach before killing the process without draining of tasks. Default: 1500 (1.5 GB).  
+    * **`maxConcurrentTasks`** - A number that limits the number of concurrent tasks the connector would do at runtime. If the controller has reached its limit, it would stop pulling tasks, until a task is completed. Default: 5.  
+    * **`taskTimeout`** - Fails task if it wasn't completed in this time (in ms). Default: 30 * 60 * 1000 (30 min).  
 
-* **caprizaConfig** - Contains the Capriza (backend) API keys, secret, and urls. This file is auto-generated on deployment using *Fortitude* (see below) for production deployment. For develpment purposes, this file should be manually created on the machine, and it's path should be mentioned in the config.json of the connector.  
+* **`caprizaConfig`** - Contains the Capriza (backend) API keys, secret, and urls. This file is auto-generated on deployment using *Fortitude* (see below) for production deployment. For develpment purposes, this file should be manually created on the machine, and it's path should be mentioned in the config.json of the connector.  
 Example:  
 ```
 {
