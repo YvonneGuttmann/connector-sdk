@@ -8,9 +8,9 @@ The architecture of a connector is composed of several layers - Connector contro
 A Driver is a technical object that provides access the a backend system API.
 Examples:
 
-* HTTP - A driver that enables connection to a REST API of a backend system.
-* Web Engine - Provides a scripting ability to automatically run the backend system's WEB UI, extract data and perform actions.
-* [node-rfc](https://github.com/SAP/node-rfc) - a node based driver that enables connection to SAP rfc functions.
+* **HTTP** - A driver that enables connection to a REST API of a backend system.
+* **Web Engine** - Provides a scripting ability to automatically run the backend system's WEB UI, extract data and perform actions.
+* [**node-rfc**](https://github.com/SAP/node-rfc) - a node based driver that enables connection to SAP rfc functions.
 
 Drivers does not contain business logic, and does not depend on the connector use-case.
 Drivers does not have a predefined API.
@@ -57,7 +57,20 @@ The *BL connector* can (and should) use a configuration file (json). The *BL con
 * **systemConfig** - Configuration that contains system/environment "sensitive" information (e.g. system url, integration user credentials..). This configuration should be placed manually on the connector's machine.
      
 \* See "Deployment section for more configuration details. 
-    
+
+####Error reporting
+Generally, the *BL connector* communicate errors using the promises it returns (as rejections) or exceptions. In some cases, we would want to report more meaningful errors to the backend, which in turn would reach the end user. In these cases (listed below), the *BL connector* is expected to reject the promise with an Error object, that includes an "error" attribute, with the Capriza's error code. example code:
+
+```
+var err = new Error ("System returned code 4"); 
+err.error = "SYSTEM_UNAVAILABLE";
+throw err;
+```
+
+Error types expected:  
+* **`SYSTEM_UNAVAILABLE`** - When the *BL connector* identifies a state of source system unavailability, it should reject the relevant method (promise) with this error.
+* **`ATTACHMENT_NOT_FOUND`** - When the requested attachment was not found in the source system.
+* **`APPROVAL_DATA_MISMATCH`** - When the *BL connector* performs the validation itself (`selfValidation=true` in the *BL connector* settings), and the approval data mismatches to the source system, it should throw this error.  
 
 ###Connector Controller
 The *Connector Controller* is a generic wrapper for each connector that uses a single *BL Connector* to implement one or more use-cases in a specific system, and fulfill the *Backend* tasks:
