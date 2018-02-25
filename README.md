@@ -30,7 +30,7 @@ The *BL connector* should implement the following interface:
 
 The *BL connector* can expose settings for the controller under "settings" key in the exported object.   
 supported settings:  
-* **selfValidation** - If true, the controller wouldn't validate the approval (using getApproval()) before calling approve / reject. The validation should be performed by the BL itself.
+* **selfValidation** - If true, the controller wouldn't validate the approval (using getApproval()) before calling approve / reject. The validation should be performed by the BL itself.  
 * **disableMiniSync** - If true, the controller wouldn't perform mini-sync (using getApproval()) after calling approve / reject. Instead it would mark the approval as "deleted".
 
 Important guidelines for the *BL Connector*:
@@ -52,9 +52,9 @@ Connector should contain this minimum file structure:
         /resources/config.json 
 
 ####Configuration
-The *BL connector* can (and should) use a configuration file (json). The *BL connector* is assumed to use 2 types of configurations:
-* **blConfig** - "Private" configuration of the connector (e.g. source system types, fields..). This configuration is saved on the cloud, and given to the controller at run-time.
-* **systemConfig** - Configuration that contains system/environment "sensitive" information (e.g. system url, integration user credentials..). This configuration should be placed manually on the connector's machine.
+The *BL connector* can (and should) use a configuration file (json). The *BL connector* is assumed to use 2 types of configurations:  
+* **blConfig** - "Private" configuration of the connector (e.g. source system types, fields..). This configuration is saved on the cloud, and given to the controller at run-time.  
+* **systemConfig** - Configuration that contains system/environment "sensitive" information (e.g. system url, integration user credentials..). This configuration should be placed manually on the connector's machine.  
      
 \* See "Deployment section for more configuration details. 
 
@@ -68,9 +68,9 @@ throw err;
 ```
 
 Error types expected:  
-* **`SYSTEM_UNAVAILABLE`** - When the *BL connector* identifies a state of source system unavailability, it should reject the relevant method (promise) with this error.
-* **`ATTACHMENT_NOT_FOUND`** - When the requested attachment was not found in the source system.
-* **`APPROVAL_DATA_MISMATCH`** - When the *BL connector* performs the validation itself (`selfValidation=true` in the *BL connector* settings), and the approval data mismatches to the source system, it should throw this error.  
+* **`SYSTEM_UNAVAILABLE`** - When the *BL connector* identifies a state of source system unavailability, it should reject the relevant method (promise) with this error.  
+* **`ATTACHMENT_NOT_FOUND`** - When the requested attachment was not found in the source system.  
+* **`APPROVAL_DATA_MISMATCH`** - When the *BL connector* performs the validation itself (`selfValidation=true` in the *BL connector* settings), and the approval data mismatches to the source system, it should throw this error.    
 
 ###Connector Controller
 The *Connector Controller* is a generic wrapper for each connector that uses a single *BL Connector* to implement one or more use-cases in a specific system, and fulfill the *Backend* tasks:
@@ -88,36 +88,38 @@ The *Connector Controller* is a generic wrapper for each connector that uses a s
     * **deleted** - An optional flag that would mark an approval as deleted (relevant for sync).
 
 
-   Final approval structure (root level):
+Final approval structure (root level):  
    
-    {id, syncver, signature, sourceUserId, schemaId, public, private, [deleted]}
+```
+{id, syncver, signature, sourceUserId, schemaId, public, private, [deleted]}
+```
         
 ####configuration
-The controller has its own configuration "controllerConfig", that includes 2 types of configurations: "controllerConfig", "caprizaConfig".
-* **controllerConfig** - Includes configuration for the controller:
+The controller has its own configuration "controllerConfig", that includes 2 types of configurations: "controllerConfig", "caprizaConfig".  
+* **controllerConfig** - Includes configuration for the controller:  
     * **JSLT template** - A library that enables transformations of JSON objects according to a *JSLT Template*. The controller uses JSLT to enable transformation of the JSON data exported by the *BL Connector* to a JSON object that is sent to the Capriza's
                           backend allowing for complex operators (e.g 1:1 field mapping, aggregation functions, logic operators and more..).
-                          The JSL template is a part of the controller configuration.  
-    * **bulkSize** - Send updates on approvals to the backend in bulks of this size (in string length). Default: 100,000.
-    * **taskProgressInterval** - Update the progress of a task to the backend in intervals of this length (in ms). Default: 30,000 (30 s).
-    * **monitorMemoryInterval** - Check the memory usage of the process in intervals of this length (in ms). Default: 5 * 60 * 1000 (5 min).
-    * **memoryMaxLowerLimit** - Maximum memory usage (rss memory, in MB) the node process may reach before starting to shut down the process (draining tasks), by not pulling any more tasks, finish the current active tasks, and kill the process. Default: 1000 (1 GB). 
-    * **memoryMaxUpperLimit** - Maximum memory usage (rss memory, in MB) the node process may reach before killing the process without draining of tasks. Default: 1500 (1.5 GB).
-    * **maxConcurrentTasks** - A number that limits the number of concurrent tasks the connector would do at runtime. If the controller has reached its limit, it would stop pulling tasks, until a task is completed. Default: 5.
-    * **taskTimeout** - Fails task if it wasn't completed in this time (in ms). Default: 30 * 60 * 1000 (30 min).
+                          The JSL template is a part of the controller configuration.    
+    * **bulkSize** - Send updates on approvals to the backend in bulks of this size (in string length). Default: 100,000.  
+    * **taskProgressInterval** - Update the progress of a task to the backend in intervals of this length (in ms). Default: 30,000 (30 s).  
+    * **monitorMemoryInterval** - Check the memory usage of the process in intervals of this length (in ms). Default: 5 * 60 * 1000 (5 min).  
+    * **memoryMaxLowerLimit** - Maximum memory usage (rss memory, in MB) the node process may reach before starting to shut down the process (draining tasks), by not pulling any more tasks, finish the current active tasks, and kill the process. Default: 1000 (1 GB).   
+    * **memoryMaxUpperLimit** - Maximum memory usage (rss memory, in MB) the node process may reach before killing the process without draining of tasks. Default: 1500 (1.5 GB).  
+    * **maxConcurrentTasks** - A number that limits the number of concurrent tasks the connector would do at runtime. If the controller has reached its limit, it would stop pulling tasks, until a task is completed. Default: 5.  
+    * **taskTimeout** - Fails task if it wasn't completed in this time (in ms). Default: 30 * 60 * 1000 (30 min).  
 
-* **caprizaConfig** - Contains the Capriza (backend) API keys, secret, and urls. This file is auto-generated on deployment using *Fortitude* (see below) for production deployment. For develpment purposes, this file should be manually created on the machine, and it's path should be mentioned in the config.json of the connector.
-Example:
-
-
-    {
-        "connectorId": "xxxx-xxxx-xxxx-xxxxxxx-xxxxx",
-        "apiUrl": "https://approvals.capriza.com",
-        "creds": {
-            "apiKey":       "<Environment API key>",
-            "apiSecret":    "<Environment API secret>"
-        }
+* **caprizaConfig** - Contains the Capriza (backend) API keys, secret, and urls. This file is auto-generated on deployment using *Fortitude* (see below) for production deployment. For develpment purposes, this file should be manually created on the machine, and it's path should be mentioned in the config.json of the connector.  
+Example:  
+```
+{
+    "connectorId": "xxxx-xxxx-xxxx-xxxxxxx-xxxxx",
+    "apiUrl": "https://approvals.capriza.com",
+    "creds": {
+        "apiKey":       "<Environment API key>",
+        "apiSecret":    "<Environment API secret>"
     }
+}
+```
        
 
 \* See "Deployment section for more configuration details.
