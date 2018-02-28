@@ -15,7 +15,7 @@
   },
   "schema": {
     "configure": {
-      "useVanillaConfig": {"type": "string", "title": "Use vanilla configuration", "required": true, "default": false},
+      "useVanillaConfig": {"type": "boolean", "title": "Use vanilla configuration", "required": true, "default": false},
       "connectorId": {"type": "string", "title": "Connector ID", "required": true},
       "systemConfig": {"type": "string", "title": "System Configuration File", "required": true, "default": "/etc/capriza/{{name}}/systemConfig.json"},
       "controllerConfig": {"type": "string", "title": "Controller Configuration File", "required": true, "default": {{{controllerConfig}}} },
@@ -27,6 +27,7 @@
       { "type": "fieldset",
         "expandable": false,
         "items": [
+          "useVanillaConfig",
           "connectorId",
           "systemConfig",
           {"key": "controllerConfig", "type": "textarea"},
