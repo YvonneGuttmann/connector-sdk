@@ -52,8 +52,10 @@ function readdirRecursive (dir) {
 
     }
     catch (ex) {
-        outpost.fail(`Error running prestart scripts: ${ex.message || ex}`);
-        return;
+        if (ex && ex.code != "ENOENT") {
+            outpost.fail(`Error running prestart scripts: ${ex.message || ex}`);
+            return;
+        }
     }
 
     process.env["CONTROLLER_TITLE"] = name;
