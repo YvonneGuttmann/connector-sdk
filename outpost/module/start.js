@@ -13,12 +13,13 @@ function readdirRecursive (dir) {
               var file = list[i++];
               if (!file) return resolve(results);
               file = dir + '/' + file;
-              fs.stat(file, function(err, stat) {
+              fs.stat(file, async function(err, stat) {
                   if (stat && stat.isDirectory()) {
-                      readdirRecursive(file, function(err, res) {
+                      try {
+                          var res = await readdirRecursive(file);
                           results = results.concat(res);
                           next();
-                      });
+                      } catch (ex) {return reject (ex);}
                   } else {
                       results.push(file);
                       next();
