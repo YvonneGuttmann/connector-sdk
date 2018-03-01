@@ -41,10 +41,10 @@ function readdirRecursive (dir) {
         files.forEach(file => {
             try {
                 outpost.log = msg => origLogger(`[${file}] ${msg}`);
-                require(`${prefix}/${file}`);
+                require(file);
             }
             catch (ex) {
-                throw new Error(`Error running prestart script ${prefix}/${file}: ${ex.message}`);
+                throw new Error(`Error running prestart script ${file}: ${ex.message}`);
             }
             finally {
                 outpost.log = origLogger;
