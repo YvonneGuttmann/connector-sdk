@@ -65,7 +65,7 @@ function readdirRecursive (dir) {
         name,
         cmd: "./node",
         cwd: "connector",
-        args: ["node_modules/connector-controller/start.js"],
+        args: ["node_modules/@capriza/connector-controller/start.js"],
         env: process.env
     }, function (err) {
         if (err) {

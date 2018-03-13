@@ -3,7 +3,7 @@
 PLATFORM=`node -e "console.log(require('os').platform())"`
 export NODE_VER="v8.9.4"
 export NODE_VER_NAME="node-${NODE_VER}-${PLATFORM}-x64"
-export OUTPOST_DIR="node_modules/connector-controller/outpost"
+export OUTPOST_DIR="node_modules/@capriza/connector-controller/outpost"
 
 rm -rf build
 mkdir -p build/connector

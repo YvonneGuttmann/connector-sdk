@@ -1,6 +1,6 @@
 {
-  "name": "connector-controller",
-  "version": "1.0.25",
+  "name": "@capriza/connector-controller",
+  "version": "1.0.27",
   "description": "Capriza connectors controller",
   "main": "index.js",
   "directories": {
@@ -11,10 +11,10 @@
   },
   "author": "Doron Oded",
   "dependencies": {
+    "@capriza/jslt": "^0.1.0",
     "async-exit-hook": "2.0.1",
     "axios": "0.17.1",
     "deepmerge": "2.0.1",
-    "jslt": "git+https://git@github.com/capriza/jslt.git",
     "logrotator": "1.1.0",
     "minimist": "1.2.0",
     "mustache": "2.3.0",
