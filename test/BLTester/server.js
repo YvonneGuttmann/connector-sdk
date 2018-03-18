@@ -53,19 +53,24 @@ fs.readFile(`${path.resolve(__dirname)}/index.html`, function (err, html) {
                         if(data.partialSync){
                             data = data.approvals;
                         }
-                        if (template) return data.map(rawApproval => jslt.transform(rawApproval));
+                        if (template) return data.map(rawApproval => {
+                            if (rawApproval.error) return rawApproval;
+                            return jslt.transform(rawApproval)
+                        });
                         return data;
                     })
                     .then (data => {
                         let validationResult;
                         for (i in data) {
                             var approval = data[i];
-                            if (!approval.schemaId) {
-                                validationResult = {errors: [{error: `approval ${approval.private.id} has no schemaId:\n${JSON.stringify()}`}]};
-                                break;
+                            if (!approval.error) {
+                                if (!approval.schemaId) {
+                                    validationResult = {errors: [{error: `approval ${approval.private.id} has no schemaId:\n${JSON.stringify()}`}]};
+                                    break;
+                                }
+                                validationResult = validate(JSON.parse(JSON.stringify(approval)), approval.schemaId);
+                                if (validationResult.errors.length > 0) break;
                             }
-                            validationResult = validate(JSON.parse(JSON.stringify(approval)), approval.schemaId);
-                            if (validationResult.errors.length > 0) break;
                         }
                         res.write(JSON.stringify({data, validationResult}));
                         return res.end();

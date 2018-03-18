@@ -10,8 +10,9 @@ var [connectorName, connectorVersion] = process.title.split("@");
 
 //logger
 var loggerFactory;
-if ("dev" in argv) loggerFactory = new Logger("console");  //in dev mode write log to console
-else loggerFactory = new Logger ("file");                  //in production write log to file
+if ("dev" in argv) process.env.logStream = "console"; //in dev mode write log to console
+else process.env.logStream = "file"; //in production write log to file
+loggerFactory = new Logger(process.env.logStream);
 
 var logger = loggerFactory.create({}).child({component: "index.js", module: "connectors", connectorName: connectorName, connectorVersion: connectorVersion});
 
