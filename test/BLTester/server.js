@@ -50,6 +50,9 @@ fs.readFile(`${path.resolve(__dirname)}/index.html`, function (err, html) {
             if ("fetch" in bl){
                 return bl.fetch({logger})
                     .then(data => {
+                        if(data.partialSync){
+                            data = data.approvals;
+                        }
                         if (template) return data.map(rawApproval => jslt.transform(rawApproval));
                         return data;
                     })
