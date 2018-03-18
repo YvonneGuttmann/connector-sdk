@@ -39,6 +39,9 @@ describe ("approve / reject", function (){
                     return true;
                 }
             },
+            getBLLogger() {
+                return Connector.prototype.getBLLogger.apply (this, arguments);
+            },
             _addApprovalData(){
                 return Connector.prototype._addApprovalData.apply (this, arguments);
             },
