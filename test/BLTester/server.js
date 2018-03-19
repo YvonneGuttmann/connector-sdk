@@ -63,7 +63,7 @@ fs.readFile(`${path.resolve(__dirname)}/index.html`, function (err, html) {
                         let validationResult;
                         for (i in data) {
                             var approval = data[i];
-                            if (!approval.error) {
+                            if (!approval.error && !(argv["schema-validation"] == false)) {
                                 if (!approval.schemaId) {
                                     validationResult = {errors: [{error: `approval ${approval.private.id} has no schemaId:\n${JSON.stringify()}`}]};
                                     break;
