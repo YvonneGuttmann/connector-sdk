@@ -13,6 +13,7 @@ var template = config.controllerConfig.schemaTransformer;
 var jslt = new (require ("@capriza/jslt"))(template);
 jslt.setTemplate(template);
 var old_write = process.stdout.write;
+var signatureList = [];
 
 process.stdout.write = (function(write) {
     return function(string, encoding, fd) {
@@ -45,7 +46,6 @@ fs.readFile(`${path.resolve(__dirname)}/index.html`, function (err, html) {
             res.end();
         },
         "/fetchData": function (req, res){
-
             res.writeHeader(200, {"Content-Type": "text/html"});
             if ("fetch" in bl){
                 return bl.fetch({logger})
@@ -71,6 +71,46 @@ fs.readFile(`${path.resolve(__dirname)}/index.html`, function (err, html) {
                                 validationResult = validate(JSON.parse(JSON.stringify(approval)), approval.schemaId);
                                 if (validationResult.errors.length > 0) break;
                             }
+                        }
+                        signatureList = data.map(approval => {return {private: approval.private}});
+                        res.write(JSON.stringify({data, validationResult}));
+                        return res.end();
+                    })
+                    .catch (err => {
+                        res.write(JSON.stringify({data: [], validationResult: {errors: [{error: err ? err.stack || err : ""}]}}));
+                        return res.end();
+                    });
+            }
+            res.write("{'success': 'false'}");
+            res.end();
+        },
+        "/quickFetchData": function (req, res){
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            if ("fetch" in bl){
+                return bl.fetch({logger, fetchType:"partial", signatureList:signatureList})
+                    .then(data => {
+                        if(data.partialSync){
+                            data = data.approvals;
+                        }
+                        if (template) return data.map(rawApproval => {
+                            if (rawApproval.error) return rawApproval;
+                            return jslt.transform(rawApproval)
+                        });
+                        return data;
+                    })
+                    .then (data => {
+                        let validationResult;
+                        for (i in data) {
+                            var approval = data[i];
+                            if (!approval.error) {
+                                if (!approval.schemaId) {
+                                    validationResult = {errors: [{error: `approval ${approval.private.id} has no schemaId:\n${JSON.stringify()}`}]};
+                                    break;
+                                }
+                                validationResult = validate(JSON.parse(JSON.stringify(approval)), approval.schemaId);
+                                if (validationResult.errors.length > 0) break;
+                            }
+
                         }
                         res.write(JSON.stringify({data, validationResult}));
                         return res.end();

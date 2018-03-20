@@ -73,6 +73,7 @@
         Business Logic Test
     </h1>
     <button id="fetch" onclick="fetchData()">fetch</button>
+    <button id="quickFetch" onclick="quickFetchData()">quick fetch</button>
     <button id="authenticate" onclick="authenticate()">authenticate</button>
     <br>
     <div id="status"></div>
@@ -91,6 +92,23 @@
 
     function fetchData(){
         fetch (url + "fetchData")
+            .then (res => res.text())
+            .then (res => {
+                res = JSON.parse(res);
+                data = res.data;
+                createData ();
+                if (res.validationResult && res.validationResult.errors && res.validationResult.errors.length > 0){
+                    createValidationTable (res.validationResult.errors);
+                }
+                else {
+                    document.querySelector ("#status").innerHTML = `<p><img src=${okImage}></p><p>Schema Validation Passed!!!</p>`;
+                }
+
+            });
+    }
+
+    function quickFetchData(){
+        fetch (url + "quickFetchData")
             .then (res => res.text())
             .then (res => {
                 res = JSON.parse(res);
