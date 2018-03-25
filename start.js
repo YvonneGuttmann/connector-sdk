@@ -1,3 +1,4 @@
+require('syswide-cas');
 var path = require('path');
 var argv = require('minimist')(process.argv.slice(2));
 var exitHook = require('async-exit-hook');

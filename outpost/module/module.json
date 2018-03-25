@@ -19,7 +19,8 @@
       "connectorId": {"type": "string", "title": "Connector ID", "required": true},
       "systemConfig": {"type": "string", "title": "System Configuration File", "required": true, "default": "/etc/capriza/{{name}}/systemConfig.json"},
       "controllerConfig": {"type": "string", "title": "Controller Configuration File", "required": true, "default": {{{controllerConfig}}} },
-      "blConfig": {"type": "string", "title": "Business Logic Configuration", "required": false, "default": {{{blConfig}}} }
+      "blConfig": {"type": "string", "title": "Business Logic Configuration", "required": false, "default": {{{blConfig}}} },
+      "proxyUrl": {"type": "string", "title": "Proxy URL: <protocol>://<user?>:<password?>@<domain>:<port> (leave empty to use the agent config if set)", "required": false}
     }
   },
   "form": {
@@ -31,7 +32,8 @@
           "connectorId",
           "systemConfig",
           {"key": "controllerConfig", "type": "textarea"},
-          {"key": "blConfig", "type": "textarea"}
+          {"key": "blConfig", "type": "textarea"},
+          "proxyUrl"
         ]
       }
     ]
