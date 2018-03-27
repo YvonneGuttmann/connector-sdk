@@ -1,6 +1,6 @@
 {
   "name": "@capriza/connector-controller",
-  "version": "1.0.45",
+  "version": "1.0.46",
   "description": "Capriza connectors controller",
   "main": "index.js",
   "directories": {
