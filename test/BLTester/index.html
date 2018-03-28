@@ -202,7 +202,7 @@
         function findApprovalByAttachmentRecursive (obj){
             if (Array.isArray(obj))
                 return (obj.find (subObj => findApprovalByAttachmentRecursive(subObj, attachmentId)));
-            if (typeof obj == "object"){
+            if (typeof obj == "object" && obj !== null){
                 if ("mediaType" in obj && "id" in obj && obj.id == attachmentId )
                     return true;
                 return Object.values(obj).find(subObj => findApprovalByAttachmentRecursive(subObj, attachmentId))
