@@ -7,3 +7,4 @@ npm-debug.log
 **resources.json
 **dev_rfc.trc
 log/
+package-lock.json
