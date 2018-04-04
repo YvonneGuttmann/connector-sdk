@@ -1,6 +1,6 @@
 {
   "name": "@capriza/connector-controller",
-  "version": "1.0.48",
+  "version": "1.0.49",
   "description": "Capriza connectors controller",
   "main": "index.js",
   "directories": {
@@ -25,7 +25,7 @@
     "syswide-cas": "^5.0.0"
   },
   "devDependencies": {
-    "capriza-schema": "git+ssh://git@git.assembla.com:caprizaportfolio/capriza-ng.schemas.git#dev",
+    "@capriza/schemas": "^1.0.0",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "fs-extra": "^4.0.3",

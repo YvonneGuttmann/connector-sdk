@@ -1,4 +1,5 @@
-var validate = require('capriza-schema').validate;
+var validate = require('@capriza/schemas').validate;
+var registerSchema = require('@capriza/schemas').registerSchema;
 var http = require('http');
 var fs = require('fs');
 var consoleCacher = [], consoleCacherSentIndex = 0;
@@ -218,6 +219,15 @@ fs.readFile(`${path.resolve(__dirname)}/index.html`, function (err, html) {
             res.write("authenticate() function is unimplemented");
             res.end();
         },
+        "/registerSchema": function (req, res){
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            var params = JSON.parse(req.body),
+                schema = require(params.filePath);
+
+            registerSchema(schema);
+            res.write(`Schema ${schema.id} was registered successfully`);
+            res.end();
+        },
     }
 
     function getBody(req, res) {
@@ -259,6 +269,11 @@ fs.readFile(`${path.resolve(__dirname)}/index.html`, function (err, html) {
 module.exports = {
     registerActions(inputActions){
         bl = inputActions;
+    },
+
+    registerSchema(schema){
+        registerSchema(schema);
+        logger.log(`Schema ${schema.id} was registered successfully`)
     },
 
     async initBL(){

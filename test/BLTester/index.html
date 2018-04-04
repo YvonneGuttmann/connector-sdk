@@ -75,6 +75,7 @@
     <button id="fetch" onclick="fetchData()">fetch</button>
     <button id="quickFetch" onclick="quickFetchData()">quick fetch</button>
     <button id="authenticate" onclick="authenticate()">authenticate</button>
+    <button id="registerSchema" onclick="registerSchema()">Register Schema</button>
     <br>
     <div id="status"></div>
     <div id="approvalList"><table></table></div>
@@ -192,6 +193,21 @@
                     'Content-Type': 'text/plain'
                 },
                 body: JSON.stringify({username, password})
+            })
+            .then (res => res.text())
+            .then (res => document.querySelector("#status").innerHTML = `<p>${res}</p>`);
+    }
+
+    function registerSchema(){
+        var filePath = prompt("Schema file path: ");
+        fetch (url + "registerSchema",
+            {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'text/plain'
+                },
+                body: JSON.stringify({filePath})
             })
             .then (res => res.text())
             .then (res => document.querySelector("#status").innerHTML = `<p>${res}</p>`);

@@ -9,4 +9,7 @@ var bl = require (`${process.cwd()}`);
 var server = require("./server.js");
 server.registerActions(bl);
 server.initBL();
-
+try{
+    var schema = require (`${process.cwd()}/resources/schema.json`);
+    server.registerSchema(schema);
+} catch(ex) { }
