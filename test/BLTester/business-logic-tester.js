@@ -17,6 +17,7 @@ init();
 console.log(`Start watching files`);
 const watcher = chokidar.watch(`${process.cwd()}/**`, {
     ignoreInitial: true,
+    ignored: /log/
 });
 
 watcher.on('change', (event, filename) => {
