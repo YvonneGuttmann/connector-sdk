@@ -277,6 +277,10 @@ module.exports = {
     },
 
     async initBL(){
+        config = require ("../../lib/config").getConfiguration({logger});
+        template = config.controllerConfig.schemaTransformer;
+        jslt = new (require ("@capriza/jslt"))(template);
+        jslt.setTemplate(template);
         await bl.init({config: config.blConfig, logger});
     }
 };

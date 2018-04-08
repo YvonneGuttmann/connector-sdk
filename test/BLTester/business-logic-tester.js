@@ -1,15 +1,26 @@
-var fse = require ("fs-extra");
-var argv = require('minimist')(process.argv.slice(2));
-var log = msg => console.log(`[Business-Logic-Tester] ${msg}`);
+const chokidar = require('chokidar');
+const server = require("./server.js");
 
-//var blPath = `../../../business-logic/${argv.bl}`;
-//fse.copySync(`${blPath}/resources.json`, "../../resources.json");
-var bl = require (`${process.cwd()}`);
+function init() {
+    var bl = require (`${process.cwd()}`);
+    server.registerActions(bl);
+    server.initBL();
+    try{
+        var schema = require (`${process.cwd()}/resources/schema.json`);
+        server.registerSchema(schema);
+    } catch(ex) { }
 
-var server = require("./server.js");
-server.registerActions(bl);
-server.initBL();
-try{
-    var schema = require (`${process.cwd()}/resources/schema.json`);
-    server.registerSchema(schema);
-} catch(ex) { }
+}
+
+init();
+
+console.log(`Start watching files`);
+const watcher = chokidar.watch(`${process.cwd()}/**`, {
+    ignoreInitial: true,
+});
+
+watcher.on('change', (event, filename) => {
+    console.log(`File ${filename} reloading connector`);
+    Object.keys(require.cache).forEach(key=>delete require.cache[key]);
+    init();
+});
