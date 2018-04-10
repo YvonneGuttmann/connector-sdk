@@ -49,9 +49,9 @@ fs.readFile(`${path.resolve(__dirname)}/index.html`, function (err, html) {
         "/fetchData": function (req, res){
             res.writeHeader(200, {"Content-Type": "text/html"});
             if ("fetch" in bl){
-                return bl.fetch({logger})
+                return bl.fetch({logger, signatureList:signatureList})
                     .then(data => {
-                        if(data.partialSync){
+                        if(data.approvals){
                             data = data.approvals;
                         }
                         if (template) return data.map(rawApproval => {
