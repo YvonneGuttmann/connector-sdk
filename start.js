@@ -27,7 +27,16 @@ var connector = new Connector ({logger});
 
 //3. create com service
 logger.info ("Initiating com instance");
-var com = new ComManager(connector,{ logger, config });
+var com;
+try {
+    com = new ComManager(connector,{ logger, config });
+} catch (err) {
+    logger.error(`Failed to create ComManager instance. Exiting...`);
+    setTimeout(() => {
+        process.exit(2);
+    },500);
+    return;
+}
 
 //4. On Exit hook and exceptions:
 exitHook(callback => {
