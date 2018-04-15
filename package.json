@@ -1,6 +1,6 @@
 {
   "name": "@capriza/connector-controller",
-  "version": "1.0.54",
+  "version": "1.0.55",
   "description": "Capriza connectors controller",
   "main": "index.js",
   "directories": {
@@ -11,7 +11,7 @@
   },
   "author": "Doron Oded",
   "dependencies": {
-    "@capriza/jslt": "^0.1.0",
+    "jslt": "^0.1.0",
     "async-exit-hook": "2.0.1",
     "axios": "0.17.1",
     "deepmerge": "2.0.1",
