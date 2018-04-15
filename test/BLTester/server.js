@@ -11,7 +11,7 @@ var path = require ("path");
 var blName = process.cwd().substring(Math.max(process.cwd().lastIndexOf("/") + 1, process.cwd().lastIndexOf("\\") + 1));
 var config = require ("../../lib/config").getConfiguration({logger});
 var template = config.controllerConfig.schemaTransformer;
-var jslt = new (require ("@capriza/jslt"))(template);
+var jslt = new (require ("jslt"))(template);
 jslt.setTemplate(template);
 var old_write = process.stdout.write;
 var signatureList = [];
@@ -279,7 +279,7 @@ module.exports = {
     async initBL(){
         config = require ("../../lib/config").getConfiguration({logger});
         template = config.controllerConfig.schemaTransformer;
-        jslt = new (require ("@capriza/jslt"))(template);
+        jslt = new (require ("jslt"))(template);
         jslt.setTemplate(template);
         await bl.init({config: config.blConfig, logger});
     }
