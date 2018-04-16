@@ -282,5 +282,9 @@ module.exports = {
         jslt = new (require ("jslt"))(template);
         jslt.setTemplate(template);
         await bl.init({config: config.blConfig, logger});
+    },
+
+    async stopBL() {
+        await bl.stop();
     }
 };

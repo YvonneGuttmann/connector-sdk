@@ -20,8 +20,9 @@ const watcher = chokidar.watch(`${process.cwd()}/**`, {
     ignored: /log/
 });
 
-watcher.on('change', (event, filename) => {
+watcher.on('change', async (event, filename) => {
     console.log(`File ${filename} reloading connector`);
     Object.keys(require.cache).forEach(key=>delete require.cache[key]);
+    await server.stopBL();
     init();
 });
