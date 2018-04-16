@@ -93,6 +93,23 @@ describe ("approve / reject", function (){
                 done();
             }).catch(done);
     });
+
+    it ("~3 should remove not exists approval from the backend (after approve)", function (done){
+
+        var backendApproval = {private: {id: "approval1", approver: "approver1", a: "a"}, metadata: {fingerprints: {sync: "a"}}};
+        connector.signatureList = [backendApproval];
+        connector.BL.getApproval = function () {
+            return null;
+        };
+        connector.approve({approval: backendApproval}, {logger})
+            .then(() =>
+                done("approve should have failed due to not exits approval"))
+            .catch (err => {
+                err.should.have.property('details', "Approval was not returned from the connector");
+                expect(err.approvalSyncResult.length).to.equal(1);
+                done();
+            });
+    });
 });
 
 describe ("Fingerprint Object", function (){
