@@ -1,6 +1,6 @@
 {
   "name": "@capriza/connector-controller",
-  "version": "1.0.56",
+  "version": "1.0.57",
   "description": "Capriza connectors controller",
   "main": "index.js",
   "directories": {
@@ -21,7 +21,7 @@
     "object-hash": "1.2.0",
     "path": "0.12.7",
     "pino": "4.10.2",
-    "proxying-agent": "^2.1.2",
+    "proxying-agent": "^2.2.0",
     "syswide-cas": "^5.0.0"
   },
   "devDependencies": {

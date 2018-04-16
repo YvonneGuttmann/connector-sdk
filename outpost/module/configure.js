@@ -21,7 +21,7 @@ let config = {
   systemConfig: outpost.config.systemConfig,
   controllerConfig: (!outpost.config.useVanillaConfig && controllerConfig) ? JSON.parse(controllerConfig) : (vanilla.controllerConfig || {}),
   blConfig: (!outpost.config.useVanillaConfig && blConfig) ? JSON.parse(blConfig) : (vanilla.blConfig || {}),
-  proxyUrl: outpost.config.proxyUrl
+  proxy: outpost.proxy
 }
 fs.writeFileSync("connector/resources/config.json", JSON.stringify(config, null, 2));
 
