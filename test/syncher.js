@@ -139,4 +139,62 @@ describe ("syncher", function (){
 
         syncher.sync(mockHashList, mockApprovals).should.have.deep.members(expected);
     });
+
+    it("~9  prevent adding removed approval. using calcRemoved", function () {
+        var mockApprovals = [
+            { id: 1, private: { id: 1, approver : "approver" }, metadata: { fingerprints: { sync: "111", action: "aaa" } } },
+        ];
+
+        var expected = [
+            { id: 1, syncver: undefined, deleted: true }
+        ];
+
+        var syncher1 = new syncher([]);
+        syncher.sync(mockApprovals, []).should.have.deep.members(expected);
+        expect(syncher1.syncChunk(mockApprovals).length).to.equal(0);
+        syncher1.destroy();
+    });
+
+    it("~10  prevent adding removed approval where approval marked as deleted", function () {
+        var mockApprovals = [
+            { id: 1, private: { id: 1, approver : "approver" }, metadata: { fingerprints: { sync: "111", action: "aaa" } } },
+        ];
+
+        var expected = [
+            { id: 1, syncver: undefined, deleted: true }
+        ];
+
+        var syncher1 = new syncher([]);
+        var syncher2 = new syncher(mockApprovals);
+        syncher2.syncChunk([{ deleted: this, id: 1, private: { id: 1, approver : "approver" }, metadata: { fingerprints: { sync: "111", action: "aaa" }}}]).should.have.deep.members(expected);
+        expect(syncher1.syncChunk(mockApprovals).length).to.equal(0);
+        syncher1.destroy();
+        syncher2.destroy();
+    });
+
+    it("~11  check max synchers should be 5", function () {
+
+        var mockApprovals = [
+            { id: 1, private: { id: 1, approver : "approver" }, metadata: { fingerprints: { sync: "111", action: "aaa" } } },
+        ];
+
+        var expected = [
+            { id: 1, syncver: undefined, deleted: true }
+        ];
+
+        var syncher1 = new syncher([]);
+        var syncher2 = new syncher([]);
+        var syncher3 = new syncher([]);
+        var syncher4 = new syncher([]);
+        var syncher5 = new syncher([]);
+        var syncher6 = new syncher([]);
+        syncher.sync(mockApprovals, []).should.have.deep.members(expected);
+        expect(syncher1.syncChunk(mockApprovals).length).to.equal(1);
+        syncher1.destroy();
+        syncher2.destroy();
+        syncher3.destroy();
+        syncher4.destroy();
+        syncher5.destroy();
+        syncher6.destroy();
+    });
 });
