@@ -1,6 +1,8 @@
 var should = require('chai').should();
 var syncher = require ("../lib/syncher.js");
 var hash = require ("object-hash");
+var chai = require('chai');
+var expect = chai.expect;
 var Logger = require ("../lib/log").Logger;
 var loggerFactory = new Logger("console");
 var logger = loggerFactory.create({component: "test/syncher.js"});
