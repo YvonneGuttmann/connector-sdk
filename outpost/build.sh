@@ -1,5 +1,5 @@
 #!/bin/bash 
-
+  
 PLATFORM=`node -e "console.log(require('os').platform())"`
 export NODE_VER="v8.9.4" 
 export NODE_VER_NAME="node-${NODE_VER}-${PLATFORM}-x64"
