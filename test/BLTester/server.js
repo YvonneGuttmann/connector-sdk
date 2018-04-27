@@ -257,7 +257,10 @@ fs.readFile(`${path.resolve(__dirname)}/index.html`, function (err, html) {
                 .then (res => routes[request.url](request, response));
 
         }
-    }).listen(PORT);
+    });
+    var WS = require("ws");
+    new WS.Server({server: server}).on("connection", () => { logger.info("BLTester connected")});
+    server.listen(PORT);
 
     server.timeout = 15 * 60 * 1000;
 

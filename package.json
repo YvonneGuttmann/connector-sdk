@@ -1,6 +1,6 @@
 {
   "name": "@capriza/connector-controller",
-  "version": "1.0.68",
+  "version": "1.0.69",
   "description": "Capriza connectors controller",
   "main": "index.js",
   "directories": {
@@ -11,7 +11,7 @@
   },
   "author": {
     "name": "Capriza",
-    "email": "",
+    "email": "connecteam@capriza.com",
     "url": "https://www.capriza.com/"
   },
   "repository": {
@@ -19,10 +19,10 @@
     "url": "git://github.com/capriza/connector-sdk"
   },
   "dependencies": {
-    "jslt": "^0.1.0",
     "async-exit-hook": "2.0.1",
     "axios": "0.17.1",
     "deepmerge": "2.0.1",
+    "jslt": "^0.1.0",
     "logrotator": "1.1.0",
     "minimist": "1.2.0",
     "mustache": "2.3.0",
@@ -30,7 +30,8 @@
     "path": "0.12.7",
     "pino": "4.10.2",
     "proxying-agent": "^2.2.0",
-    "syswide-cas": "^5.0.0"
+    "syswide-cas": "^5.0.0",
+    "ws": "^5.1.1"
   },
   "devDependencies": {
     "@capriza/schemas": "^1.0.0",
