@@ -1,11 +1,15 @@
 {
   "name": "@capriza/connector-controller",
-  "version": "1.0.69",
+  "version": "1.0.70",
   "description": "Capriza connectors controller",
   "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
+  "files": [
+    "lib",
+    "outpost",
+    "test",
+    "index.js",
+    "start.js"
+  ],
   "scripts": {
     "test": "./node_modules/.bin/mocha --exit --reporter spec"
   },
