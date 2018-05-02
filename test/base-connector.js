@@ -132,9 +132,9 @@ describe ("Fingerprint Object", function (){
 
         beforeEach (function (){
             connector.config = {
-                    "actionFingerprint": {
-                        "id": "{{approval.id}}"
-                    }
+                "actionFingerprint": {
+                    "id": "{{approval.id}}"
+                }
             };
         });
 
@@ -153,6 +153,29 @@ describe ("Fingerprint Object", function (){
             obj.approval.id = "caprizaId2";
 
             expect(h1.action).not.to.equal(connector._createApprovalFingerprints(obj).action);
+        });
+    });
+
+    describe ("When actionFingerprint is not configured", function (){
+
+        beforeEach (function (){
+            connector.config = {};
+        });
+
+
+        it ("~5 return same hash", function (){
+            var obj = {approval: {id: "caprizaId1", requester: "Roie Uziel", private: {id: "approval1"}}};
+            var h1 = connector._createApprovalFingerprints(obj);
+
+            expect(h1.sync).to.equal(connector._createApprovalFingerprints(obj).sync);
+        });
+
+        it ("~6 return different hash if object was changed", function (){
+            var obj = {approval: {id: "caprizaId1", requester: "Roie Uziel", private: {id: "approval1"}}};
+            var h1 = connector._createApprovalFingerprints(obj);
+            obj.approval.requester = "John Doe";
+
+            expect(h1.sync).not.to.equal(connector._createApprovalFingerprints(obj).sync);
         });
     });
 
