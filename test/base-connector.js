@@ -21,13 +21,16 @@ var powerset = (array) => { // O(2^n)
     }
     return results;
 };
-describe ("approve / reject", function (){
+describe ("SDK Tasks", function (){
     beforeEach (function (){
         var newApproval = {private: {id: "approval1", approver: "approver1"}};
         connector = {
             config: {},
             BL : {
                 settings: {},
+                fetch(){
+                    return Promise.resolve([newApproval]);
+                },
                 getApproval(){
                     return newApproval;
                 },
@@ -54,6 +57,9 @@ describe ("approve / reject", function (){
             async _performAction() {
                 return Connector.prototype._performAction.apply(this, arguments);
             },
+            async sync () {
+                return Connector.prototype.sync.apply(this, arguments);
+            },
             async getApproval () {
                 return Connector.prototype.getApproval.apply (this, arguments);
             },
@@ -66,8 +72,240 @@ describe ("approve / reject", function (){
         }
     })
 
-    it ("~1 should fail on bad validation (the approval has changed)", function (done){
+    it ("~1 sync task - should add 1 approvals", function (done) {
+        connector.signatureList = [];
+        let action = {
+            logger: logger,
+            send: function (approvals) {
+                approvals[0].should.deep.include({private: {approver: "approver1", id: "approval1"}});
+            }
+        };
+        connector.sync(action).then(() => {
+            done();
+        });
+    });
 
+    it ("~2 sync task - fetch return same approval as store in the backend - should add 0 approvals", function (done) {
+        var backendApproval = {private: {id: "approval1", approver: "approver1"}};
+        connector._addApprovalData(backendApproval);
+        connector.signatureList = [backendApproval];
+
+        let action = {
+            logger: logger,
+            send: function (approvals) {
+                expect(approvals.length).to.equal(0);
+            }
+        };
+        connector.sync(action).then(() => {
+            done();
+        });
+    });
+
+    it ("~3 sync task - fetch return new approval - should add 1 approval and remove 1 approval", function (done) {
+        var backendApproval = {private: {id: "approval2", approver: "approver2"}};
+        connector._addApprovalData(backendApproval);
+        backendApproval.id = "caprizaId1";
+        connector.signatureList = [backendApproval];
+
+        let action = {
+            logger: logger,
+            send: function (approvals) {
+                approvals[0].should.deep.include({private: {approver: "approver1", id: "approval1"}});
+                approvals[1].should.deep.include({id: "caprizaId1", deleted: true});
+            }
+        };
+
+        connector.sync(action).then(() => {
+            done();
+        });
+    });
+
+    it ("~4 sync task - fetch return empty list - should remove 1 approval", function (done) {
+        var backendApproval = {private: {id: "approval1", approver: "approver1"}};
+        connector._addApprovalData(backendApproval);
+        backendApproval.id = "caprizaId1";
+        connector.signatureList = [backendApproval];
+        connector.BL.fetch = function () {
+            return Promise.resolve([])
+        };
+
+        let action = {
+            logger: logger,
+            send: function (approvals) {
+                approvals[0].should.deep.include({id: "caprizaId1", deleted: true});
+            }
+        };
+        connector.sync(action).then(() => {
+            done();
+        });
+    });
+
+    it ("~5 sync task - fetch return empty list - should remove 0 approval instead of 1 due to partial sync", function (done) {
+        var backendApproval = {private: {id: "approval1", approver: "approver1"}};
+        connector._addApprovalData(backendApproval);
+        connector.signatureList = [backendApproval];
+        connector.BL.fetch = function () {
+            return Promise.resolve({approvals: [], partialSync: true});
+        };
+
+        let action = {
+            logger: logger,
+            send: function (approvals) {
+                expect(approvals.length).to.equal(0);
+            }
+        };
+        connector.sync(action).then(() => {
+            done();
+        });
+    });
+
+    it ("~6 sync task - fetch return updated approval - should update 1 approval", function (done) {
+        var backendApproval = {private: {id: "approval1", approver: "approver1"}, a: "1"};
+        connector._addApprovalData(backendApproval);
+        connector.signatureList = [backendApproval];
+
+        let action = {
+            logger: logger,
+            send: function (approvals) {
+                approvals[0].should.deep.include({private: {approver: "approver1", id: "approval1"}, a: "1"});
+            }
+        };
+        connector.sync(action).then(() => {
+            done();
+        });
+    });
+
+    it ("~7 sync task - fetch return new and updated approval - should update 1, add 1, remove 0 due to partial sync", function (done) {
+        var backendApproval = {private: {id: "approval1", approver: "approver1"}, a: "1"};
+        var backendApproval2 = {private: {id: "approval2", approver: "approver2"}, a: "2"};
+        connector._addApprovalData(backendApproval);
+        connector._addApprovalData(backendApproval2);
+        connector.signatureList = [backendApproval, backendApproval2];
+
+        connector.BL.fetch = function () {
+            var updatedApproval = {private: {id: "approval1", approver: "approver1"}, a: "a"};
+            var newApproval = {private: {id: "approval3", approver: "approver3"}, a: "3"};
+            return Promise.resolve({approvals: [updatedApproval, newApproval], partialSync: true})
+        };
+
+        let action = {
+            logger: logger,
+            send: function (approvals) {
+                approvals[0].should.deep.include({private: {approver: "approver1", id: "approval1"}, a: "a"});
+                approvals[1].should.deep.include({private: {approver: "approver3", id: "approval3"}, a: "3"});
+            }
+        };
+        connector.sync(action).then(() => {
+            done();
+        });
+    });
+
+    it ("~8 sync task - using callback - should add one approval, one chunk", function (done) {
+        connector.signatureList = [];
+        connector.BL.fetch = function ({}, callback) {
+            var newApproval = {private: {id: "approval1", approver: "approver1"}};
+            callback(null, [newApproval], false);
+        };
+
+        let action = {
+            logger: logger,
+            send: function (approvals) {
+                approvals[0].should.deep.include({private: {approver: "approver1", id: "approval1"}});
+            }
+        };
+        connector.sync(action).then(() => {
+            done();
+        });
+    });
+
+    it ("~9 sync task - using callback - should add two approvals, two chunk", function (done) {
+        connector.signatureList = [];
+        connector.BL.fetch = function ({}, callback) {
+            var newApproval = {private: {id: "approval1", approver: "approver1"}};
+            callback(null, [newApproval], false);
+            var newApproval2 = {private: {id: "approval2", approver: "approver2"}};
+            callback(null, [newApproval2], true);
+        };
+
+        let times = 0;
+        let action = {
+            logger: logger,
+            send: function (approvals) {
+                if(times==0) {
+                    approvals[0].should.deep.include({private: {approver: "approver1", id: "approval1"}});
+                    times++;
+                } else {
+                    approvals[0].should.deep.include({private: {approver: "approver2", id: "approval2"}});
+                }
+            }
+        };
+        connector.sync(action).then(() => {
+            done();
+        });
+    });
+
+    it ("~10 sync task - using callback - should add one approval, and NOT remove one because of partialSync", function (done) {
+        var backendApproval = {private: {id: "approval1", approver: "approver1"}, a: "1"};
+        connector._addApprovalData(backendApproval);
+        connector.signatureList = [backendApproval];
+
+        connector.BL.fetch = function ({}, callback) {
+            var newApproval2 = {private: {id: "approval2", approver: "approver2"}};
+            callback(null, {approvals: [newApproval2], partialSync: true}, false);
+        };
+
+        let action = {
+            logger: logger,
+            send: function (approvals) {
+                approvals[0].should.deep.include({private: {approver: "approver2", id: "approval2"}});
+            }
+        };
+        connector.sync(action).then(() => {
+            done();
+        });
+    });
+
+    it ("~11 sync task - using callback - should add 1 approval, and remove 1", function (done) {
+        var backendApproval = {private: {id: "approval1", approver: "approver1"}, a: "1"};
+        connector._addApprovalData(backendApproval);
+        backendApproval.id = "caprizaId1";
+        connector.signatureList = [backendApproval];
+
+        connector.BL.fetch = function ({}, callback) {
+            var newApproval2 = {private: {id: "approval2", approver: "approver2"}};
+            callback(null, [newApproval2], false);
+        };
+
+        let action = {
+            logger: logger,
+            send: function (approvals) {
+                approvals[0].should.deep.include({private: {approver: "approver2", id: "approval2"}});
+                approvals[1].should.deep.include({id: "caprizaId1", deleted: true});
+            }
+        };
+        connector.sync(action).then(() => {
+            done();
+        });
+    });
+
+    it ("~12 sync task - using callback - throw error", function (done) {
+        connector.signatureList = [];
+        connector.BL.fetch = function ({}, callback) {
+            callback("simulated error", [], false);
+        };
+
+        let action = {
+            logger: logger,
+        };
+        connector.sync(action).then(res => {
+
+        }).catch(err => {
+            expect(err).to.equal("simulated error");
+            done();
+        });
+    });
+
+    it ("~13 approve task - should fail on bad validation (the approval has changed)", function (done){
         var backendApproval = {private: {id: "approval1", approver: "approver1", a: "a"}};
         connector._addApprovalData(backendApproval);
         backendApproval.id = "caprizaId1";
@@ -82,7 +320,7 @@ describe ("approve / reject", function (){
             });
     });
 
-    it ("~2 should return the approval as deleted once approved (assuming not returned again by getApproval)", function (done) {
+    it ("~14 approve task - should return the approval as deleted once approved (assuming not returned again by getApproval)", function (done) {
         var approval = {private: {id: "approval1", approver: "approver1"}};
         connector._addApprovalData(approval);
         approval.id = "caprizaId1";
@@ -94,9 +332,10 @@ describe ("approve / reject", function (){
             }).catch(done);
     });
 
-    it ("~3 should remove not exists approval from the backend (after approve)", function (done){
-
+    it ("~15 approve task - should remove not exists approval from the backend (after approve)", function (done){
         var backendApproval = {private: {id: "approval1", approver: "approver1", a: "a"}, metadata: {fingerprints: {sync: "a"}}};
+        connector._addApprovalData(backendApproval);
+        backendApproval.id = "caprizaId1";
         connector.signatureList = [backendApproval];
         connector.BL.getApproval = function () {
             return null;
@@ -105,8 +344,7 @@ describe ("approve / reject", function (){
             .then(() =>
                 done("approve should have failed due to not exits approval"))
             .catch (err => {
-                err.should.have.property('details', "Approval was not returned from the connector");
-                expect(err.approvalSyncResult.length).to.equal(1);
+                err.approvalSyncResult[0].should.deep.include ({id: "caprizaId1",syncver:undefined, deleted: true});
                 done();
             });
     });
