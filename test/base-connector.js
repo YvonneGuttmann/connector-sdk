@@ -40,6 +40,9 @@ describe ("SDK Tasks", function (){
                 },
                 reject () {
                     return true;
+                },
+                dataTransformer (a) {
+                    return a;
                 }
             },
             getBLLogger() {
