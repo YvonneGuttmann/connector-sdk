@@ -1,6 +1,6 @@
 {
   "name": "@capriza/connector-controller",
-  "version": "1.0.71",
+  "version": "1.0.72",
   "description": "Capriza connectors controller",
   "main": "index.js",
   "files": [
@@ -11,7 +11,8 @@
     "start.js"
   ],
   "scripts": {
-    "test": "./node_modules/.bin/mocha --exit --reporter spec"
+    "test": "./node_modules/.bin/mocha --exit --reporter spec",
+    "test-jenkins": "JUNIT_REPORT_PATH=./report.xml mocha --colors --reporter mocha-jenkins-reporter --exit"
   },
   "author": {
     "name": "Capriza",
@@ -44,6 +45,7 @@
     "mocha": "^4.0.1",
     "mock-require": "^2.0.2",
     "opn": "^5.1.0",
-    "chokidar": "1.7.0"
+    "chokidar": "1.7.0",
+    "mocha-jenkins-reporter": "0.3.10"
   }
 }
