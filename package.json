@@ -37,16 +37,16 @@
     "pino": "4.10.2",
     "proxying-agent": "^2.2.0",
     "syswide-cas": "^5.0.0",
-    "ws": "^5.1.1"
+    "ws": "^5.1.1",
+    "@capriza/schemas": "^1.0.0",
+    "chokidar": "1.7.0",
+    "opn": "^5.1.0"
   },
   "devDependencies": {
-    "@capriza/schemas": "^1.0.0",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "mocha": "^4.0.1",
     "mock-require": "^2.0.2",
-    "opn": "^5.1.0",
-    "chokidar": "1.7.0",
     "mocha-jenkins-reporter": "0.3.10"
   }
 }
