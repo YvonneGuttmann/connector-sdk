@@ -1,6 +1,6 @@
 {
   "name": "@capriza/connector-controller",
-  "version": "1.0.75",
+  "version": "1.0.76",
   "description": "Capriza connectors controller",
   "license": "MIT",
   "main": "index.js",
@@ -28,7 +28,7 @@
     "async-exit-hook": "2.0.1",
     "axios": "0.17.1",
     "deepmerge": "2.0.1",
-    "jslt": "^0.1.0",
+    "jslt": "^0.2.1",
     "logrotator": "1.1.0",
     "minimist": "1.2.0",
     "mustache": "2.3.0",
