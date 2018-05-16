@@ -28,6 +28,7 @@
     "async-exit-hook": "2.0.1",
     "axios": "0.17.1",
     "deepmerge": "2.0.1",
+    "express": "4.16.3",
     "jslt": "^0.2.1",
     "logrotator": "1.1.0",
     "minimist": "1.2.0",

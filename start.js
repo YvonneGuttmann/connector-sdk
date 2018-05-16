@@ -5,6 +5,8 @@ var exitHook = require('async-exit-hook');
 var ComManager = require ("./lib/com.js").ComManager;
 var Connector = require ("./lib/connector.js").Connector;
 var Logger = require ("./lib/log").Logger;
+var LocalServer = require ("./lib/server").LocalServer;
+var com;
 
 process.title = process.env["CONTROLLER_TITLE"] || path.basename(process.cwd());
 var [connectorName, connectorVersion] = process.title.split("@");
@@ -25,16 +27,21 @@ logger = logger.child ({connectorId: config.controllerConfig.connectorId});
 logger.info ("Initiating connector instance");
 var connector = new Connector ({logger});
 
-//3. create com service
-logger.info ("Initiating com instance");
-var com;
-try {
-    com = new ComManager(connector,{ logger, config });
+//3. Initializing com manager instance (local or remote)
+try{
+    if ("local" in argv){
+        logger.info ("Local mode");
+        com = new LocalServer(connector, logger)
+    } else {
+        logger.info("Remote mode");
+        com = new ComManager(connector,{ logger, config });
+    }
 } catch (err) {
-    logger.error(`Failed to create ComManager instance. Exiting...`);
+    logger.error(`Failed to create ComManager instance ${err}.`);
+    logger.info(`Stopping connector`);
     setTimeout(() => {
-        process.exit(2);
-    },500);
+        process.exit();
+    },100);
     return;
 }
 
@@ -46,9 +53,9 @@ exitHook(callback => {
 exitHook.uncaughtExceptionHandler(err => logger.error (`Caught global exception: ${err.stack}`));
 exitHook.unhandledRejectionHandler(err => logger.error (`Caught global async rejection: ${err.stack}`));
 
-//5. bootstrap connector
 async function run(attempts){
     try {
+        logger.info(`Run ${attempts}`);
         await com.start();
     }
     catch (ex) {
@@ -61,4 +68,12 @@ async function run(attempts){
         else process.exit(2);
     }
 }
-run (1); //1st attempt
+
+//5. Bootstrap connector
+logger.info ("Initializing connector");
+connector.init({config,logger})
+    .then(()=>run(1)) //1st attempt
+    .catch(err=>{
+        logger.error(`Connector initialization failed ${err}`);
+        process.exit(2);
+    });
