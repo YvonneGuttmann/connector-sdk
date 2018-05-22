@@ -6,6 +6,7 @@ var ComManager = require ("./lib/com.js").ComManager;
 var Connector = require ("./lib/connector.js").Connector;
 var Logger = require ("./lib/log").Logger;
 var LocalServer = require ("./lib/server").LocalServer;
+var watch = require ("./lib/watcher");
 var com;
 
 process.title = process.env["CONTROLLER_TITLE"] || path.basename(process.cwd());
@@ -31,7 +32,15 @@ var connector = new Connector ({logger});
 try{
     if ("local" in argv){
         logger.info ("Local mode");
-        com = new LocalServer(connector, logger)
+        com = new LocalServer(connector, logger);
+        watch(()=>{
+            logger.info(`Reloading connector`);
+            com.stop().catch().then(connector.stop.bind(connector)).then(()=>{
+                config = require('./lib/config').getConfiguration({logger: logger.child({component: "config"})});
+                connector = new Connector ({logger});
+                com = new LocalServer(connector, logger);
+            }).then(async ()=>connector.init({config,logger})).then(com.start.bind(com)).then(()=>logger.info(`Done reloading connector`));
+        })
     } else {
         logger.info("Remote mode");
         com = new ComManager(connector,{ logger, config });
