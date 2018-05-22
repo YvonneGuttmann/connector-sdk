@@ -21,64 +21,30 @@ var powerset = (array) => { // O(2^n)
     }
     return results;
 };
+
+var MOCK_APPROVAL_1 = { schemaId: "schemaId", private: {id: "approval1", approver: "approver1"}, public: {name: "1"} };
+var MOCK_APPROVAL_1_UPDATED = { schemaId: "schemaId", private: {id: "approval1", approver: "approver1"}, public: {name: "11"} };
+var MOCK_APPROVAL_2 = { schemaId: "schemaId", private: {id: "approval2", approver: "approver2"}, public: {name: "2"} };
+var MOCK_APPROVAL_3 = { schemaId: "schemaId", private: {id: "approval3", approver: "approver3"}, public: {name: "3"} };
+
 describe ("SDK Tasks", function (){
     beforeEach (function (){
-        var newApproval = {private: {id: "approval1", approver: "approver1"}};
-        connector = {
-            config: {},
-            BL : {
-                settings: {},
-                fetch(){
-                    return Promise.resolve([newApproval]);
-                },
-                getApproval(){
-                    return newApproval;
-                },
-                approve (){
-                    newApproval = null; //removed after approved
-                    return true;
-                },
-                reject () {
-                    return true;
-                },
-                dataTransformer (a) {
-                    return a;
-                }
-            },
-            getBLLogger() {
-                return Connector.prototype.getBLLogger.apply (this, arguments);
-            },
-            _addApprovalData(){
-                return Connector.prototype._addApprovalData.apply (this, arguments);
-            },
-            _createApprovalFingerprints(){
-                return Connector.prototype._createApprovalFingerprints.apply (this, arguments);
-            },
-            _compareActionFingerPrints(){
-                return Connector.prototype._compareActionFingerPrints.apply (this, arguments);
-            },
-            async _performAction() {
-                return Connector.prototype._performAction.apply(this, arguments);
-            },
-            async sync () {
-                return Connector.prototype.sync.apply(this, arguments);
-            },
-            async getApproval () {
-                return Connector.prototype.getApproval.apply (this, arguments);
-            },
-            async approve (){
-                return Connector.prototype.approve.apply (this, arguments);
-            },
-            async reject (){
-                return Connector.prototype.reject.apply (this, arguments);
-            }
-        }
-    })
+        connector = require('./mockSDK');
+        MOCK_APPROVAL_1 = { schemaId: "schemaId", private: {id: "approval1", approver: "approver1"}, public: {name: "1"} };
+        MOCK_APPROVAL_1_UPDATED = { schemaId: "schemaId", private: {id: "approval1", approver: "approver1"}, public: {name: "11"} };
+        MOCK_APPROVAL_2 = { schemaId: "schemaId", private: {id: "approval2", approver: "approver2"}, public: {name: "2"} };
+        MOCK_APPROVAL_3 = { schemaId: "schemaId", private: {id: "approval3", approver: "approver3"}, public: {name: "3"} };
+    });
 
     it ("~1 sync task - should add 1 approvals", function (done) {
+        connector.BL.fetch = () => { return Promise.resolve([MOCK_APPROVAL_1]) };
         connector.signatureList = [];
+
         let action = {
             logger: logger,
+            getUITemplate: function () {
+                return {};
+            },
             send: function (approvals) {
                 approvals[0].should.deep.include({private: {approver: "approver1", id: "approval1"}});
             }
@@ -89,12 +55,12 @@ describe ("SDK Tasks", function (){
     });
 
     it ("~2 sync task - fetch return same approval as store in the backend - should add 0 approvals", function (done) {
-        var backendApproval = {private: {id: "approval1", approver: "approver1"}};
-        connector._addApprovalData(backendApproval);
-        connector.signatureList = [backendApproval];
+        connector.BL.fetch = () => { return Promise.resolve([MOCK_APPROVAL_1]) };
+        connector.signatureList = [connector._addApprovalData(MOCK_APPROVAL_1)];
 
         let action = {
             logger: logger,
+            getUITemplate: () => { return {} },
             send: function (approvals) {
                 expect(approvals.length).to.equal(0);
             }
@@ -105,13 +71,12 @@ describe ("SDK Tasks", function (){
     });
 
     it ("~3 sync task - fetch return new approval - should add 1 approval and remove 1 approval", function (done) {
-        var backendApproval = {private: {id: "approval2", approver: "approver2"}};
-        connector._addApprovalData(backendApproval);
-        backendApproval.id = "caprizaId1";
-        connector.signatureList = [backendApproval];
+        connector.BL.fetch = () => { return Promise.resolve([MOCK_APPROVAL_1]) };
+        connector.signatureList = [Object.assign(connector._addApprovalData(MOCK_APPROVAL_2), {id: "caprizaId1"})];
 
         let action = {
             logger: logger,
+            getUITemplate: () => { return {} },
             send: function (approvals) {
                 approvals[0].should.deep.include({private: {approver: "approver1", id: "approval1"}});
                 approvals[1].should.deep.include({id: "caprizaId1", deleted: true});
@@ -124,16 +89,12 @@ describe ("SDK Tasks", function (){
     });
 
     it ("~4 sync task - fetch return empty list - should remove 1 approval", function (done) {
-        var backendApproval = {private: {id: "approval1", approver: "approver1"}};
-        connector._addApprovalData(backendApproval);
-        backendApproval.id = "caprizaId1";
-        connector.signatureList = [backendApproval];
-        connector.BL.fetch = function () {
-            return Promise.resolve([])
-        };
+        connector.BL.fetch = () => { return Promise.resolve([]) };
+        connector.signatureList = [Object.assign(connector._addApprovalData(MOCK_APPROVAL_1), {id: "caprizaId1"})];
 
         let action = {
             logger: logger,
+            getUITemplate: () => { return {} },
             send: function (approvals) {
                 approvals[0].should.deep.include({id: "caprizaId1", deleted: true});
             }
@@ -144,15 +105,12 @@ describe ("SDK Tasks", function (){
     });
 
     it ("~5 sync task - fetch return empty list - should remove 0 approval instead of 1 due to partial sync", function (done) {
-        var backendApproval = {private: {id: "approval1", approver: "approver1"}};
-        connector._addApprovalData(backendApproval);
-        connector.signatureList = [backendApproval];
-        connector.BL.fetch = function () {
-            return Promise.resolve({approvals: [], partialSync: true});
-        };
+        connector.BL.fetch = () => { return Promise.resolve({approvals: [], partialSync: true}) };
+        connector.signatureList = [Object.assign(connector._addApprovalData(MOCK_APPROVAL_1), {id: "caprizaId1"})];
 
         let action = {
             logger: logger,
+            getUITemplate: () => { return {} },
             send: function (approvals) {
                 expect(approvals.length).to.equal(0);
             }
@@ -163,14 +121,14 @@ describe ("SDK Tasks", function (){
     });
 
     it ("~6 sync task - fetch return updated approval - should update 1 approval", function (done) {
-        var backendApproval = {private: {id: "approval1", approver: "approver1"}, a: "1"};
-        connector._addApprovalData(backendApproval);
-        connector.signatureList = [backendApproval];
+        connector.BL.fetch = () => { return Promise.resolve([MOCK_APPROVAL_1_UPDATED]) };
+        connector.signatureList = [connector._addApprovalData(MOCK_APPROVAL_1)];
 
         let action = {
             logger: logger,
+            getUITemplate: () => { return {} },
             send: function (approvals) {
-                approvals[0].should.deep.include({private: {approver: "approver1", id: "approval1"}, a: "1"});
+                approvals[0].should.deep.include(MOCK_APPROVAL_1_UPDATED);
             }
         };
         connector.sync(action).then(() => {
@@ -179,23 +137,15 @@ describe ("SDK Tasks", function (){
     });
 
     it ("~7 sync task - fetch return new and updated approval - should update 1, add 1, remove 0 due to partial sync", function (done) {
-        var backendApproval = {private: {id: "approval1", approver: "approver1"}, a: "1"};
-        var backendApproval2 = {private: {id: "approval2", approver: "approver2"}, a: "2"};
-        connector._addApprovalData(backendApproval);
-        connector._addApprovalData(backendApproval2);
-        connector.signatureList = [backendApproval, backendApproval2];
-
-        connector.BL.fetch = function () {
-            var updatedApproval = {private: {id: "approval1", approver: "approver1"}, a: "a"};
-            var newApproval = {private: {id: "approval3", approver: "approver3"}, a: "3"};
-            return Promise.resolve({approvals: [updatedApproval, newApproval], partialSync: true})
-        };
+        connector.BL.fetch = () => { return Promise.resolve({ approvals: [MOCK_APPROVAL_1_UPDATED, MOCK_APPROVAL_3], partialSync: true })};
+        connector.signatureList = [connector._addApprovalData(MOCK_APPROVAL_1), connector._addApprovalData(MOCK_APPROVAL_2)];
 
         let action = {
             logger: logger,
+            getUITemplate: () => { return {} },
             send: function (approvals) {
-                approvals[0].should.deep.include({private: {approver: "approver1", id: "approval1"}, a: "a"});
-                approvals[1].should.deep.include({private: {approver: "approver3", id: "approval3"}, a: "3"});
+                approvals[0].should.deep.include(MOCK_APPROVAL_1_UPDATED);
+                approvals[1].should.deep.include(MOCK_APPROVAL_3);
             }
         };
         connector.sync(action).then(() => {
@@ -204,16 +154,14 @@ describe ("SDK Tasks", function (){
     });
 
     it ("~8 sync task - using callback - should add one approval, one chunk", function (done) {
+        connector.BL.fetch = ({}, callback) => { return callback(null, [MOCK_APPROVAL_1], false); };
         connector.signatureList = [];
-        connector.BL.fetch = function ({}, callback) {
-            var newApproval = {private: {id: "approval1", approver: "approver1"}};
-            callback(null, [newApproval], false);
-        };
 
         let action = {
             logger: logger,
+            getUITemplate: () => { return {} },
             send: function (approvals) {
-                approvals[0].should.deep.include({private: {approver: "approver1", id: "approval1"}});
+                approvals[0].should.deep.include(MOCK_APPROVAL_1);
             }
         };
         connector.sync(action).then(() => {
@@ -222,23 +170,19 @@ describe ("SDK Tasks", function (){
     });
 
     it ("~9 sync task - using callback - should add two approvals, two chunk", function (done) {
+        connector.BL.fetch = ({}, callback) => { callback(null, [MOCK_APPROVAL_1], false); callback(null, [MOCK_APPROVAL_2], true); };
         connector.signatureList = [];
-        connector.BL.fetch = function ({}, callback) {
-            var newApproval = {private: {id: "approval1", approver: "approver1"}};
-            callback(null, [newApproval], false);
-            var newApproval2 = {private: {id: "approval2", approver: "approver2"}};
-            callback(null, [newApproval2], true);
-        };
 
         let times = 0;
         let action = {
             logger: logger,
+            getUITemplate: () => { return {} },
             send: function (approvals) {
                 if(times==0) {
-                    approvals[0].should.deep.include({private: {approver: "approver1", id: "approval1"}});
+                    approvals[0].should.deep.include(MOCK_APPROVAL_1);
                     times++;
                 } else {
-                    approvals[0].should.deep.include({private: {approver: "approver2", id: "approval2"}});
+                    approvals[0].should.deep.include(MOCK_APPROVAL_2);
                 }
             }
         };
@@ -248,19 +192,14 @@ describe ("SDK Tasks", function (){
     });
 
     it ("~10 sync task - using callback - should add one approval, and NOT remove one because of partialSync", function (done) {
-        var backendApproval = {private: {id: "approval1", approver: "approver1"}, a: "1"};
-        connector._addApprovalData(backendApproval);
-        connector.signatureList = [backendApproval];
-
-        connector.BL.fetch = function ({}, callback) {
-            var newApproval2 = {private: {id: "approval2", approver: "approver2"}};
-            callback(null, {approvals: [newApproval2], partialSync: true}, false);
-        };
+        connector.BL.fetch = ({}, callback) => { return callback(null, {approvals: [MOCK_APPROVAL_2], partialSync: true }, false); };
+        connector.signatureList = [connector._addApprovalData(MOCK_APPROVAL_1)];
 
         let action = {
             logger: logger,
+            getUITemplate: () => { return {} },
             send: function (approvals) {
-                approvals[0].should.deep.include({private: {approver: "approver2", id: "approval2"}});
+                approvals[0].should.deep.include(MOCK_APPROVAL_2);
             }
         };
         connector.sync(action).then(() => {
@@ -269,20 +208,14 @@ describe ("SDK Tasks", function (){
     });
 
     it ("~11 sync task - using callback - should add 1 approval, and remove 1", function (done) {
-        var backendApproval = {private: {id: "approval1", approver: "approver1"}, a: "1"};
-        connector._addApprovalData(backendApproval);
-        backendApproval.id = "caprizaId1";
-        connector.signatureList = [backendApproval];
-
-        connector.BL.fetch = function ({}, callback) {
-            var newApproval2 = {private: {id: "approval2", approver: "approver2"}};
-            callback(null, [newApproval2], false);
-        };
+        connector.BL.fetch = ({}, callback) => { return callback(null, {approvals: [MOCK_APPROVAL_2], partialSync: false }, false); };
+        connector.signatureList = [Object.assign(connector._addApprovalData(MOCK_APPROVAL_1), {id: "caprizaId1"})];
 
         let action = {
             logger: logger,
+            getUITemplate: () => { return {} },
             send: function (approvals) {
-                approvals[0].should.deep.include({private: {approver: "approver2", id: "approval2"}});
+                approvals[0].should.deep.include(MOCK_APPROVAL_2);
                 approvals[1].should.deep.include({id: "caprizaId1", deleted: true});
             }
         };
@@ -308,13 +241,11 @@ describe ("SDK Tasks", function (){
         });
     });
 
-    it ("~13 approve task - should fail on bad validation (the approval has changed)", function (done){
-        var backendApproval = {private: {id: "approval1", approver: "approver1", a: "a"}};
-        connector._addApprovalData(backendApproval);
-        backendApproval.id = "caprizaId1";
-        connector.signatureList = [backendApproval];
+    it ("~13 approve task - should fail on bad validation - approval doesn't match latest backend approval", function (done){
+        connector.signatureList = [Object.assign(connector._addApprovalData(MOCK_APPROVAL_1), {id: "caprizaId1"})];
+        var copiedApproval = JSON.parse(JSON.stringify(MOCK_APPROVAL_1));
 
-        connector.approve({approval: {id: "caprizaId1", private: {id: "approval1"}, metadata: {fingerprints: {}}}}, {logger})
+        connector.approve({ approval: Object.assign(copiedApproval, {metadata: {fingerprints: {}}}) }, {logger})
             .then(() =>
                 done("approve should have failed due to fingerprint mismatch"))
             .catch (err => {
@@ -323,110 +254,50 @@ describe ("SDK Tasks", function (){
             });
     });
 
-    it ("~14 approve task - should return the approval as deleted once approved (assuming not returned again by getApproval)", function (done) {
-        var approval = {private: {id: "approval1", approver: "approver1"}};
-        connector._addApprovalData(approval);
-        approval.id = "caprizaId1";
-        connector.signatureList = [approval];
-        connector.approve({approval}, {logger})
-            .then (res => {
-                res.should.deep.include ({id: "caprizaId1",syncver:undefined, deleted: true});
-                done();
-            }).catch(done);
-    });
+    it ("~14 approve task - should fail on bad validation - approval doesn't match in the source system", function (done){
+        connector.signatureList = [Object.assign(connector._addApprovalData(MOCK_APPROVAL_1), {id: "caprizaId1"})];
 
-    it ("~15 approve task - should remove not exists approval from the backend (after approve)", function (done){
-        var backendApproval = {private: {id: "approval1", approver: "approver1", a: "a"}, metadata: {fingerprints: {sync: "a"}}};
-        connector._addApprovalData(backendApproval);
-        backendApproval.id = "caprizaId1";
-        connector.signatureList = [backendApproval];
-        connector.BL.getApproval = function () {
-            return null;
-        };
-        connector.approve({approval: backendApproval}, {logger})
+        connector.approve({ approval: MOCK_APPROVAL_1 }, {logger})
             .then(() =>
-                done("approve should have failed due to not exits approval"))
+                logger.error("approve should have failed due to fingerprint mismatch"))
             .catch (err => {
-                err.approvalSyncResult[0].should.deep.include ({id: "caprizaId1",syncver:undefined, deleted: true});
+                err.should.have.property ('details', "Action failed! approval doesn't match in the source system");
                 done();
             });
     });
-});
 
-describe ("Fingerprint Object", function (){
-    it ("~1 return same hash if object is the same)", function (){
-        var obj = {approval: {id: "caprizaId1", requester: "Roie Uziel", private: {id: "approval1"}}};
-        var obj2 = {approval: {id: "caprizaId1", requester: "Roie Uziel", private: {id: "approval1"}}};
+    it ("~15 approve task - should return the approval as deleted once approved", function (done) {
+        var approvalToApprove = { schemaId: "schemaId", private: {id: "approval1", approver: "approver1"}, id: "caprizaId1"};
+        connector.signatureList = [connector._addApprovalData(approvalToApprove)];
+        connector.resetApproval();
 
-        expect(connector._createApprovalFingerprints(obj)).to.deep.equal(connector._createApprovalFingerprints(obj2));
+        connector.approve({ approval: approvalToApprove}, {logger})
+            .then (res => {
+                res.should.deep.include ({id: "caprizaId1", syncver:undefined, deleted: true});
+                done();
+            });
     });
 
-    it ("~2 return different hash if object changed)", function (){
-        var obj = {approval: {id: "caprizaId1", requester: "Roie Uziel", private: {id: "approval1"}}};
-        var h1 = connector._createApprovalFingerprints(obj);
-        obj.approval.requester = "John Doe";
+    it ("~16 approve task - should remove not exists approval from the backend (after approve)", function (done){
+        connector.BL.getApproval = () => { return null };
+        let approval = connector._addApprovalData(Object.assign(MOCK_APPROVAL_1, {id: "caprizaId"}));
+        connector.signatureList = [approval];
 
-        expect(h1).not.to.equal(connector._createApprovalFingerprints(obj));
+        connector.approve({approval: approval}, {logger})
+            .then(() =>
+                logger.error("approve should have failed due to not exits approval"))
+            .catch (err => {
+                err.approvalSyncResult[0].should.deep.include ({id: "caprizaId",syncver:undefined, deleted: true});
+                done();
+            });
     });
-
-    describe ("When actionFingerprint is configured", function (){
-
-        beforeEach (function (){
-            connector.config = {
-                "actionFingerprint": {
-                    "id": "{{approval.id}}"
-                }
-            };
-        });
-
-
-        it ("~3 return same hash if object changed but actionFingerprint returned same object)", function (){
-            var obj = {approval: {id: "caprizaId1", requester: "Roie Uziel", private: {id: "approval1"}}};
-            var h1 = connector._createApprovalFingerprints(obj);
-            obj.approval.requester = "John Doe";
-
-            expect(h1.action).to.equal(connector._createApprovalFingerprints(obj).action);
-        });
-
-        it ("~4 return different hash if object changed but actionFingerprint returned different object)", function (){
-            var obj = {approval: {id: "caprizaId1", requester: "Roie Uziel", private: {id: "approval1"}}};
-            var h1 = connector._createApprovalFingerprints(obj);
-            obj.approval.id = "caprizaId2";
-
-            expect(h1.action).not.to.equal(connector._createApprovalFingerprints(obj).action);
-        });
-    });
-
-    describe ("When actionFingerprint is not configured", function (){
-
-        beforeEach (function (){
-            connector.config = {};
-        });
-
-
-        it ("~5 return same hash", function (){
-            var obj = {approval: {id: "caprizaId1", requester: "Roie Uziel", private: {id: "approval1"}}};
-            var h1 = connector._createApprovalFingerprints(obj);
-
-            expect(h1.sync).to.equal(connector._createApprovalFingerprints(obj).sync);
-        });
-
-        it ("~6 return different hash if object was changed", function (){
-            var obj = {approval: {id: "caprizaId1", requester: "Roie Uziel", private: {id: "approval1"}}};
-            var h1 = connector._createApprovalFingerprints(obj);
-            obj.approval.requester = "John Doe";
-
-            expect(h1.sync).not.to.equal(connector._createApprovalFingerprints(obj).sync);
-        });
-    });
-
 });
 
 describe ("BL Validation", function (){
     var requiredMethods = ['init', 'stop', 'fetch', 'approve', 'reject', 'downloadAttachment'];
     var allCombinations = powerset(requiredMethods);
 
-    it ("~1 should fail BL validation if one of the required methods is missing (without getApprovals)", function (){
+    it ("~1 should fail BL validation if one of the required methods is missing (without getApprovals)", function (done){
         allCombinations.forEach (blCombo => {
             var bl = blCombo.reduce ( (bl, method) => Object.assign(bl, {[method]: () => null}), {});
             var mockConnector = {
@@ -437,18 +308,19 @@ describe ("BL Validation", function (){
             if (comboShouldFail)
                 expect (() => Connector.prototype.validateBL.apply(mockConnector)).to.throw();
         });
+        done();
     });
 
-    it ("~2 should fail if getApproval method is missing without selfValidation=false, disableMiniSync=false in the bl settings", function (){
+    it ("~2 should fail if getApproval method is missing without selfValidation=false, disableMiniSync=false in the bl settings", function (done){
         var mockConnector = {
             logger: console,
             BL: Object.assign ({settings: {}}, requiredMethods.reduce ( (bl, method) => Object.assign (bl, {[method]: () => null}), {} ))
         }
         expect (() => Connector.prototype.validateBL.apply(mockConnector)).to.throw(/'getApproval' method is missing in the BL Connector/);
-
+        done();
     });
 
-    it ("~3 should fail if getApproval method is missing with selfValidation=true, disableMiniSync=false in the bl settings", function (){
+    it ("~3 should fail if getApproval method is missing with selfValidation=true, disableMiniSync=false in the bl settings", function (done){
         var mockConnector = {
             logger: console,
             BL: Object.assign (
@@ -457,10 +329,10 @@ describe ("BL Validation", function (){
             )
         }
         expect (() => Connector.prototype.validateBL.apply(mockConnector)).to.throw(/'getApproval' method is missing in the BL Connector/);
-
+        done();
     });
 
-    it ("~4 should fail if getApproval method is missing with selfValidation=false, disableMiniSync=true in the bl settings", function (){
+    it ("~4 should fail if getApproval method is missing with selfValidation=false, disableMiniSync=true in the bl settings", function (done){
         var mockConnector = {
             logger: console,
             BL: Object.assign (
@@ -469,10 +341,10 @@ describe ("BL Validation", function (){
             )
         }
         expect (() => Connector.prototype.validateBL.apply(mockConnector)).to.throw(/'getApproval' method is missing in the BL Connector/);
-
+        done();
     });
 
-    it ("~5 should pass if getApproval method is missing with disableMiniSync=true && selfValidation = true in the bl settings", function (){
+    it ("~5 should pass if getApproval method is missing with disableMiniSync=true && selfValidation = true in the bl settings", function (done){
         var mockConnector = {
             logger: console,
             BL: Object.assign (
@@ -481,7 +353,7 @@ describe ("BL Validation", function (){
             )
         }
         expect (() => Connector.prototype.validateBL.apply(mockConnector)).to.not.throw(/'getApproval' method is missing in the BL Connector/);
-
+        done();
     });
 
 });
