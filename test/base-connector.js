@@ -291,6 +291,30 @@ describe ("SDK Tasks", function (){
                 done();
             });
     });
+
+    it ("~17 approve task - disableMiniSync=true. approve action should auto remove approval without mini sync", function (done){
+        connector.BL.getApproval = () => { return MOCK_APPROVAL_1 };
+        let approval = connector._addApprovalData(Object.assign(MOCK_APPROVAL_1, {id: "caprizaId"}));
+        connector.signatureList = [approval];
+        connector.BL.settings = {disableMiniSync: true};
+        connector.approve({approval: approval}, {logger})
+            .then(approvals => {
+                approvals[0].should.deep.include ({id: "caprizaId",syncver:undefined, deleted: true});
+                done();
+            });
+    });
+
+    it ("~18 reject task - disableMiniSync=true. reject action should auto remove approval without mini sync", function (done){
+        connector.BL.getApproval = () => { return MOCK_APPROVAL_1 };
+        let approval = connector._addApprovalData(Object.assign(MOCK_APPROVAL_1, {id: "caprizaId"}));
+        connector.signatureList = [approval];
+        connector.BL.settings = {disableMiniSync: true};
+        connector.reject({approval: approval}, {logger})
+            .then(approvals => {
+                approvals[0].should.deep.include ({id: "caprizaId",syncver:undefined, deleted: true});
+                done();
+            });
+    });
 });
 
 describe ("BL Validation", function (){
