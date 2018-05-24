@@ -5,7 +5,6 @@ var exitHook = require('async-exit-hook');
 var ComManager = require ("./lib/com.js").ComManager;
 var Connector = require ("./lib/connector.js").Connector;
 var Logger = require ("./lib/log").Logger;
-var LocalServer = require ("./lib/server").LocalServer;
 var watch = require ("./lib/watcher");
 var com;
 
@@ -28,10 +27,36 @@ logger = logger.child ({connectorId: config.controllerConfig.connectorId});
 logger.info ("Initiating connector instance");
 var connector = new Connector ({logger});
 
+function startRemoteMode(config) {
+	logger.info("Remote mode");
+
+	if (!config.creds || !config.creds.apiKey || !config.creds.apiSecret)
+		throw "API credentials was not found in configuration";
+	
+	var apiUrl = config.apiUrl;
+	var requestHeaders = {
+		"x-capriza-api-key"			: config.creds.apiKey,
+		"x-capriza-secret"			: config.creds.apiSecret,
+		"x-capriza-connector-id"	: config.connectorId
+	};
+	
+	var BackendAPI = require("./lib/backendAPI.js");
+
+	var TaskClasses = require("./lib/task.js")({
+		handlers	: require("./lib/taskHandlers.js"),
+		config		: config.controllerConfig,
+		api			: new BackendAPI(apiUrl, requestHeaders, config),
+		connector	: connector,
+		logger		: logger
+	});
+	com = new ComManager({ apiUrl, requestHeaders, TaskClasses, logger, config });
+}
+
 //3. Initializing com manager instance (local or remote)
 try{
     if ("local" in argv){
         logger.info ("Local mode");
+		var LocalServer = require ("./lib/server").LocalServer;
         com = new LocalServer(connector, logger);
         watch(()=>{
             logger.info(`Reloading connector`);
@@ -42,8 +67,7 @@ try{
             }).then(async ()=>connector.init({config,logger})).then(com.start.bind(com)).then(()=>logger.info(`Done reloading connector`));
         })
     } else {
-        logger.info("Remote mode");
-        com = new ComManager(connector,{ logger, config });
+        startRemoteMode(config.controllerConfig);
     }
 } catch (err) {
     logger.error(`Failed to create ComManager instance ${err}.`);
