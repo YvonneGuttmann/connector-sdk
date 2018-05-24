@@ -20,9 +20,6 @@ module.exports = {
         },
         reject () {
             return true;
-        },
-        dataTransformer (a) {
-            return a;
         }
     },
     getBLLogger() {

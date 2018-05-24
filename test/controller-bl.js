@@ -30,6 +30,7 @@ var MOCK_APPROVAL_3 = { schemaId: "schemaId", private: {id: "approval3", approve
 describe ("SDK Tasks", function (){
     beforeEach (function (){
         connector = require('./mockSDK');
+        connector.BL.dataTransformer = (a) => { return a; };
         MOCK_APPROVAL_1 = { schemaId: "schemaId", private: {id: "approval1", approver: "approver1"}, public: {name: "1"} };
         MOCK_APPROVAL_1_UPDATED = { schemaId: "schemaId", private: {id: "approval1", approver: "approver1"}, public: {name: "11"} };
         MOCK_APPROVAL_2 = { schemaId: "schemaId", private: {id: "approval2", approver: "approver2"}, public: {name: "2"} };
@@ -153,7 +154,69 @@ describe ("SDK Tasks", function (){
         });
     });
 
-    it ("~8 sync task - using callback - should add one approval, one chunk", function (done) {
+    it ("~8 sync task - fetch return new approval but data transformer failed - should send 0 approval", function (done) {
+        connector.BL.fetch = () => { return Promise.resolve([MOCK_APPROVAL_1])};
+        connector.BL.dataTransformer = (a) => {
+            let approval = {};
+            approval.kuku = a.ku.ku;
+            return approval;
+        };
+
+        connector.signatureList = [];
+
+        let action = {
+            logger: logger,
+            getUITemplate: () => { return {} },
+            send: function (approvals) {
+                expect(approvals.length).to.equal(0);
+            }
+        };
+        connector.sync(action).then(() => {
+            done();
+        });
+
+    });
+
+    it ("~9 sync task - fetch return new approval and UITemplate validate passed - should send 1 approval", function (done) {
+        connector.BL.fetch = () => { return Promise.resolve([MOCK_APPROVAL_1])};
+        connector.signatureList = [];
+
+        let action = {
+            logger: logger,
+            getUITemplate: () => { return {
+                name: "{{name:string}}"
+            } },
+            send: function (approvals) {
+                approvals[0].should.deep.include(MOCK_APPROVAL_1);
+            }
+        };
+        connector.sync(action).then(() => {
+            done();
+        });
+
+    });
+
+    it ("~10 sync task - fetch return new approval but UITemplate validate failed - should send 1 approval anyway", function (done) {
+        connector.BL.fetch = () => { return Promise.resolve([MOCK_APPROVAL_1])};
+        connector.signatureList = [];
+
+        let action = {
+            logger: logger,
+            getUITemplate: () => { return {
+                name: "{{kuku:string}}"
+            } },
+            send: function (approvals) {
+                approvals[0].should.deep.include(MOCK_APPROVAL_1);
+                expect(approvals[0].error).to.equal("DataValidationException")
+            }
+        };
+        connector.sync(action).then(() => {
+            done();
+        });
+
+    });
+
+    it ("~11 sync task - using callback - should add one approval, one chunk", function (done) {
         connector.BL.fetch = ({}, callback) => { return callback(null, [MOCK_APPROVAL_1], false); };
         connector.signatureList = [];
 
@@ -169,7 +232,7 @@ describe ("SDK Tasks", function (){
         });
     });
 
-    it ("~9 sync task - using callback - should add two approvals, two chunk", function (done) {
+    it ("~12 sync task - using callback - should add two approvals, two chunk", function (done) {
         connector.BL.fetch = ({}, callback) => { callback(null, [MOCK_APPROVAL_1], false); callback(null, [MOCK_APPROVAL_2], true); };
         connector.signatureList = [];
 
@@ -191,7 +254,7 @@ describe ("SDK Tasks", function (){
         });
     });
 
-    it ("~10 sync task - using callback - should add one approval, and NOT remove one because of partialSync", function (done) {
+    it ("~13 sync task - using callback - should add one approval, and NOT remove one because of partialSync", function (done) {
         connector.BL.fetch = ({}, callback) => { return callback(null, {approvals: [MOCK_APPROVAL_2], partialSync: true }, false); };
         connector.signatureList = [connector._addApprovalData(MOCK_APPROVAL_1)];
 
@@ -207,7 +270,7 @@ describe ("SDK Tasks", function (){
         });
     });
 
-    it ("~11 sync task - using callback - should add 1 approval, and remove 1", function (done) {
+    it ("~14 sync task - using callback - should add 1 approval, and remove 1", function (done) {
         connector.BL.fetch = ({}, callback) => { return callback(null, {approvals: [MOCK_APPROVAL_2], partialSync: false }, false); };
         connector.signatureList = [Object.assign(connector._addApprovalData(MOCK_APPROVAL_1), {id: "caprizaId1"})];
 
@@ -224,7 +287,7 @@ describe ("SDK Tasks", function (){
         });
     });
 
-    it ("~12 sync task - using callback - throw error", function (done) {
+    it ("~15 sync task - using callback - throw error", function (done) {
         connector.signatureList = [];
         connector.BL.fetch = function ({}, callback) {
             callback("simulated error", [], false);
@@ -241,7 +304,7 @@ describe ("SDK Tasks", function (){
         });
     });
 
-    it ("~13 approve task - should fail on bad validation - approval doesn't match latest backend approval", function (done){
+    it ("~16 approve task - should fail on bad validation - approval doesn't match latest backend approval", function (done){
         connector.signatureList = [Object.assign(connector._addApprovalData(MOCK_APPROVAL_1), {id: "caprizaId1"})];
         var copiedApproval = JSON.parse(JSON.stringify(MOCK_APPROVAL_1));
 
@@ -254,7 +317,7 @@ describe ("SDK Tasks", function (){
             });
     });
 
-    it ("~14 approve task - should fail on bad validation - approval doesn't match in the source system", function (done){
+    it ("~17 approve task - should fail on bad validation - approval doesn't match in the source system", function (done){
         connector.signatureList = [Object.assign(connector._addApprovalData(MOCK_APPROVAL_1), {id: "caprizaId1"})];
 
         connector.approve({ approval: MOCK_APPROVAL_1 }, {logger})
@@ -266,7 +329,7 @@ describe ("SDK Tasks", function (){
             });
     });
 
-    it ("~15 approve task - should return the approval as deleted once approved", function (done) {
+    it ("~18 approve task - should return the approval as deleted once approved", function (done) {
         var approvalToApprove = { schemaId: "schemaId", private: {id: "approval1", approver: "approver1"}, id: "caprizaId1"};
         connector.signatureList = [connector._addApprovalData(approvalToApprove)];
         connector.resetApproval();
@@ -278,7 +341,7 @@ describe ("SDK Tasks", function (){
             });
     });
 
-    it ("~16 approve task - should remove not exists approval from the backend (after approve)", function (done){
+    it ("~19 approve task - should remove not exists approval from the backend (after approve)", function (done){
         connector.BL.getApproval = () => { return null };
         let approval = connector._addApprovalData(Object.assign(MOCK_APPROVAL_1, {id: "caprizaId"}));
         connector.signatureList = [approval];
@@ -292,7 +355,7 @@ describe ("SDK Tasks", function (){
             });
     });
 
-    it ("~17 approve task - disableMiniSync=true. approve action should auto remove approval without mini sync", function (done){
+    it ("~20 approve task - disableMiniSync=true. approve action should auto remove approval without mini sync", function (done){
         connector.BL.getApproval = () => { return MOCK_APPROVAL_1 };
         let approval = connector._addApprovalData(Object.assign(MOCK_APPROVAL_1, {id: "caprizaId"}));
         connector.signatureList = [approval];
@@ -304,7 +367,22 @@ describe ("SDK Tasks", function (){
             });
     });
 
-    it ("~18 reject task - disableMiniSync=true. reject action should auto remove approval without mini sync", function (done){
+    it ("~21 approve task - approve and miniSync should return the approval again (chain)", function (done){
+
+        // getApproval return same approval before and after the action. hence miniSync should return 0 approvals
+        connector.BL.getApproval = () => { return MOCK_APPROVAL_1 };
+        let approval = connector._addApprovalData(Object.assign(MOCK_APPROVAL_1, {id: "caprizaId"}));
+        connector.BL.settings = {disableMiniSync: false};
+
+        connector.signatureList = [approval];
+        connector.approve({approval: approval}, {logger})
+            .then(approvals => {
+                expect(approvals.length).to.equal(0);
+                done();
+            });
+    });
+
+    it ("~22 reject task - disableMiniSync=true. reject action should auto remove approval without mini sync", function (done){
         connector.BL.getApproval = () => { return MOCK_APPROVAL_1 };
         let approval = connector._addApprovalData(Object.assign(MOCK_APPROVAL_1, {id: "caprizaId"}));
         connector.signatureList = [approval];

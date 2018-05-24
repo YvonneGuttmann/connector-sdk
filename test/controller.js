@@ -11,6 +11,7 @@ var MOCK_APPROVAL_1;
 describe ("Controller functions", function () {
     beforeEach (function (){
         connector = require('./mockSDK');
+        connector.BL.dataTransformer = (a) => { return a; };
         MOCK_APPROVAL_1 = { schemaId: "schemaId", private: {id: "approval1", approver: "approver1"}, public: {name: "1"} };
     });
 
@@ -18,6 +19,7 @@ describe ("Controller functions", function () {
         var approval = connector._addApprovalData(MOCK_APPROVAL_1);
         var expectObj = {
             private: { approver: "approver1", id: "approval1" },
+            public: {name: "1"},
             metadata: { fingerprints: { sync: "ad13439f104f0fa02e29d80a3eb7aa0f27808fe1" } },
             schemaId: "schemaId",
             systemApprovalId: "approval1",
@@ -27,7 +29,15 @@ describe ("Controller functions", function () {
         done();
     });
 
-    it("~2 - _createApprovalFingerprints function - without action", function (done) {
+    it("~2 - _addApprovalData function - should return approval with error when there is no schemaId in the approval", function (done) {
+        delete MOCK_APPROVAL_1.schemaId;
+        var approval = connector._addApprovalData(MOCK_APPROVAL_1, console);
+        MOCK_APPROVAL_1.error = "TransformException";
+        approval.should.deep.include(MOCK_APPROVAL_1);
+        done();
+    });
+
+    it("~3 - _createApprovalFingerprints function - without action", function (done) {
         var fingerprints = connector._createApprovalFingerprints(MOCK_APPROVAL_1);
         var expectObj = {
             sync: "ad13439f104f0fa02e29d80a3eb7aa0f27808fe1"
@@ -36,7 +46,7 @@ describe ("Controller functions", function () {
         done();
     });
 
-    it("~3 - _createApprovalFingerprints function - with action", function (done) {
+    it("~4 - _createApprovalFingerprints function - with action", function (done) {
         connector.config = {
             "actionFingerprint": {
                 "id": "{{approval.id}}"
@@ -52,7 +62,7 @@ describe ("Controller functions", function () {
         done();
     });
 
-    it("~4 - _createApprovalFingerprints function - changed approval property - only sync should be changed", function (done) {
+    it("~5 - _createApprovalFingerprints function - changed approval property - only sync should be changed", function (done) {
         connector.config = {
             "actionFingerprint": {
                 "id": "{{private.id}}"
@@ -75,7 +85,7 @@ describe ("Controller functions", function () {
         done();
     });
 
-    it("~5 - _createApprovalFingerprints function - changed approval property - sync and action should be changed", function (done) {
+    it("~6 - _createApprovalFingerprints function - changed approval property - sync and action should be changed", function (done) {
         connector.config = {
             "actionFingerprint": {
                 "id": "{{private.id}}"
@@ -101,7 +111,7 @@ describe ("Controller functions", function () {
         done();
     });
 
-    it("~6 _compareActionFingerPrints - should check sync hash and return true", function (done) {
+    it("~7 _compareActionFingerPrints - should check sync hash and return true", function (done) {
         connector.config = {};
 
         let app1 = {
@@ -115,7 +125,7 @@ describe ("Controller functions", function () {
         done();
     });
 
-    it("~7 _compareActionFingerPrints - should check sync hash and return false", function (done) {
+    it("~8 _compareActionFingerPrints - should check sync hash and return false", function (done) {
         connector.config = {};
 
         let app1 = {
@@ -138,7 +148,7 @@ describe ("Controller functions", function () {
         done();
     });
 
-    it("~8 _compareActionFingerPrints - should check action hash and return true", function (done) {
+    it("~9 _compareActionFingerPrints - should check action hash and return true", function (done) {
         connector.config = {
             "actionFingerprint": {
                 "id": "{{private.id}}"
@@ -157,7 +167,7 @@ describe ("Controller functions", function () {
         done();
     });
 
-    it("~9 _compareActionFingerPrints - should check action hash and return false", function (done) {
+    it("~10 _compareActionFingerPrints - should check action hash and return false", function (done) {
         let app1 = {
             metadata: {
                 fingerprints: {
@@ -173,5 +183,45 @@ describe ("Controller functions", function () {
         expect(connector._compareActionFingerPrints(app1, app2)).to.equal(false);
         done();
     });
+
+    it("~11 _validateApprovalData - validate succeeded - should return null", function (done) {
+        let input = {
+            public: {
+                number: 1,
+                string: "hello",
+                date: new Date()
+            }
+        };
+
+        let template = {
+            number: "{{number:number}}",
+            string: "{{string:string}}",
+            date: "{{date:date}}"
+        };
+
+        let err = connector._validateApprovalData(input, template, console);
+        expect(err).to.equal(null);
+        done();
+    });
+
+    it("~12 _validateApprovalData - validate failed - should return error", function (done) {
+        let input = {
+            public: {
+                number: 1,
+                string: "hello",
+                date: new Date()
+            }
+        };
+
+        let template = {
+            number: "{{number:number}}",
+            string: "{{string:date}}",
+            date: "{{date:date}}"
+        };
+
+        let err = connector._validateApprovalData(input, template, console);
+        expect(err).to.not.equal(null);
+        done();
+    })
 
 });
