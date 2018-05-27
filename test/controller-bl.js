@@ -207,7 +207,6 @@ describe ("SDK Tasks", function (){
             } },
             send: function (approvals) {
                 approvals[0].should.deep.include(MOCK_APPROVAL_1);
-                expect(approvals[0].error).to.equal("DataValidationException")
             }
         };
         connector.sync(action).then(() => {
