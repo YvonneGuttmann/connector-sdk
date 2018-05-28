@@ -5,7 +5,6 @@ var exitHook = require('async-exit-hook');
 var ComManager = require ("./lib/com.js").ComManager;
 var Connector = require ("./lib/connector.js").Connector;
 var Logger = require ("./lib/log").Logger;
-var watch = require ("./lib/watcher");
 var com;
 
 process.title = process.env["CONTROLLER_TITLE"] || path.basename(process.cwd());
@@ -43,34 +42,47 @@ function startRemoteMode(config) {
 	var BackendAPI = require("./lib/backendAPI.js");
 
 	var TaskClasses = require("./lib/task.js")({
-		handlers	: require("./lib/taskHandlers.js"),
-		config		: config.controllerConfig,
-		api			: new BackendAPI(apiUrl, requestHeaders, config),
-		connector	: connector,
-		logger		: logger
+		handlers	    : require("./lib/taskHandlers.js"),
+		config		    : config,
+        backendFactory  : (conf, logger)=>new BackendAPI(apiUrl, requestHeaders, conf, logger),
+		connector	    : connector,
+		logger		    : logger
 	});
 	com = new ComManager({ apiUrl, requestHeaders, TaskClasses, logger, config });
+}
+
+function startLocalMode(config) {
+    logger.info ("Local mode");
+    var LocalAPI = require("./lib/local/api.js");
+    var TaskClasses = require("./lib/task.js")({
+        handlers	    : require("./lib/taskHandlers.js"),
+        config		    : config,
+        backendFactory  : (conf, logger)=>new LocalAPI(conf, logger),
+        connector	    : connector,
+        logger		    : logger
+    });
+    var LocalServer = require ("./lib/local/server").LocalServer;
+    com = new LocalServer(TaskClasses, logger);
+    var watch = require ("./lib/local/watcher");
+    watch(()=>{
+        logger.info(`Reloading connector`);
+        com.stop().catch().then(connector.stop.bind(connector)).then(()=>{
+            config = require('./lib/config').getConfiguration({logger: logger.child({component: "config"})});
+            connector = new Connector ({logger});
+            com = new LocalServer(connector, logger);
+        }).then(async ()=>connector.init({config,logger})).then(com.start.bind(com)).then(()=>logger.info(`Done reloading connector`));
+    })
 }
 
 //3. Initializing com manager instance (local or remote)
 try{
     if ("local" in argv){
-        logger.info ("Local mode");
-		var LocalServer = require ("./lib/server").LocalServer;
-        com = new LocalServer(connector, logger);
-        watch(()=>{
-            logger.info(`Reloading connector`);
-            com.stop().catch().then(connector.stop.bind(connector)).then(()=>{
-                config = require('./lib/config').getConfiguration({logger: logger.child({component: "config"})});
-                connector = new Connector ({logger});
-                com = new LocalServer(connector, logger);
-            }).then(async ()=>connector.init({config,logger})).then(com.start.bind(com)).then(()=>logger.info(`Done reloading connector`));
-        })
+        startLocalMode(config.controllerConfig);
     } else {
         startRemoteMode(config.controllerConfig);
     }
 } catch (err) {
-    logger.error(`Failed to create ComManager instance ${err}.`);
+    logger.error(`Failed to create ComManager instance ${err.stack}.`);
     logger.info(`Stopping connector`);
     setTimeout(() => {
         process.exit();
