@@ -63,21 +63,24 @@ function startLocalMode(config) {
     });
     var LocalServer = require ("./lib/local/server").LocalServer;
     com = new LocalServer(TaskClasses, logger);
-    var watch = require ("./lib/local/watcher");
-    watch(()=>{
-        logger.info(`Reloading connector`);
-        com.stop().catch().then(connector.stop.bind(connector)).then(()=>{
-            config = require('./lib/config').getConfiguration({logger: logger.child({component: "config"})});
-            connector = new Connector ({logger});
-            com = new LocalServer(connector, logger);
-        }).then(async ()=>connector.init({config,logger})).then(com.start.bind(com)).then(()=>logger.info(`Done reloading connector`));
-    })
+
+}
+
+function onLocalFileChange(){
+    logger.info(`Reloading connector`);
+    com.stop().catch().then(connector.stop.bind(connector)).then(()=>{
+        config = require('./lib/config').getConfiguration({logger: logger.child({component: "config"})});
+        connector = new Connector ({logger});
+        startLocalMode(config.controllerConfig)
+    }).then(async ()=>connector.init({config,logger})).then(com.start.bind(com)).then(()=>logger.info(`Done reloading connector`));
 }
 
 //3. Initializing com manager instance (local or remote)
 try{
     if ("local" in argv){
+        var watch = require ("./lib/local/watcher");
         startLocalMode(config.controllerConfig);
+        watch(onLocalFileChange)
     } else {
         startRemoteMode(config.controllerConfig);
     }
