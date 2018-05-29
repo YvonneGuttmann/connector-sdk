@@ -62,6 +62,7 @@ fs.readFile(`${path.resolve(__dirname)}/index.html`, function (err, html) {
                     })
                     .then (data => {
                         let validationResult;
+                        let nonExistingSchemas;
                         for (i in data) {
                             var approval = data[i];
                             if (!approval.error && !(argv["schema-validation"] == false)) {
@@ -69,12 +70,18 @@ fs.readFile(`${path.resolve(__dirname)}/index.html`, function (err, html) {
                                     validationResult = {errors: [{error: `approval ${approval.private.id} has no schemaId:\n${JSON.stringify()}`}]};
                                     break;
                                 }
-                                validationResult = validate(JSON.parse(JSON.stringify(approval)), approval.schemaId);
-                                if (validationResult.errors.length > 0) break;
+
+                                try {
+                                    validationResult = validate(JSON.parse(JSON.stringify(approval)), approval.schemaId);
+                                    if (validationResult.errors.length > 0) break;
+                                } catch (ex) {
+                                    if(!nonExistingSchemas) nonExistingSchemas = {};
+                                    nonExistingSchemas[approval.schemaId] = true;
+                                }
                             }
                         }
                         signatureList = data.map(approval => {return {private: approval.private}});
-                        res.write(JSON.stringify({data, validationResult}));
+                        res.write(JSON.stringify({data, validationResult, nonExistingSchemas}));
                         return res.end();
                     })
                     .catch (err => {

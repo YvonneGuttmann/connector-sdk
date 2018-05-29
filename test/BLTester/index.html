@@ -109,8 +109,9 @@
                 createData ();
                 if (res.validationResult && res.validationResult.errors && res.validationResult.errors.length > 0){
                     createValidationTable (res.validationResult.errors);
-                }
-                else {
+                } else if (res.nonExistingSchemas) {
+                    document.querySelector ("#status").innerHTML = `Schema validation was not run - schema is not fount.<br />schemas ids:<br />${Object.keys(res.nonExistingSchemas)}`
+                } else {
                     document.querySelector ("#status").innerHTML = `<p><img src=${okImage}></p><p>Schema Validation Passed!!!</p>`;
                 }
 
