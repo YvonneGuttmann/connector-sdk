@@ -1,3 +1,22 @@
+## Getting Started
+
+### Installing Connector SDK
+
+To install the ApproveSimple Connector SDK use the [npm](http://npmjs.org) package manager for Node.js.
+Simply type the following into a terminal window:
+
+```sh
+npx @capriza/create-capriza-connector sample-connector
+```
+### Testing the Connector
+
+The SDK installation comes with an internal UI to test the connector functionality.
+To launch the Connector UI type the following into a terminal window:
+
+```sh
+npm run bltester
+```
+
 # Capriza Connectors
 Backend systems connectors.
 
