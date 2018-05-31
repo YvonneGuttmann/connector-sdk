@@ -24,7 +24,6 @@ logger = logger.child ({connectorId: config.controllerConfig.connectorId});
 
 //2. create an instance of the connector according to the configuration
 logger.info ("Initiating connector instance");
-var connector = new Connector ({logger});
 
 function startRemoteMode(config) {
 	logger.info("Remote mode");
@@ -45,7 +44,7 @@ function startRemoteMode(config) {
 		handlers	    : require("./lib/taskHandlers.js"),
 		config		    : config,
         backendFactory  : (conf, logger)=>new BackendAPI(apiUrl, requestHeaders, conf, logger),
-		connector	    : connector,
+		Connector	    : Connector,
 		logger		    : logger
 	});
 	com = new ComManager({ apiUrl, requestHeaders, TaskClasses, logger, config });
@@ -58,7 +57,7 @@ function startLocalMode(config) {
         handlers	    : require("./lib/taskHandlers.js"),
         config		    : config,
         backendFactory  : (conf, logger)=>new LocalAPI(conf, logger),
-        connector	    : connector,
+        Connector	    : Connector,
         logger		    : logger
     });
     var LocalServer = require ("./lib/local/server").LocalServer;
@@ -70,9 +69,8 @@ function onLocalFileChange(){
     logger.info(`Reloading connector`);
     com.stop().catch().then(connector.stop.bind(connector)).then(()=>{
         config = require('./lib/config').getConfiguration({logger: logger.child({component: "config"})});
-        connector = new Connector ({logger});
         startLocalMode(config.controllerConfig)
-    }).then(async ()=>connector.init({config,logger})).then(com.start.bind(com)).then(()=>logger.info(`Done reloading connector`));
+    }).then(async ()=>Connector.init({config,logger})).then(com.start.bind(com)).then(()=>logger.info(`Done reloading connector`));
 }
 
 //3. Initializing com manager instance (local or remote)
@@ -96,7 +94,7 @@ try{
 //4. On Exit hook and exceptions:
 exitHook(callback => {
     logger.info(`Stopping connector...`);
-    com.stop().catch().then(connector.stop.bind(connector)).then(()=>logger.info(`Bye bye`)).then(()=>process.exit());
+    com.stop().catch().then(() => Connector.stop()).then(()=>logger.info(`Bye bye`)).then(()=>process.exit());
 });
 exitHook.uncaughtExceptionHandler(err => logger.error (`Caught global exception: ${err.stack}`));
 exitHook.unhandledRejectionHandler(err => logger.error (`Caught global async rejection: ${err.stack}`));
@@ -119,9 +117,9 @@ async function run(attempts){
 
 //5. Bootstrap connector
 logger.info ("Initializing connector");
-connector.init({config,logger})
+Connector.init({config,logger})
     .then(()=>run(1)) //1st attempt
     .catch(err=>{
-        logger.error(`Connector initialization failed ${err}`);
+        logger.error(`Connector initialization failed ${err}\n${err.stack}`);
         process.exit(2);
     });
