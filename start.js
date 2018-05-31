@@ -24,6 +24,7 @@ logger = logger.child ({connectorId: config.controllerConfig.connectorId});
 
 //2. create an instance of the connector according to the configuration
 logger.info ("Initiating connector instance");
+var API;
 
 function startRemoteMode(config) {
 	logger.info("Remote mode");
@@ -38,7 +39,8 @@ function startRemoteMode(config) {
 		"x-capriza-connector-id"	: config.connectorId
 	};
 	
-	var BackendAPI = require("./lib/backendAPI.js");
+	const BackendAPI = require("./lib/backendAPI.js");
+	API = new BackendAPI(apiUrl, requestHeaders, {connectorId: config.connectorId}, logger);
 
 	var TaskClasses = require("./lib/task.js")({
 		handlers	    : require("./lib/taskHandlers.js"),
@@ -52,7 +54,9 @@ function startRemoteMode(config) {
 
 function startLocalMode(config) {
     logger.info ("Local mode");
-    var LocalAPI = require("./lib/local/api.js");
+    const LocalAPI = require("./lib/local/api.js");
+    API = new LocalAPI();
+
     var TaskClasses = require("./lib/task.js")({
         handlers	    : require("./lib/taskHandlers.js"),
         config		    : config,
@@ -118,7 +122,21 @@ async function run(attempts){
 //5. Bootstrap connector
 logger.info ("Initializing connector");
 Connector.init({config,logger})
-    .then(()=>run(1)) //1st attempt
+    .then(async (taskTypes) => {
+
+        if(API.sendConnectorTaskTypes) {
+            try {
+                logger.info(`Sending task types to the api task types: ${taskTypes}`);
+                await API.sendConnectorTaskTypes(taskTypes)
+            } catch (ex) {
+                logger.error(`Failed to send task types to the api: ${ex.stack || ex}`);
+            }
+        } else {
+            logger.info(`sendConnectorTaskTypes not exists in the API, won't send task types`);
+        }
+
+        run(1)
+    }) //1st attempt
     .catch(err=>{
         logger.error(`Connector initialization failed ${err}\n${err.stack}`);
         process.exit(2);
