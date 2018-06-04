@@ -10,11 +10,13 @@ var argv = require('minimist')(process.argv.slice(2));
 var path = require ("path");
 var blName = process.cwd().substring(Math.max(process.cwd().lastIndexOf("/") + 1, process.cwd().lastIndexOf("\\") + 1));
 var config = require ("../../lib/config").getConfiguration({logger});
-var template = config.controllerConfig.schemaTransformer;
-var jslt = new (require ("jslt"))(template);
-jslt.setTemplate(template);
+//var template = config.controllerConfig.schemaTransformer;
+// var jslt = new (require ("jslt"))(template);
+//jslt.setTemplate(template);
+const jslt = require('jslt');
 var old_write = process.stdout.write;
 var signatureList = [];
+var transformer;
 
 process.stdout.write = (function(write) {
     return function(string, encoding, fd) {
@@ -54,9 +56,9 @@ fs.readFile(`${path.resolve(__dirname)}/index.html`, function (err, html) {
                         if(data.approvals){
                             data = data.approvals;
                         }
-                        if (template) return data.map(rawApproval => {
+                        if (transformer) return data.map(rawApproval => {
                             if (rawApproval.error) return rawApproval;
-                            return jslt.transform(rawApproval)
+                            return transformer(rawApproval)
                         });
                         return data;
                     })
@@ -100,9 +102,9 @@ fs.readFile(`${path.resolve(__dirname)}/index.html`, function (err, html) {
                         if(data.partialSync){
                             data = data.approvals;
                         }
-                        if (template) return data.map(rawApproval => {
+                        if (transformer) return data.map(rawApproval => {
                             if (rawApproval.error) return rawApproval;
-                            return jslt.transform(rawApproval)
+                            return transformer(rawApproval)
                         });
                         return data;
                     })
@@ -136,7 +138,7 @@ fs.readFile(`${path.resolve(__dirname)}/index.html`, function (err, html) {
             if ("getApproval" in bl){
                 return bl.getApproval(JSON.parse(req.body), {logger})
                     .then(data => {
-                        if (template) return jslt.transform(data);
+                        if (transformer) return transformer(data);
                         return data;
                     })
                     .then(data => {
@@ -288,9 +290,22 @@ module.exports = {
 
     async initBL(){
         config = require ("../../lib/config").getConfiguration({logger});
-        template = config.controllerConfig.schemaTransformer;
-        jslt = new (require ("jslt"))(template);
-        jslt.setTemplate(template);
+
+        if(config.controllerConfig.schemaTransformer) {
+            transformer = ((approval) => jslt.transform(approval, config.controllerConfig.schemaTransformer));
+        }
+
+        if(!transformer) {
+            try {
+                const transformerFile = require(`${process.cwd()}/resources/transformer.js`);
+                if (transformerFile && typeof transformerFile === "object") {
+                    transformer = ((approval) => jslt.transform(approval, transformerFile));
+                } else if (transformerFile && typeof transformerFile === "function") {
+                    transformer = transformerFile;
+                }
+            } catch (ex) {}
+        }
+
         await bl.init({config: config.blConfig, logger});
     },
 
