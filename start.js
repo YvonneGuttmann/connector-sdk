@@ -67,12 +67,13 @@ function startLocalMode(config) {
     com = new LocalServer(TaskClasses, logger);
 }
 
-function onLocalFileChange(){
+function onLocalFileChange(context){
     logger.info(`Reloading connector`);
     Connector.stop().catch().then(()=>{
         config = require('./lib/config').getConfiguration({logger: logger.child({component: "config"})});
         var TaskClasses = createTaskClasses(config.controllerConfig, (conf, logger)=>new LocalAPI(conf, logger));
         com.setTaskClasses(TaskClasses);
+        com.onFileChanged(context);
         LocalAPI.resetState();
     }).then(async ()=>Connector.init({config,logger})).then(()=>logger.info(`Done reloading connector`));
 }
