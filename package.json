@@ -1,6 +1,6 @@
 {
   "name": "@capriza/connector-controller",
-  "version": "1.0.86",
+  "version": "1.1.0",
   "description": "Capriza connectors controller",
   "license": "MIT",
   "main": "index.js",
@@ -25,8 +25,12 @@
     "url": "git://github.com/capriza/connector-sdk"
   },
   "dependencies": {
+    "@capriza/schemas": "^1.0.0",
     "async-exit-hook": "2.0.1",
     "axios": "0.17.1",
+    "body-parser": "^1.18.3",
+    "chokidar": "1.7.0",
+    "cors": "~2.8.4",
     "deepmerge": "2.0.1",
     "express": "4.16.3",
     "jslt": "^0.2.1",
@@ -34,15 +38,12 @@
     "minimist": "1.2.0",
     "mustache": "2.3.0",
     "object-hash": "1.2.0",
+    "opn": "^5.1.0",
     "path": "0.12.7",
     "pino": "4.10.2",
     "proxying-agent": "^2.2.0",
     "syswide-cas": "^5.0.0",
-    "ws": "^5.1.1",
-    "@capriza/schemas": "^1.0.0",
-    "chokidar": "1.7.0",
-    "opn": "^5.1.0",
-    "cors": "~2.8.4"
+    "ws": "^5.1.1"
   },
   "devDependencies": {
     "chai": "^4.1.2",
