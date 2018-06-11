@@ -6,8 +6,9 @@ var ComManager = require ("./lib/com.js").ComManager;
 var Connector = require ("./lib/connector.js").Connector;
 var Logger = require ("./lib/log").Logger;
 var handlers = require("./lib/taskHandlers.js");
+var jslt = require('jslt');
 var TaskFactory =  require("./lib/task.js");
-var com;
+var com, transform = jslt.transform;
 
 process.title = process.env["CONTROLLER_TITLE"] || path.basename(process.cwd());
 var [connectorName, connectorVersion] = process.title.split("@");
@@ -60,6 +61,7 @@ function startRemoteMode(config) {
 
 function startLocalMode(config) {
     logger.info ("Local mode");
+    transform = transformWithErrors;
     API = new LocalAPI();
 
     var TaskClasses = createTaskClasses(config, (conf, logger)=>new LocalAPI(conf, logger));
@@ -75,7 +77,20 @@ function onLocalFileChange(context){
         com.setTaskClasses(TaskClasses);
         com.onFileChanged(context);
         LocalAPI.resetState();
-    }).then(async ()=>Connector.init({config,logger})).then(()=>logger.info(`Done reloading connector`));
+    }).then(async ()=>Connector.init({config,logger,transform})).then(()=>logger.info(`Done reloading connector`));
+}
+
+function transformWithErrors(data, template, props = {}){
+    var res;
+    props.continueOnError = true;
+    try{
+        res = jslt.transform(data, template, props);
+    } catch (ex){
+        res = ex.result;
+        res.jsltErrors = ex.errors;
+    }
+
+    return res;
 }
 
 //3. Initializing com manager instance (local or remote)
@@ -124,7 +139,7 @@ async function run(attempts){
 
 //5. Bootstrap connector
 logger.info ("Initializing connector");
-Connector.init({config,logger})
+Connector.init({config,logger,transform})
     .then(async (taskTypes) => {
 
         if(API.sendConnectorTaskTypes) {

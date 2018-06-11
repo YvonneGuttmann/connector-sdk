@@ -33,7 +33,7 @@
     "cors": "~2.8.4",
     "deepmerge": "2.0.1",
     "express": "4.16.3",
-    "jslt": "^0.2.1",
+    "jslt": "^0.2.4",
     "logrotator": "1.1.0",
     "minimist": "1.2.0",
     "mustache": "2.3.0",
