@@ -5,6 +5,7 @@ var exitHook = require('async-exit-hook');
 var ComManager = require ("./lib/com.js").ComManager;
 var Connector = require ("./lib/connector.js").Connector;
 var Logger = require ("./lib/log").Logger;
+var LogCleaner = require ("./lib/logCleaner");
 var handlers = require("./lib/taskHandlers.js");
 var jslt = require('jslt');
 var TaskFactory =  require("./lib/task.js");
@@ -14,12 +15,13 @@ process.title = process.env["CONTROLLER_TITLE"] || path.basename(process.cwd());
 var [connectorName, connectorVersion] = process.title.split("@");
 
 //logger
-var loggerFactory;
-if ("dev" in argv) process.env.logStream = "console"; //in dev mode write log to console
-else process.env.logStream = "file"; //in production write log to file
-loggerFactory = new Logger(process.env.logStream);
-
-var logger = loggerFactory.create({}).child({component: "index.js", module: "connectors", connectorName: connectorName, connectorVersion: connectorVersion});
+process.env.logStream = "dev" in argv ? "console" : "file"; //in dev mode write log to console, in production write log to file
+var loggerFactory = new Logger(process.env.logStream);
+var logger = loggerFactory.create({}).child({component: "index.js", module: "connectors", connectorName, connectorVersion});
+if (process.env.logStream == "file") {
+	var logCleaner = new LogCleaner("log", { days : 2, size : 50, onlyDirs : true }, logger);
+	logCleaner.startMonitor(30);
+}
 
 //1. get configuration
 var config = require('./lib/config').getConfiguration({logger: logger.child({component: "config"})});
