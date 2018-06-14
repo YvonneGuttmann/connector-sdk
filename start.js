@@ -65,7 +65,7 @@ function startLocalMode(config) {
     API = new LocalAPI();
 
     var TaskClasses = createTaskClasses(config, (conf, logger)=>new LocalAPI(conf, logger));
-    var LocalServer = require ("./lib/local/server").LocalServer;
+    var LocalServer = require('@capriza/as-inspector').LocalServer;
     com = new LocalServer(TaskClasses, logger);
 }
 

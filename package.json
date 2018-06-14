@@ -13,7 +13,8 @@
   ],
   "scripts": {
     "test": "./node_modules/.bin/mocha --exit --reporter spec",
-    "test-jenkins": "JUNIT_REPORT_PATH=./report.xml mocha --colors --reporter mocha-jenkins-reporter --exit"
+    "test-jenkins": "JUNIT_REPORT_PATH=./report.xml mocha --colors --reporter mocha-jenkins-reporter --exit",
+    "run-inspector": "opn http://localhost:8080"
   },
   "author": {
     "name": "Capriza",
@@ -43,7 +44,9 @@
     "pino": "4.10.2",
     "proxying-agent": "^2.2.0",
     "syswide-cas": "^5.0.0",
-    "ws": "^5.1.1"
+    "ws": "^5.1.1",
+    "@capriza/as-inspector": "^0.1.0",
+    "opn-cli": "3.1.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",
