@@ -23,10 +23,6 @@ if (process.env.logStream == "file") {
 	logCleaner.startMonitor(30);
 }
 
-if ("local" in argv) {
-    var localMode = require('@capriza/as-inspector');
-}
-
 //1. get configuration
 var config = require('./lib/config').getConfiguration({logger: logger.child({component: "config"})});
 logger = logger.child ({connectorId: config.controllerConfig.connectorId});
@@ -102,7 +98,8 @@ function transformWithErrors(data, template, props = {}){
 //3. Initializing com manager instance (local or remote)
 try{
     if ("local" in argv){
-        var watch = localMode.Watcher,
+        var localMode = require('@capriza/as-inspector'),
+            watch = localMode.Watcher,
             LocalAPI = localMode.api;
 
         startLocalMode(config.controllerConfig);
