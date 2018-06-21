@@ -1,0 +1,63 @@
+{
+  "title": "fetching approvals (1 new) when signature list is empty",
+  "task": "sync",
+  "steps": [
+    {"func": "getBackendApprovals", "args": [{}], "output": []},
+    {"func": "fetch", "args": [{"signatureList": []}, null], "output": [{"schemaId": "schemaId", "public": {}, "private": { "id": "1", "approver": "ad" }}]},
+    {"func": "sendApprovals", "args":[{
+      "approvals": [
+        {
+          "schemaId": "schemaId",
+          "public": {},
+          "private": {
+            "id": "1",
+            "approver": "ad"
+          },
+          "metadata": {
+            "fingerprints": {
+              "sync": "0b6b5fc865026042c84103d1970ccec4434f0215"
+            }
+          },
+          "systemUserId": "ad",
+          "systemApprovalId": "1"
+        }
+      ],
+      "rawApprovals": [
+        {
+          "schemaId": "schemaId",
+          "public": {},
+          "private": {
+            "id": "1",
+            "approver": "ad"
+          },
+          "metadata": {
+            "fingerprints": {
+              "sync": "0b6b5fc865026042c84103d1970ccec4434f0215"
+            }
+          },
+          "systemUserId": "ad",
+          "systemApprovalId": "1"
+        }
+      ],
+      "transformedApprovals": [
+        {
+          "schemaId": "schemaId",
+          "public": {},
+          "private": {
+            "id": "1",
+            "approver": "ad"
+          },
+          "metadata": {
+            "fingerprints": {
+              "sync": "0b6b5fc865026042c84103d1970ccec4434f0215"
+            }
+          },
+          "systemUserId": "ad",
+          "systemApprovalId": "1"
+        }
+      ]
+    }, {}], "output": {}},
+    {"func": "updateTask", "args": ["sync-2", {"succeeded": true}], "output": {}},
+    {"func": "updateTask", "args": ["sync-2", {"succeeded": true}], "output": {}}
+  ]
+}
