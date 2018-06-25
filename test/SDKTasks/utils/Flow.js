@@ -38,9 +38,21 @@ module.exports = class Flow {
             this._updateError(this.counter, `Trying to call function ${funcName}. Expected function: ${step.func}`);
         }
 
-        if(JSON.stringify(step.args) !== stringify(Array.from(args))) {
-            this._updateError(this.counter, `Function ${funcName}. Actual arguments ${stringify(args)}. Expected arguments: ${JSON.stringify(step.args)}`);
-        }
+		if (step.args) {
+			for (var i = 0; i < step.args.length; ++i) {
+				if (JSON.stringify(step.args[i]) != stringify(args[i])) {
+					console.log(`Mismatch in argument ${i}:`);
+					console.log("expected=" + JSON.stringify(step.args[i]));
+					console.log("actual=" + stringify(args[i]));
+					this._updateError(this.counter, `Function ${funcName}. Actual arguments ${stringify(args)}. Expected arguments: ${JSON.stringify(step.args)}`);
+					break;
+				}
+			}
+		}
+		
+//      if(JSON.stringify(step.args) !== stringify(Array.from(args))) {
+//          this._updateError(this.counter, `Function ${funcName}. Actual arguments ${stringify(args)}. Expected arguments: ${JSON.stringify(step.args)}`);
+//      }
 
         return step.output;
     }
