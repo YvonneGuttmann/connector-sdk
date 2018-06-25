@@ -1,0 +1,8 @@
+{
+  "apiUrl": "https://approvals.capriza.com/v1",
+  "connectorId": "AAAAAAAAAAAAAAAAAAA",
+  "creds": {
+    "apiKey":    "BBBBBBBBBBBBBBBBBBB",
+    "apiSecret": "CCCCCCCCCCCCCCCCCCC"
+  }
+}
