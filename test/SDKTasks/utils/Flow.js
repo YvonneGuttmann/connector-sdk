@@ -39,7 +39,7 @@ module.exports = class Flow {
         }
 
         if(JSON.stringify(step.args) !== stringify(Array.from(args))) {
-            this._updateError(this.counter, `Function ${funcName}. Actual arguments ${JSON.stringify(args)}. Expected arguments: ${JSON.stringify(step.args)}`);
+            this._updateError(this.counter, `Function ${funcName}. Actual arguments ${stringify(args)}. Expected arguments: ${JSON.stringify(step.args)}`);
         }
 
         return step.output;
@@ -63,7 +63,7 @@ module.exports = class Flow {
 			var origValue = obj[key];
 			if (typeof origValue !== "function" || key[0] == "_") return;
 			obj[key] = function() {
-				var step = { func : key, args : JSON.parse(stringify(arguments)) };
+				var step = { func : key, args : JSON.parse(stringify(Array.from(arguments))) };
 				$this.steps.push(step);
 				var retVal = origValue.apply(this, arguments);
 				step.output = JSON.parse(stringify(retVal) || null);
