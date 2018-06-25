@@ -2,21 +2,20 @@ const assert = require('assert');
 const chalk = require ("chalk");
 
 module.exports = class Flow {
-
     constructor(data) {
         // if(!data.expectedResult) assert.fail(`Expected result is not defined`);
         this.verifySteps(data.steps);
         // this.expectedResult = data.expectedResult;
         this.title = data.title;
         this.task = data.task;
-        this.steps = data.steps;
+        this.steps = data.steps || [];
         this.counter = 0;
     }
 
     verifySteps(step) {
         if(step instanceof Array) {
             step.forEach((s, index) => {
-                if((!s.func || !s.args || !s.output) && index !== step.length - 1) {
+                if((!s.func || !s.args) && index !== step.length - 1) {
                     assert.fail(`invalid steps.\nstep ${index} is invalid:\n${JSON.stringify(s)}`);
                 }
             })
@@ -58,6 +57,24 @@ module.exports = class Flow {
         return this.steps.slice(this.counter);
     }
 
+	capture(obj) {
+		var $this = this;
+		Object.getOwnPropertyNames(Object.getPrototypeOf(obj)).forEach(key => {
+			var origValue = obj[key];
+			if (typeof origValue !== "function" || key[0] == "_") return;
+			obj[key] = function() {
+				var step = { func : key, args : JSON.parse(stringify(arguments)) };
+				$this.steps.push(step);
+				var retVal = origValue.apply(this, arguments);
+				step.output = JSON.parse(stringify(retVal) || null);
+				if (retVal && retVal.then) {
+					retVal.then(res => step.output = JSON.parse(stringify(res) || null));
+				}
+				return retVal;
+			}
+		});	
+	}
+	
     _updateError(stepNumber, message) {
         this.error = {
             message: message,
