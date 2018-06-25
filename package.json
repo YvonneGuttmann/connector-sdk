@@ -46,8 +46,7 @@
     "syswide-cas": "^5.0.0",
     "ws": "^5.1.1",
     "@capriza/as-inspector": "^0.1.14",
-    "opn-cli": "3.1.0",
-    "require-uncached": "^1.0.3"
+    "opn-cli": "3.1.0"
   },
   "devDependencies": {
     "chalk": "^2.3.2",
