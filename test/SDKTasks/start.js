@@ -20,7 +20,7 @@ async function runTestFlow(flowData, index) {
     const bl = new BL({logger, flow});
     Connector.init({config: { controllerConfig: {} }, logger: logger, BL: bl, transform: (a) => { return a }});
     var TaskClasses = createTaskClasses({timeout: 3000}, () => new Backend({signatureList: [], flow}));
-    var task = new TaskClasses.Task({ id : `${flow.task}-${index}`, type : flow.task});
+    var task = new TaskClasses.Task(flow.taskData);
 
     try{
         await task.execute();
