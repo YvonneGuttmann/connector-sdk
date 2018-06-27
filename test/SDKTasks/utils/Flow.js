@@ -8,6 +8,7 @@ module.exports = class Flow {
         // this.expectedResult = data.expectedResult;
         this.title = data.title;
         this.task = data.task;
+        this.taskData = data.taskData;
         this.steps = data.steps || [];
         this.counter = 0;
     }
@@ -42,8 +43,8 @@ module.exports = class Flow {
 			for (var i = 0; i < step.args.length; ++i) {
 				if (JSON.stringify(step.args[i]) != stringify(args[i])) {
 					console.log(`Mismatch in argument ${i}:`);
-					console.log("expected=" + JSON.stringify(step.args[i]));
-					console.log("actual=" + stringify(args[i]));
+					console.log("expected=\n" + JSON.stringify(step.args[i]));
+					console.log("actual=\n" + stringify(args[i]));
 					this._updateError(this.counter, `Function ${funcName}. Actual arguments ${stringify(args)}. Expected arguments: ${JSON.stringify(step.args)}`);
 					break;
 				}
