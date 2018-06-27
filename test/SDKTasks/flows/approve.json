@@ -1,0 +1,45 @@
+{
+  "title": "approve approval (without selfValidation)",
+  "task": "approve",
+  "taskData": {
+    "type":"approve",
+    "id":"approve-0",
+    "approval": {
+      "metadata": {
+        "fingerprints": {
+          "sync": "9b75227a46a083abfe5e1e56494e2922896d3e11",
+          "action": "38ea97eed8501d5144fc2604045f7185f9aed339"
+        }
+      },
+      "id": "approve-0"
+    }
+  },
+  "steps": [
+    {
+      "func": "getBackendApproval",
+      "args": [
+        {
+          "id": "approve-0"
+        }
+      ],
+      "output": [
+        {
+          "id": "approve-0",
+          "syncver": 243143,
+          "systemId": "8320de1c-b777-4196-afa4-8eea0fe90956",
+          "systemUserId": "christen.mitchell@example.com",
+          "metadata": {
+            "fingerprints": {
+              "sync": "9b75227a46a083abfe5e1e56494e2922896d3e11",
+              "action": "38ea97eed8501d5144fc2604045f7185f9aed339"
+            }
+          },
+          "private": {
+            "id": "082a0c7adba52200a6a2b31be0b8f5df",
+            "approver": "christen.mitchell@example.com"
+          }
+        }
+      ]
+    }
+  ]
+}

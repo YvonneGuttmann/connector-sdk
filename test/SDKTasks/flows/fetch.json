@@ -1,9 +1,13 @@
 {
   "title": "fetching approvals (1 new) when signature list is empty",
   "task": "sync",
+  "taskData": {
+    "type":"sync",
+    "id":"sync-0"
+  },
   "steps": [
     {"func": "getBackendApprovals", "args": [{}], "output": []},
-    {"func": "fetch", "args": [{"signatureList": []}, null], "output": [{"schemaId": "schemaId", "public": {}, "private": { "id": "1", "approver": "ad" }}]},
+    {"func": "fetch", "args": [{"signatureList": []}], "output": [{"schemaId": "schemaId", "public": {}, "private": { "id": "1", "approver": "ad" }}]},
     {"func": "sendApprovals", "args":[{
       "approvals": [
         {

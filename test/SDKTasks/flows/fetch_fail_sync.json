@@ -1,0 +1,13 @@
+{
+  "title": "fetching approvals with error return in fetch",
+  "task": "sync",
+  "taskData": {
+    "type":"sync",
+    "id":"sync-2"
+  },
+  "steps": [
+    {"func": "getBackendApprovals", "args": [{}], "output": []},
+    {"func": "fetch", "args": [{"signatureList": []}], "output": "error"},
+    {"func": "updateTask", "args": ["sync-2", {"succeeded": false}], "output": {}}
+  ]
+}

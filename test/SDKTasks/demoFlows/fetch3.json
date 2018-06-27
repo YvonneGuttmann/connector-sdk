@@ -3,7 +3,7 @@
   "task": "sync",
   "steps": [
     {"func": "getBackendApprovals", "args": [{}], "output": []},
-    {"func": "fetch", "args": [{"signatureList": []}, null], "output": [{"schemaId": "schemaId", "public": {}, "private": { "id": "1", "approver": "ad" }}]},
+    {"func": "fetch", "args": [{"signatureList": []}], "output": [{"schemaId": "schemaId", "public": {}, "private": { "id": "1", "approver": "ad" }}]},
     {"func": "sendApprovals", "args":[{
       "approvals": [
         {
@@ -56,6 +56,8 @@
           "systemApprovalId": "1"
         }
       ]
-    }, {}], "output": {}}
+    }, {}], "output": {}},
+    {"func": "updateTask", "args": ["sync-2", {"succeeded": true}], "output": {}},
+    {"func": "updateTask", "args": ["sync-2", {"succeeded": true}], "output": {}}
   ]
 }
