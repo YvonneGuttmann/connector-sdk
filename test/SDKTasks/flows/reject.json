@@ -1,11 +1,11 @@
 {
-  "title": "approve approval (without selfValidation)",
-  "task": "approve",
+  "title": "reject approval (without selfValidation)",
+  "task": "reject",
   "taskData": {
-    "type": "approve",
-    "id": "approve-0",
+    "type": "reject",
+    "id": "reject-0",
     "approval": {
-      "id": "approve-0",
+      "id": "reject-0",
       "metadata": {
         "fingerprints": {
           "sync": "10bad52d5b7b3772fe9c39d9cad8ba1302219876",
@@ -17,6 +17,9 @@
         "id": "082a0c7adba52200a6a2b31be0b8f5df",
         "approver": "christen.mitchell@example.com"
       }
+    },
+    "volatile":{
+      "rejectionReason":"This is reject reason..."
     }
   },
   "steps": [
@@ -24,12 +27,12 @@
       "func": "getBackendApproval",
       "args": [
         {
-          "id": "approve-0"
+          "id": "reject-0"
         }
       ],
       "output": [
         {
-          "id": "approve-0",
+          "id": "reject-0",
           "syncver": 243143,
           "systemId": "8320de1c-b777-4196-afa4-8eea0fe90956",
           "systemUserId": "christen.mitchell@example.com",
@@ -48,7 +51,7 @@
     {
       "func": "getApproval",
       "args": {
-        "id": "approve-0",
+        "id": "reject-0",
         "metadata": {
           "fingerprints": {
             "sync": "10bad52d5b7b3772fe9c39d9cad8ba1302219876",
@@ -71,11 +74,11 @@
       }
     },
     {
-      "func": "approve",
+      "func": "reject",
       "args": [
         {
           "approval": {
-            "id": "approve-0",
+            "id": "reject-0",
             "metadata": {
               "fingerprints": {
                 "sync": "10bad52d5b7b3772fe9c39d9cad8ba1302219876",
@@ -87,7 +90,8 @@
               "id": "082a0c7adba52200a6a2b31be0b8f5df",
               "approver": "christen.mitchell@example.com"
             }
-          }
+          },
+          "rejectionReason": "This is reject reason..."
         },
         {}
       ],
@@ -96,7 +100,7 @@
     {
       "func": "getApproval",
       "args": {
-        "id": "approve-0",
+        "id": "reject-0",
         "metadata": {
           "fingerprints": {
             "sync": "10bad52d5b7b3772fe9c39d9cad8ba1302219876",
@@ -117,7 +121,7 @@
         {
           "approvals": [
             {
-              "id": "approve-0",
+              "id": "reject-0",
               "syncver": 243143,
               "deleted": true
             }
@@ -129,6 +133,6 @@
       ],
       "output": {}
     },
-    {"func":"updateTask", "args":["approve-0",{"succeeded": true}], "output":{}}
+    {"func":"updateTask", "args":["reject-0",{"succeeded": true}], "output":{}}
   ]
 }

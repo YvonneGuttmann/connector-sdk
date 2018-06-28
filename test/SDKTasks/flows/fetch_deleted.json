@@ -3,7 +3,7 @@
   "task": "sync",
   "taskData": {
     "type":"sync",
-    "id":"sync-1"
+    "id":"sync-delete"
   },
   "steps": [
     {"func": "getBackendApprovals", "args": [{}], "output": [{
@@ -83,6 +83,6 @@
       "rawApprovals": [],
       "transformedApprovals": []
     }, {}], "output": null},
-    {"func": "updateTask", "args": ["sync-1", {"succeeded": true}], "output": {}}
+    {"func": "updateTask", "args": ["sync-delete", {"succeeded": true}], "output": {}}
   ]
 }

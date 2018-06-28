@@ -3,11 +3,11 @@
   "task": "sync",
   "taskData": {
     "type":"sync",
-    "id":"sync-2"
+    "id":"sync-fail"
   },
   "steps": [
     {"func": "getBackendApprovals", "args": [{}], "output": []},
     {"func": "fetch", "args": [{"signatureList": []}], "output": "error"},
-    {"func": "updateTask", "args": ["sync-2", {"succeeded": false}], "output": {}}
+    {"func": "updateTask", "args": ["sync-fail", {"succeeded": false}], "output": {}}
   ]
 }

@@ -1,11 +1,11 @@
 {
-  "title": "approve approval (without selfValidation)",
+  "title": "approve approval (without selfValidation) but failed to approve (doesn't return null at the second getApproval...)",
   "task": "approve",
   "taskData": {
     "type": "approve",
-    "id": "approve-0",
+    "id": "approve-fail",
     "approval": {
-      "id": "approve-0",
+      "id": "approve-fail",
       "metadata": {
         "fingerprints": {
           "sync": "10bad52d5b7b3772fe9c39d9cad8ba1302219876",
@@ -24,12 +24,12 @@
       "func": "getBackendApproval",
       "args": [
         {
-          "id": "approve-0"
+          "id": "approve-fail"
         }
       ],
       "output": [
         {
-          "id": "approve-0",
+          "id": "approve-fail",
           "syncver": 243143,
           "systemId": "8320de1c-b777-4196-afa4-8eea0fe90956",
           "systemUserId": "christen.mitchell@example.com",
@@ -48,7 +48,7 @@
     {
       "func": "getApproval",
       "args": {
-        "id": "approve-0",
+        "id": "approve-fail",
         "metadata": {
           "fingerprints": {
             "sync": "10bad52d5b7b3772fe9c39d9cad8ba1302219876",
@@ -75,7 +75,7 @@
       "args": [
         {
           "approval": {
-            "id": "approve-0",
+            "id": "approve-fail",
             "metadata": {
               "fingerprints": {
                 "sync": "10bad52d5b7b3772fe9c39d9cad8ba1302219876",
@@ -96,7 +96,7 @@
     {
       "func": "getApproval",
       "args": {
-        "id": "approve-0",
+        "id": "approve-fail",
         "metadata": {
           "fingerprints": {
             "sync": "10bad52d5b7b3772fe9c39d9cad8ba1302219876",
@@ -109,26 +109,68 @@
           "approver": "christen.mitchell@example.com"
         }
       },
-      "output": null
+      "output": {
+        "schemaId": "schemaId",
+        "public": {},
+        "private": {
+          "id": "082a0c7adba52200a6a2b31be0b8f5df",
+          "approver": "christen.mitchell@example.com"
+        }
+      }
     },
     {
       "func": "sendApprovals",
       "args": [
         {
-          "approvals": [
+          "approvals": [],
+          "rawApprovals": [
             {
-              "id": "approve-0",
-              "syncver": 243143,
-              "deleted": true
+              "schemaId": "schemaId",
+              "public": {},
+              "private": {
+                "id": "082a0c7adba52200a6a2b31be0b8f5df",
+                "approver": "christen.mitchell@example.com"
+              },
+              "metadata": {
+                "fingerprints": {
+                  "sync": "10bad52d5b7b3772fe9c39d9cad8ba1302219876"
+                }
+              },
+              "systemUserId": "christen.mitchell@example.com",
+              "systemApprovalId": "082a0c7adba52200a6a2b31be0b8f5df"
             }
           ],
-          "rawApprovals": [],
-          "transformedApprovals": []
+          "transformedApprovals": [
+            {
+              "schemaId": "schemaId",
+              "public": {},
+              "private": {
+                "id": "082a0c7adba52200a6a2b31be0b8f5df",
+                "approver": "christen.mitchell@example.com"
+              },
+              "metadata": {
+                "fingerprints": {
+                  "sync": "10bad52d5b7b3772fe9c39d9cad8ba1302219876"
+                }
+              },
+              "systemUserId": "christen.mitchell@example.com",
+              "systemApprovalId": "082a0c7adba52200a6a2b31be0b8f5df"
+            }
+          ]
         },
         {}
       ],
       "output": {}
     },
-    {"func":"updateTask", "args":["approve-0",{"succeeded": true}], "output":{}}
+    {
+      "func": "updateTask",
+      "args": [
+        "approve-fail",
+        {
+          "succeeded": true
+        }
+      ],
+      "output": {}
+    }
   ]
 }

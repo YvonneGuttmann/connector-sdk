@@ -3,7 +3,7 @@
   "task": "sync",
   "taskData": {
     "type":"sync",
-    "id":"sync-0"
+    "id":"sync"
   },
   "steps": [
     {"func": "getBackendApprovals", "args": [{}], "output": []},
@@ -61,6 +61,6 @@
         }
       ]
     }, {}], "output": {}},
-    {"func": "updateTask", "args": ["sync-0", {"succeeded": true}], "output": {}}
+    {"func": "updateTask", "args": ["sync", {"succeeded": true}], "output": {}}
   ]
 }
