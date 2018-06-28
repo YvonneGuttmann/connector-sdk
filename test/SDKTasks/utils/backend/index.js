@@ -25,11 +25,11 @@ var TestAPI = module.exports = class TestAPI {
     }
 	
     async sendApprovals() {
-        this.flow.exec('sendApprovals', arguments);
+        return this.flow.exec('sendApprovals', arguments);
     }
 	
 	async sendAttachment() {
-
+        return this.flow.exec('sendAttachment', arguments);
 	}
 
 	async sendUserIds(data) {
