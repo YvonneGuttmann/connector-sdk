@@ -17,6 +17,8 @@ class BLClass {
 
     reject() { return this.flow.exec('reject', arguments); }
 
+    authenticate() { return this.flow.exec('authenticate', arguments); }
+
     downloadAttachment(data) { return this.flow.exec('downloadAttachment', arguments); }
 
 }
