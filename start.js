@@ -10,16 +10,26 @@ var handlers = require("./lib/taskHandlers.js");
 var jslt = require('jslt');
 var TaskFactory =  require("./lib/task.js");
 var com, transform = jslt.transform;
+const ARCHIVE_PATH = "log_archive";
 
 process.title = process.env["CONTROLLER_TITLE"] || path.basename(process.cwd());
 var [connectorName, connectorVersion] = process.title.split("@");
 
 //logger
-process.env.logStream = "dev" in argv ? "console" : "file"; //in dev mode write log to console, in production write log to file
+process.env.logStream = "de1v" in argv ? "console" : "file"; //in dev mode write log to console, in production write log to file
 var loggerFactory = new Logger(process.env.logStream);
 var logger = loggerFactory.create({}).child({component: "index.js", module: "connectors", connectorName, connectorVersion});
 if (process.env.logStream == "file") {
-	var logCleaner = new LogCleaner("log", { days : 2, size : 50, onlyDirs : true }, logger);
+	let fs = require("fs");
+	if (!fs.existsSync(ARCHIVE_PATH)) fs.mkdirSync(ARCHIVE_PATH);
+	
+	let logCleaner = new LogCleaner("log", { hours : 1, size : 50, onlyDirs : true}, logger);
+	logCleaner.removeFunc = filepath => new Promise(resolve => {
+		fs.rename(filepath, path.join(ARCHIVE_PATH, path.basename(filepath)), resolve);
+	});
+	logCleaner.startMonitor(32);
+	
+	logCleaner = new LogCleaner(ARCHIVE_PATH, { hours : 48, size : 50, onlyDirs : true }, logger);
 	logCleaner.startMonitor(30);
 }
 
