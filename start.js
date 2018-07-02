@@ -16,7 +16,7 @@ process.title = process.env["CONTROLLER_TITLE"] || path.basename(process.cwd());
 var [connectorName, connectorVersion] = process.title.split("@");
 
 //logger
-process.env.logStream = "de1v" in argv ? "console" : "file"; //in dev mode write log to console, in production write log to file
+process.env.logStream = "dev" in argv ? "console" : "file"; //in dev mode write log to console, in production write log to file
 var loggerFactory = new Logger(process.env.logStream);
 var logger = loggerFactory.create({}).child({component: "index.js", module: "connectors", connectorName, connectorVersion});
 if (process.env.logStream == "file") {
