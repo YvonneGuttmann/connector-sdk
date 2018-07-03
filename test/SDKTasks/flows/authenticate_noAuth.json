@@ -1,0 +1,17 @@
+{
+  "title": "make authenticate without credentials (i cant swt the volatile to be undefined, so i use null instead off)",
+  "task": "authenticate",
+  "taskData": {
+    "type": "authenticate",
+    "id": "authenticate-noAuth",
+    "volatile": null
+  },
+  "steps": [
+    {
+      "func": "authenticate",
+      "args": [null],
+      "output": {}
+    },
+    {"func":"updateTask", "args":["authenticate-noAuth",{"succeeded": true}], "output": {}}
+  ]
+}
