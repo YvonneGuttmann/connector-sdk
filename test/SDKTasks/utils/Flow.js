@@ -11,13 +11,15 @@ module.exports = class Flow {
         this.taskData = data.taskData;
         this.steps = data.steps || [];
         this.counter = 0;
+        this.output = [];
     }
 
     verifySteps(step) {
         if(step instanceof Array) {
             step.forEach((s, index) => {
                 if((!s.func || !s.args) && index !== step.length - 1) {
-                    assert.fail(`invalid steps.\nstep ${index} is invalid:\n${JSON.stringify(s)}`);
+                    let message = `invalid steps.\nstep ${index} is invalid:\n${JSON.stringify(s)}`;
+                    assert.fail(message);
                 }
             })
         }
@@ -28,15 +30,20 @@ module.exports = class Flow {
             throw 'flow with error';
         }
 
+        var stepOutput = this._factoryStepOutput(`step ${this.counter}`,funcName);
+        this.output.push(stepOutput);
+
         if(this.counter >= this.steps.length) {
-            this._updateError(this.counter, `Trying to run step ${this.counter} (function: ${funcName}) where flow length is ${this.steps.length}`);
+            let message = `Trying to run step ${this.counter} (function: ${funcName}) where flow length is ${this.steps.length}`;
+            this._updateError(stepOutput, this.counter, message);
         }
 
         const step = this.steps[this.counter++];
         console.log(chalk.yellow(`Executing step ${this.counter - 1}: ${JSON.stringify(step)}`));
 
         if(step.func !== funcName) {
-            this._updateError(this.counter, `Trying to call function ${funcName}. Expected function: ${step.func}`);
+            let message = `Trying to call function ${funcName}. Expected function: ${step.func}`;
+            this._updateError(stepOutput, this.counter, message);
         }
 
 		if (step.args) {
@@ -45,7 +52,8 @@ module.exports = class Flow {
 					console.log(`Mismatch in argument ${i}:`);
 					console.log("expected=\n" + JSON.stringify(step.args[i]));
 					console.log("actual=\n" + stringify(args[i]));
-					this._updateError(this.counter, `Function ${funcName}. Actual arguments ${stringify(args)}. Expected arguments: ${JSON.stringify(step.args)}`);
+                    let message = `Function ${funcName}. Actual arguments ${stringify(args)}. Expected arguments: ${JSON.stringify(step.args)}`;
+                    this._updateError(stepOutput, this.counter, message);
 					break;
 				}
 			}
@@ -88,19 +96,35 @@ module.exports = class Flow {
 		});	
 	}
 	
-    _updateError(stepNumber, message) {
+    _updateError(stepOutput, stepNumber, message) {
         this.error = {
             message: message,
             stepNumber: stepNumber,
             step: JSON.stringify(this.steps[stepNumber])
         };
+        this._reportFailure(stepOutput, message);
         assert.fail(message);
+    }
+
+    _factoryStepOutput(className, name){
+        return {
+            className   : className,
+            name        : name,
+            failure     : { status: false, message: null}
+        };
+    }
+
+    _reportFailure(stepOutput, message){
+        stepOutput.failure.status = true;
+        stepOutput.failure.message = message;
     }
 
     getPreRunString() {
         return chalk.yellow(`Title: ${this.title}`) + '\n' + chalk.yellow(`Number of steps: ${this.steps.length}`);
     }
 };
+
+
 
 function stringify(data) {
     return JSON.stringify(data, (key, value) => {
