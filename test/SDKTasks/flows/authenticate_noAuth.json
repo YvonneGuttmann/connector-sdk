@@ -1,5 +1,5 @@
 {
-  "title": "make authenticate without credentials (i cant swt the volatile to be undefined, so i use null instead off)",
+  "title": "make authenticate without credentials",
   "task": "authenticate",
   "taskData": {
     "type": "authenticate",
