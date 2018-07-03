@@ -31,7 +31,7 @@ module.exports = class Flow {
             throw 'flow with error';
         }
 
-        var stepOutput = this._factoryStepOutput(this.name, funcName);
+        var stepOutput = this._factoryStepOutput(`${this.name} - ${this.title}`, funcName);
         this.output.push(stepOutput);
 
         if(this.counter >= this.steps.length) {
@@ -110,7 +110,7 @@ module.exports = class Flow {
     _factoryStepOutput(className, name){
         return {
             className   : className,
-            name        : name,
+            name        : `[${this.counter}] ${name}`,
             failure     : { status: false, message: null}
         };
     }
