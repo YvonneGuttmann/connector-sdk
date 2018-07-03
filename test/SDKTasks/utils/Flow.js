@@ -53,7 +53,7 @@ module.exports = class Flow {
 					console.log(`Mismatch in argument ${i}:`);
 					console.log("expected=\n" + JSON.stringify(step.args[i]));
 					console.log("actual=\n" + stringify(args[i]));
-                    let message = `Function ${funcName}. Actual arguments ${stringify(args)}. Expected arguments: ${JSON.stringify(step.args)}`;
+                    let message = `Function ${funcName}.\nActual arguments:\n${stringify(args)}. Expected arguments:\n${JSON.stringify(step.args)}`;
                     this._updateError(stepOutput, this.counter, message);
 					break;
 				}
