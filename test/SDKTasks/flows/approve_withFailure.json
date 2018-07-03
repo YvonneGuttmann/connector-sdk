@@ -1,5 +1,5 @@
 {
-  "title": "approve approval (without selfValidation) but failed to approve (doesn't return null at the second getApproval...)",
+  "title": "approve approval (without selfValidation) but failed to approve (doesn't return null at the second getApproval)",
   "task": "approve",
   "taskData": {
     "type": "approve",
