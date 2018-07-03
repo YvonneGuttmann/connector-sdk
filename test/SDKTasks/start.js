@@ -76,7 +76,8 @@ async function start() {
 
     for (var i = 0; i < flows.length; i++) {
         console.log(chalk.yellow(`Running test flow #${i + 1}`));
-        const flowData = require(path.join(__dirname,'./flows/' + flows[i]));
+        var flowData = require(path.join(__dirname,'./flows/' + flows[i]));
+        Object.assign(flowData, {flowName: flows[i]});
         await runTestFlow(flowData, i);
         console.log(chalk.yellow(`finished test flow #${i + 1}`));
         console.log(chalk.yellow(`------------------------------------------------`));

@@ -6,6 +6,7 @@ module.exports = class Flow {
         // if(!data.expectedResult) assert.fail(`Expected result is not defined`);
         this.verifySteps(data.steps);
         // this.expectedResult = data.expectedResult;
+        this.name = data.flowName;
         this.title = data.title;
         this.task = data.task;
         this.taskData = data.taskData;
@@ -30,7 +31,7 @@ module.exports = class Flow {
             throw 'flow with error';
         }
 
-        var stepOutput = this._factoryStepOutput(`step ${this.counter}`,funcName);
+        var stepOutput = this._factoryStepOutput(this.name, funcName);
         this.output.push(stepOutput);
 
         if(this.counter >= this.steps.length) {
