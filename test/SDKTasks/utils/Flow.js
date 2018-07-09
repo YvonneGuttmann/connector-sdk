@@ -59,11 +59,8 @@ module.exports = class Flow {
 				}
 			}
 		}
-		
-//      if(JSON.stringify(step.args) !== stringify(Array.from(args))) {
-//          this._updateError(this.counter, `Function ${funcName}. Actual arguments ${stringify(args)}. Expected arguments: ${JSON.stringify(step.args)}`);
-//      }
 
+        if(step.exception) throw step.exception;
         return step.output;
     }
 
