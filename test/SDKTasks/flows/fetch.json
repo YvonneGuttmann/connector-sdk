@@ -7,58 +7,16 @@
   },
   "steps": [
     {"func": "getBackendApprovals", "args": [{}], "output": []},
-    {"func": "fetch", "args": [{"signatureList": []}], "output": [{"schemaId": "schemaId", "public": {}, "private": { "id": "1", "approver": "ad" }}]},
+    {"func": "fetch", "args": [{"signatureList": []}], "output": [ "transformedApproval.json" ]},
     {"func": "sendApprovals", "args":[{
       "approvals": [
-        {
-          "schemaId": "schemaId",
-          "public": {},
-          "private": {
-            "id": "1",
-            "approver": "ad"
-          },
-          "metadata": {
-            "fingerprints": {
-              "sync": "0b6b5fc865026042c84103d1970ccec4434f0215"
-            }
-          },
-          "systemUserId": "ad",
-          "systemApprovalId": "1"
-        }
+        "sendApproval.json"
       ],
       "rawApprovals": [
-        {
-          "schemaId": "schemaId",
-          "public": {},
-          "private": {
-            "id": "1",
-            "approver": "ad"
-          },
-          "metadata": {
-            "fingerprints": {
-              "sync": "0b6b5fc865026042c84103d1970ccec4434f0215"
-            }
-          },
-          "systemUserId": "ad",
-          "systemApprovalId": "1"
-        }
+        "transformedApproval.json"
       ],
       "transformedApprovals": [
-        {
-          "schemaId": "schemaId",
-          "public": {},
-          "private": {
-            "id": "1",
-            "approver": "ad"
-          },
-          "metadata": {
-            "fingerprints": {
-              "sync": "0b6b5fc865026042c84103d1970ccec4434f0215"
-            }
-          },
-          "systemUserId": "ad",
-          "systemApprovalId": "1"
-        }
+        "transformedApproval.json"
       ]
     }, {}], "output": {}},
     {"func": "updateTask", "args": ["sync", {"succeeded": true}], "output": {}}

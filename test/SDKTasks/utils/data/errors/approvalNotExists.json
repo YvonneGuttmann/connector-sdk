@@ -1,0 +1,6 @@
+{
+  "code": "APPROVAL_NOT_EXIST",
+  "severity": "NORMAL",
+  "name": "Approval wasn't found",
+  "description": "approval wasn't found in the source system or is not pending"
+}

@@ -1,0 +1,6 @@
+{
+  "code": "APPROVAL_DATA_MISMATCH",
+  "severity": "CRITICAL",
+  "name": "Approval data mismatch",
+  "description": "Approval data doesn't match to the source system"
+}

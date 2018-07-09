@@ -1,5 +1,5 @@
 {
-  "title": "approve approval (without selfValidation)",
+  "title": "approve approval",
   "task": "approve",
   "taskData": {
     "type": "approve",
@@ -35,13 +35,7 @@
       "func": "sendApprovals",
       "args": [
         {
-          "approvals": [
-            {
-              "id": "approve-0",
-              "syncver": 243143,
-              "deleted": true
-            }
-          ],
+          "approvals": [ "deletedApproval.json" ],
           "rawApprovals": [],
           "transformedApprovals": []
         },
