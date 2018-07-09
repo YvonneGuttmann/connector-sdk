@@ -4,20 +4,7 @@
   "taskData": {
     "type": "approve",
     "id": "approve-0",
-    "approval": {
-      "id": "approve-0",
-      "metadata": {
-        "fingerprints": {
-          "sync": "10bad52d5b7b3772fe9c39d9cad8ba1302219876",
-          "action": "38ea97eed8501d5144fc2604045f7185f9aed339"
-        }
-      },
-      "public": {},
-      "private": {
-        "id": "082a0c7adba52200a6a2b31be0b8f5df",
-        "approver": "christen.mitchell@example.com"
-      }
-    }
+    "approval": "caprizaApproval.json"
   },
   "steps": [
     {
@@ -27,88 +14,21 @@
           "id": "approve-0"
         }
       ],
-      "output": [
-        {
-          "id": "approve-0",
-          "syncver": 243143,
-          "systemId": "8320de1c-b777-4196-afa4-8eea0fe90956",
-          "systemUserId": "christen.mitchell@example.com",
-          "metadata": {
-            "fingerprints": {
-              "sync": "10bad52d5b7b3772fe9c39d9cad8ba1302219876"
-            }
-          },
-          "private": {
-            "id": "082a0c7adba52200a6a2b31be0b8f5df",
-            "approver": "christen.mitchell@example.com"
-          }
-        }
-      ]
+      "output": [ "caprizaApproval.json" ]
     },
     {
       "func": "getApproval",
-      "args": {
-        "id": "approve-0",
-        "metadata": {
-          "fingerprints": {
-            "sync": "10bad52d5b7b3772fe9c39d9cad8ba1302219876",
-            "action": "38ea97eed8501d5144fc2604045f7185f9aed339"
-          }
-        },
-        "public": {},
-        "private": {
-          "id": "082a0c7adba52200a6a2b31be0b8f5df",
-          "approver": "christen.mitchell@example.com"
-        }
-      },
-      "output": {
-        "schemaId": "schemaId",
-        "public": {},
-        "private": {
-          "id": "082a0c7adba52200a6a2b31be0b8f5df",
-          "approver": "christen.mitchell@example.com"
-        }
-      }
+      "args": "caprizaApproval.json",
+      "output": "transformedApproval.json"
     },
     {
       "func": "approve",
-      "args": [
-        {
-          "approval": {
-            "id": "approve-0",
-            "metadata": {
-              "fingerprints": {
-                "sync": "10bad52d5b7b3772fe9c39d9cad8ba1302219876",
-                "action": "38ea97eed8501d5144fc2604045f7185f9aed339"
-              }
-            },
-            "public": {},
-            "private": {
-              "id": "082a0c7adba52200a6a2b31be0b8f5df",
-              "approver": "christen.mitchell@example.com"
-            }
-          }
-        },
-        {}
-      ],
+      "args": [ { "approval": "caprizaApproval.json" }, {}],
       "output": true
     },
     {
       "func": "getApproval",
-      "args": {
-        "id": "approve-0",
-        "metadata": {
-          "fingerprints": {
-            "sync": "10bad52d5b7b3772fe9c39d9cad8ba1302219876",
-            "action": "38ea97eed8501d5144fc2604045f7185f9aed339"
-          }
-        },
-        "public": {},
-        "private": {
-          "id": "082a0c7adba52200a6a2b31be0b8f5df",
-          "approver": "christen.mitchell@example.com"
-        }
-      },
+      "args": "caprizaApproval.json",
       "output": null
     },
     {

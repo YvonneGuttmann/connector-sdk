@@ -1,0 +1,15 @@
+{
+  "id": "approve-0",
+  "syncver": 243143,
+  "systemId": "8320de1c-b777-4196-afa4-8eea0fe90956",
+  "systemUserId": "christen.mitchell@example.com",
+  "metadata": {
+    "fingerprints": {
+      "sync": "10bad52d5b7b3772fe9c39d9cad8ba1302219876"
+    }
+  },
+  "private": {
+    "id": "082a0c7adba52200a6a2b31be0b8f5df",
+    "approver": "christen.mitchell@example.com"
+  }
+}

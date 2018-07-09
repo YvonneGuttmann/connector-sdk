@@ -3,14 +3,14 @@ const chalk = require ("chalk");
 
 module.exports = class Flow {
     constructor(data) {
-        // if(!data.expectedResult) assert.fail(`Expected result is not defined`);
         this.verifySteps(data.steps);
-        // this.expectedResult = data.expectedResult;
+        parseData(data);
         this.name = data.flowName;
         this.title = data.title;
         this.task = data.task;
         this.taskData = data.taskData;
         this.steps = data.steps || [];
+
         this.counter = 0;
         this.output = [];
     }
@@ -120,9 +120,18 @@ module.exports = class Flow {
     getPreRunString() {
         return chalk.yellow(`Title: ${this.title}`) + '\n' + chalk.yellow(`Number of steps: ${this.steps.length}`);
     }
+
 };
 
-
+function parseData(o) {
+    for (var i in o) {
+        if (o[i] !== null && typeof(o[i])=="object") {
+            parseData(o[i]);
+        } else if (o[i] !== null && typeof(o[i])=="string" && o[i].indexOf(".json") !== -1){
+            o[i] = require(`./data/${o[i]}`);
+        }
+    }
+}
 
 function stringify(data) {
     return JSON.stringify(data, (key, value) => {
