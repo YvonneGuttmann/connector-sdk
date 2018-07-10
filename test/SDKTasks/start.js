@@ -64,6 +64,12 @@ function postProcess(flow) {
     } else {
         console.log(chalk.green(`Test flow status: succeeded`));
     }
+
+    for(var key in require.cache) {
+        if(key.indexOf(path.join('SDKTasks', 'utils', 'data')) !== -1)
+            delete  require.cache[key];
+    }
+
 }
 
 
