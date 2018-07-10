@@ -1,0 +1,15 @@
+{
+  "schemaId": "schemaId",
+  "public": {},
+  "private": {
+    "id": "asdasdsad1235asasd3535",
+    "approver": "kuku.buku@example.com"
+  },
+  "metadata": {
+    "fingerprints": {
+      "sync": "a"
+    }
+  },
+  "systemUserId": "kuku.buku@example.com",
+  "systemApprovalId": "asdasdsad1235asasd3535"
+}
