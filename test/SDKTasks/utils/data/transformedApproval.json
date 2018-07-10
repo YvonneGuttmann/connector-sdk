@@ -4,5 +4,12 @@
   "private": {
     "id": "082a0c7adba52200a6a2b31be0b8f5df",
     "approver": "christen.mitchell@example.com"
-  }
+  },
+  "metadata": {
+    "fingerprints": {
+      "sync": "e4dc438aef1efc0e5e21330c0e3b572c36759afb"
+    }
+  },
+  "systemUserId": "christen.mitchell@example.com",
+  "systemApprovalId": "082a0c7adba52200a6a2b31be0b8f5df"
 }

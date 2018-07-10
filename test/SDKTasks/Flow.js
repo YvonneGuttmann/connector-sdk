@@ -128,7 +128,7 @@ function parseData(o) {
         if (o[i] !== null && typeof(o[i])=="object") {
             parseData(o[i]);
         } else if (o[i] !== null && typeof(o[i])=="string" && o[i].indexOf(".json") !== -1){
-            o[i] = require(`./data/${o[i]}`);
+            o[i] = require(`./utils/data/${o[i]}`);
         }
     }
 }

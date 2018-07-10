@@ -10,7 +10,7 @@
     {"func": "fetch", "args": [{"signatureList": []}], "output": [ "transformedApproval.json" ]},
     {"func": "sendApprovals", "args":[{
       "approvals": [
-        "sendApproval.json"
+        "transformedApproval.json"
       ],
       "rawApprovals": [
         "transformedApproval.json"
