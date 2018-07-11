@@ -1,0 +1,52 @@
+{
+  "title": "reject approval and disable mini sync flag is true",
+  "task": "reject",
+  "config": {
+    "blConfig": {
+      "disableMiniSync": true
+    },
+    "controllerConfig": {}
+  },
+  "taskData": {
+    "type": "reject",
+    "id": "approve-0",
+    "approval": "caprizaApproval.json",
+    "volatile": {
+      "rejectionReason": "a reason to reject"
+    }
+  },
+  "steps": [
+    {
+      "func": "getBackendApproval",
+      "args": [
+        {
+          "id": "approve-0"
+        }
+      ],
+      "output": [ "caprizaApproval.json" ]
+    },
+    {
+      "func": "getApproval",
+      "args": "caprizaApproval.json",
+      "output": "transformedApproval.json"
+    },
+    {
+      "func": "reject",
+      "args": [ { "approval": "caprizaApproval.json", "rejectionReason": "a reason to reject" }, {}],
+      "output": true
+    },
+    {
+      "func": "sendApprovals",
+      "args": [
+        {
+          "approvals": [ "deletedApproval.json" ],
+          "rawApprovals": [],
+          "transformedApprovals": []
+        },
+        {}
+      ],
+      "output": {}
+    },
+    {"func":"updateTask", "args":["approve-0",{"succeeded": true}], "output":{}}
+  ]
+}
