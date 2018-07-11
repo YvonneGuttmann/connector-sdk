@@ -5,7 +5,9 @@ class BLClass {
         this.flow = options.flow;
     }
 
-    static init(context) { this.config = context.config; }
+    static init(context) {
+        BLClass.settings = context.config;
+    }
 
     static stop() { }
 
@@ -22,5 +24,4 @@ class BLClass {
     downloadAttachment(data) { return this.flow.exec('downloadAttachment', arguments); }
 
 }
-
 module.exports = BLClass;

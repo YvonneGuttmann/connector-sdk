@@ -10,7 +10,9 @@ module.exports = class Flow {
         this.task = data.task;
         this.taskData = data.taskData;
         this.steps = data.steps || [];
-
+        this.config = data.config || {};
+        if(!this.config.blConfig) this.config.blConfig = {};
+        if(!this.config.controllerConfig) this.config.controllerConfig = {};
         this.counter = 0;
         this.output = [];
     }

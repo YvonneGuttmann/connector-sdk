@@ -15,16 +15,18 @@ var testsFlowsErrors = [];
 var TestAnalyzer = require("./utils/junitBuilder.js");
 var testAnalyzer = new TestAnalyzer('flow-test-report.xml');
 
-async function runTestFlow(flowData, index) {
+async function runTestFlow(flowData) {
 
     var flow = new Flow(flowData);
     console.log(flow.getPreRunString());
-    const bl = new BL({logger, flow});
     Connector.init({
-        config: {controllerConfig: {}}, logger: logger, BL: bl, transform: (a) => {
-            return a
-        }
-    });
+            config: flow.config,
+            logger,
+            BL,
+            transform: (a) => { return a },
+            testFlow: flow
+        });
+
     var TaskClasses = createTaskClasses({timeout: 3000}, () => new Backend({signatureList: [], flow}));
     var task = new TaskClasses.Task(flow.taskData);
 
