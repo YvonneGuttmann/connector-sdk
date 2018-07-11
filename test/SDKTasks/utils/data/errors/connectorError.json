@@ -1,0 +1,6 @@
+{
+  "code":"CONNECTOR_ERROR",
+  "severity":"CRITICAL",
+  "name":"Connector business logic error",
+  "description":"An unknows error has occured in the connector's business logic"
+}
