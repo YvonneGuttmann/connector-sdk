@@ -83,12 +83,15 @@ async function start() {
     console.log(chalk.yellow(`------------------------------------------------`));
 
     for (var i = 0; i < flows.length; i++) {
-        console.log(chalk.yellow(`Running test flow #${i + 1}`));
         var flowData = require(path.join(__dirname,'./flows/' + flows[i]));
         Object.assign(flowData, {flowName: flows[i].split(".json")[0]});
-        await runTestFlow(flowData, i);
-        console.log(chalk.yellow(`finished test flow #${i + 1}`));
-        console.log(chalk.yellow(`------------------------------------------------`));
+        if(!flowData.disable) {
+            console.log(chalk.yellow(`Running test flow #${i + 1}`));
+            await runTestFlow(flowData, i);
+            console.log(chalk.yellow(`finished test flow #${i + 1}`));
+            console.log(chalk.yellow(`------------------------------------------------`));
+        }
+
     }
 
     testAnalyzer.writeReport();
