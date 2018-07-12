@@ -78,20 +78,21 @@ function postProcess(flow) {
 async function start() {
     const flows = fs.readdirSync(path.join(__dirname,'./flows/'));
 
-    console.log(chalk.yellow(`Running tests flows`));
+    var enableTests = flows
+        .map( f => {
+            return Object.assign(require(path.join(__dirname,'./flows/' + f)), {flowName: f.split(".json")[0]})})
+        .filter( f => !f.disable);
+
     console.log(chalk.yellow(`Total tests flows: ${flows.length}`));
+    console.log(chalk.yellow(`Total enabled tests flows: ${enableTests.length}`));
     console.log(chalk.yellow(`------------------------------------------------`));
+    console.log(chalk.yellow(`Running tests flows`));
 
-    for (var i = 0; i < flows.length; i++) {
-        var flowData = require(path.join(__dirname,'./flows/' + flows[i]));
-        Object.assign(flowData, {flowName: flows[i].split(".json")[0]});
-        if(!flowData.disable) {
-            console.log(chalk.yellow(`Running test flow #${i + 1}`));
-            await runTestFlow(flowData, i);
-            console.log(chalk.yellow(`finished test flow #${i + 1}`));
-            console.log(chalk.yellow(`------------------------------------------------`));
-        }
-
+    for (var i = 0 ; i < enableTests.length ; i++) {
+        console.log(chalk.yellow(`Running test flow #${i + 1}: ${enableTests[i].flowName}`));
+        await runTestFlow(enableTests[i], i);
+        console.log(chalk.yellow(`finished test flow #${i + 1}`));
+        console.log(chalk.yellow(`------------------------------------------------`));
     }
 
     testAnalyzer.writeReport();
