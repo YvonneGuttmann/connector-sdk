@@ -42,7 +42,7 @@ module.exports = class Flow {
         }
 
         const step = this.steps[this.counter++];
-        console.log(chalk.yellow(`Executing step ${this.counter - 1}: ${JSON.stringify(step)}`));
+        // console.log(chalk.yellow(`Executing step ${this.counter - 1}: ${JSON.stringify(step)}`));
 
         if(step.func !== funcName) {
             let message = `Trying to call function ${funcName}. Expected function: ${step.func}`;

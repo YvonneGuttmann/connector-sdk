@@ -1,0 +1,43 @@
+{
+  "title": "approve approval which not exists (disableMiniSync: false)",
+  "task": "approve",
+  "config": {
+    "blConfig": {
+      "disableMiniSync": false
+    },
+    "controllerConfig": {}
+  },
+  "taskData": {
+    "type": "approve",
+    "id": "approve-0",
+    "approval": "caprizaApproval.json"
+  },
+  "steps": [
+    {
+      "func": "getBackendApproval",
+      "args": [
+        {
+          "id": "approve-0"
+        }
+      ],
+      "output": [ "caprizaApproval.json" ]
+    },
+    {
+      "func": "getApproval",
+      "args": "caprizaApproval.json",
+      "output": null
+    },
+    {
+      "func": "sendApprovals",
+      "args": [{ "approvals": [ "deletedApproval.json" ]}, {}],
+      "output": {}
+    },
+    {"func":"updateTask", "args":[
+      "approve-0",
+      {
+        "succeeded":false,
+        "payload": "errors/approvalNotExists.json"
+      }
+    ], "output":{}}
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "title": "approve approval and get mismatch data (disableMiniSync: true)",
+  "task": "approve",
+  "config": {
+    "blConfig": {
+      "disableMiniSync": true
+    },
+    "controllerConfig": {}
+  },
+  "taskData": {
+    "type": "approve",
+    "id": "approve-0",
+    "approval": "caprizaApproval.json"
+  },
+  "steps": [
+    {
+      "func": "getBackendApproval",
+      "args": [
+        {
+          "id": "approve-0"
+        }
+      ],
+      "output": [ "caprizaApproval.json" ]
+    },
+    {
+      "func": "getApproval",
+      "args": "caprizaApproval.json",
+      "output": "transformedApprovalChanged.json"
+    },
+    {
+      "func": "sendApprovals",
+      "args": [{ "approvals": [ "sendApprovalChangedSyncVer.json" ]}, {}],
+      "output": {}
+    },
+    {"func":"updateTask", "args":[
+      "approve-0",
+      {
+        "succeeded":false,
+        "payload": "errors/approvalMismatchData.json"
+      }
+    ], "output":{}}
+  ]
+}

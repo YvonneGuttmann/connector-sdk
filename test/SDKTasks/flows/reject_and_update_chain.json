@@ -1,0 +1,48 @@
+{
+  "title": "reject approval and mark as updated (approval chain) - 1 add, 1 removed",
+  "task": "reject",
+  "taskData": {
+    "type": "reject",
+    "id": "approve-0",
+    "approval": "caprizaApproval.json"
+  },
+  "steps": [
+    {
+      "func": "getBackendApproval",
+      "args": [
+        {
+          "id": "approve-0"
+        }
+      ],
+      "output": [ "caprizaApproval.json" ]
+    },
+    {
+      "func": "getApproval",
+      "args": "caprizaApproval.json",
+      "output": "transformedApproval.json"
+    },
+    {
+      "func": "reject",
+      "args": [ { "approval": "caprizaApproval.json" }, {}],
+      "output": true
+    },
+    {
+      "func": "getApproval",
+      "args": "caprizaApproval.json",
+      "output": "transformedApprovalChainChanged.json"
+    },
+    {
+      "func": "sendApprovals",
+      "args": [
+        {
+          "approvals": [ "transformedApprovalChainChanged.json", "deletedApproval.json" ],
+          "rawApprovals": [ "transformedApprovalChainChanged.json" ],
+          "transformedApprovals": [ "transformedApprovalChainChanged.json" ]
+        },
+        {}
+      ],
+      "output": {}
+    },
+    {"func":"updateTask", "args":["approve-0",{"succeeded": true}], "output":{}}
+  ]
+}
