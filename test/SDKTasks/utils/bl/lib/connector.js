@@ -21,6 +21,8 @@ class BLClass {
 
     authenticate() { return this.flow.exec('authenticate', arguments); }
 
+    action$reassign() { return this.flow.exec('action$reassign', arguments); }
+
     downloadAttachment(data) { return this.flow.exec('downloadAttachment', arguments); }
 
 }

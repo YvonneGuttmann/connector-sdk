@@ -1,13 +1,29 @@
 {
-  "title": "fetching approvals with error return in fetch",
+  "title": "fetching approvals. BL throw exception",
+  "disable": true,
   "task": "sync",
   "taskData": {
     "type":"sync",
     "id":"sync-fail"
   },
   "steps": [
-    {"func": "getBackendApprovals", "args": [{}], "output": []},
-    {"func": "fetch", "args": [{"signatureList": []}], "output": "error"},
-    {"func": "updateTask", "args": ["sync-fail", {"succeeded": false}], "output": {}}
+    {
+      "func": "getBackendApprovals",
+      "args": [{}],
+      "output": []
+    },
+    {
+      "func": "fetch",
+      "args": [{"signatureList": []}],
+      "exception": "CONNECTOR_ERROR"},
+    {
+      "func": "updateTask",
+      "args": ["sync-fail",
+        {
+          "succeeded": false,
+          "payload": "errors/connectorError.json"
+
+        }],
+      "output": {}}
   ]
 }

@@ -1,0 +1,39 @@
+{
+  "title": "additional actions: forward (not implemented in the BL) (selfValidation: true, disableMiniSync: true)",
+  "task": "action$forward",
+  "config": {
+    "blConfig": {
+      "selfValidation": true,
+      "disableMiniSync": true
+    }
+  },
+  "taskData": {
+    "type": "action$forward",
+    "id": "approve-0",
+    "approval": "caprizaApproval.json",
+    "volatile": {
+      "commentText": "comments go here",
+      "assignTo": "a@a.com"
+    }
+  },
+  "steps": [
+    {
+      "func": "getBackendApproval",
+      "args": [
+        {
+          "id": "approve-0"
+        }
+      ],
+      "output": [ "caprizaApproval.json" ]
+    },
+    {
+      "func":"updateTask",
+      "args":[
+        "approve-0",
+        {
+          "succeeded": false,
+          "payload": "errors/taskInvalid.json"
+        }],
+      "output":{}}
+  ]
+}

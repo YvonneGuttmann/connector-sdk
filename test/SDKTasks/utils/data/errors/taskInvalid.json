@@ -1,0 +1,6 @@
+{
+  "code": "TASK_INVALID",
+  "severity": "NORMAL",
+  "name": "Invalid task type",
+  "description": "Invalid task type"
+}
