@@ -1,0 +1,24 @@
+{
+  "title": "fetching approvals (1 new) when signature list is empty. returns object",
+  "task": "sync",
+  "taskData": {
+    "type":"sync",
+    "id":"sync"
+  },
+  "steps": [
+    {"func": "getBackendApprovals", "args": [{}], "output": []},
+    {"func": "fetch", "args": [{"signatureList": []}], "output": {"approvals": [ "transformedApproval.json" ]}},
+    {"func": "sendApprovals", "args":[{
+      "approvals": [
+        "transformedApproval.json"
+      ],
+      "rawApprovals": [
+        "transformedApproval.json"
+      ],
+      "transformedApprovals": [
+        "transformedApproval.json"
+      ]
+    }, {}], "output": {}},
+    {"func": "updateTask", "args": ["sync", {"succeeded": true}], "output": {}}
+  ]
+}

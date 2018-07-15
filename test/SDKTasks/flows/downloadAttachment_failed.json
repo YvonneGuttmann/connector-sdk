@@ -1,5 +1,5 @@
 {
-  "title": "get attachment and download it",
+  "title": "get attachment returns exception",
   "task": "getAttachment",
   "taskData": {
     "type": "getAttachment",
