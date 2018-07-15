@@ -1,0 +1,11 @@
+{
+  "title": "trying to authenticate without credentials",
+  "task": "authenticate",
+  "taskData": {
+    "type": "authenticate",
+    "id": "authenticate-noCreds"
+  },
+  "steps": [
+    {"func":"updateTask", "args":["authenticate-noCreds",{"succeeded": false, "payload": "AUTHENTICATION"}], "output": {}}
+  ]
+}

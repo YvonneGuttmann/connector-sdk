@@ -1,5 +1,5 @@
 {
-  "title": "make fail authenticate",
+  "title": "authentication failed - bad credentials",
   "task": "authenticate",
   "taskData": {
     "type": "authenticate",
@@ -20,7 +20,7 @@
           "pasword": "123456"
         }
       ],
-      "output": false
+      "exception": "AUTHENTICATION"
     },
     {
       "func": "updateTask",
