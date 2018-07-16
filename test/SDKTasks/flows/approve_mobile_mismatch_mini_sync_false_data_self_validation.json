@@ -1,7 +1,6 @@
 {
   "title": "approve approval and get mobile mismatch data (selfValidation: true, miniSync: false)",
   "task": "approve",
-  "disable": true,
   "config": {
     "blConfig": {
       "selfValidation": true,
