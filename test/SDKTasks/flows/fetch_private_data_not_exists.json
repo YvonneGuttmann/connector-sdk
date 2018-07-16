@@ -1,0 +1,65 @@
+{
+  "title": "fetching approvals (1 new) when signature list is empty",
+  "task": "sync",
+  "taskData": {
+    "type":"sync",
+    "id":"sync"
+  },
+  "steps": [
+    {"func": "getBackendApprovals", "args": [{}], "output": []},
+    {"func": "fetch", "args": [{"signatureList": []}], "output": [
+      {
+        "schemaId": "schemaId",
+        "public": {},
+        "private": {
+          "approver": "christen.mitchell@example.com"
+        },
+        "metadata": {
+          "fingerprints": {
+            "sync": "e4dc438aef1efc0e5e21330c0e3b572c36759afb"
+          }
+        },
+        "systemUserId": "christen.mitchell@example.com",
+        "systemApprovalId": "082a0c7adba52200a6a2b31be0b8f5df"
+      }
+    ]},
+    {"func": "sendApprovals", "args":[{
+      "approvals": [],
+      "rawApprovals": [
+        {
+          "schemaId": "schemaId",
+          "public": {},
+          "private": {
+            "approver": "christen.mitchell@example.com"
+          },
+          "metadata": {
+            "fingerprints": {
+              "sync": "e4dc438aef1efc0e5e21330c0e3b572c36759afb"
+            }
+          },
+          "systemUserId": "christen.mitchell@example.com",
+          "systemApprovalId": "082a0c7adba52200a6a2b31be0b8f5df",
+          "error":"Invalid approval: missing schemaId or private data"
+        }
+      ],
+      "transformedApprovals": [
+        {
+          "schemaId": "schemaId",
+          "public": {},
+          "private": {
+            "approver": "christen.mitchell@example.com"
+          },
+          "metadata": {
+            "fingerprints": {
+              "sync": "e4dc438aef1efc0e5e21330c0e3b572c36759afb"
+            }
+          },
+          "systemUserId": "christen.mitchell@example.com",
+          "systemApprovalId": "082a0c7adba52200a6a2b31be0b8f5df",
+          "error":"Invalid approval: missing schemaId or private data"
+        }
+      ]
+    }, {}], "output": {}},
+    {"func": "updateTask", "args": ["sync", {"succeeded": true}], "output": {}}
+  ]
+}
