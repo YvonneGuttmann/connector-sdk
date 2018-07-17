@@ -1,7 +1,6 @@
 {
   "title": "approve approval which not exists (selfValidation: false)",
   "task": "approve",
-  "disable": true,
   "config": {
     "blConfig": {
       "selfValidation": true
@@ -26,7 +25,9 @@
     {
       "func": "approve",
       "args": [ { "approval": "caprizaApproval.json" }, {}],
-      "exception": "APPROVAL_NOT_EXIST"
+      "exception": {
+        "error": "APPROVAL_NOT_EXIST"
+      }
     },
     {
       "func": "sendApprovals",
