@@ -1,6 +1,5 @@
 {
   "title": "fetching approvals. BL throw exception",
-  "disable": true,
   "task": "sync",
   "taskData": {
     "type":"sync",
@@ -21,7 +20,7 @@
       "args": ["sync-fail",
         {
           "succeeded": false,
-          "payload": "errors/connectorError.json"
+          "payload": "CONNECTOR_ERROR"
 
         }],
       "output": {}}
