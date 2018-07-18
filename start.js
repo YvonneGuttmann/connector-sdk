@@ -155,7 +155,7 @@ logger.info ("Initializing connector");
 Connector.init({config,logger,transform})
     .then(async (taskTypes) => {
 
-        if(API.sendConnectorData()) {
+        if(API.sendConnectorData) {
             try {
                 logger.info(`Sending connector info to the api. task types: ${taskTypes}`);
                 await API.sendConnectorData({taskTypes, uiMappings: getUiMappings(), authRequired: taskTypes.includes("authenticate") })
