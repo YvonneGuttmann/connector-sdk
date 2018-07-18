@@ -155,10 +155,10 @@ logger.info ("Initializing connector");
 Connector.init({config,logger,transform})
     .then(async (taskTypes) => {
 
-        if(API.sendConnectorTaskTypes) {
+        if(API.sendConnectorData()) {
             try {
-                logger.info(`Sending task types to the api task types: ${taskTypes}`);
-                await API.sendConnectorTaskTypes(taskTypes)
+                logger.info(`Sending connector info to the api. task types: ${taskTypes}`);
+                await API.sendConnectorData({taskTypes, uiMappings: getUiMappings(), authRequired: taskTypes.includes("authenticate") })
             } catch (ex) {
                 logger.error(`Failed to send task types to the api: ${ex.stack || ex}`);
             }
@@ -172,3 +172,32 @@ Connector.init({config,logger,transform})
         logger.error(`Connector initialization failed ${err}\n${err.stack}`);
         process.exit(2);
     });
+
+function getUiMappings() {
+    var res = [];
+    var uiTemplates;
+    try{
+        uiTemplates = require(path.resolve(`./resources/ui-templates.json`));
+    } catch(ex) {
+        logger.info(`There is no ui-templates.json file`);
+        return;
+    }
+
+    for(var key in uiTemplates) {
+        logger.info(`key: ${key}`);
+        if(!uiTemplates[key].type) {
+            logger.info(`${key}: type is missing in the ui template`);
+            break;
+        }
+
+        var temp = {
+            schemaId: key,
+            uiTemplate: uiTemplates[key],
+            type: uiTemplates[key].type
+        };
+        delete temp.uiTemplate.type;
+        res.push(temp);
+    }
+
+    return res;
+}
