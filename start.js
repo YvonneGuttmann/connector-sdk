@@ -163,7 +163,7 @@ Connector.init({config,logger,transform})
                 logger.error(`Failed to send task types to the api: ${ex.stack || ex}`);
             }
         } else {
-            logger.info(`sendConnectorTaskTypes not exists in the API, won't send task types`);
+            logger.info(`sendConnectorData not exists in the API, won't send connector info to API`);
         }
 
         run(1)
@@ -184,7 +184,6 @@ function getUiMappings() {
     }
 
     for(var key in uiTemplates) {
-        logger.info(`key: ${key}`);
         if(!uiTemplates[key].type) {
             logger.info(`${key}: type is missing in the ui template`);
             break;
