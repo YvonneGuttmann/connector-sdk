@@ -194,7 +194,6 @@ function getUiMappings() {
             uiTemplate: uiTemplates[key],
             type: uiTemplates[key].type
         };
-        delete temp.uiTemplate.type;
         res.push(temp);
     }
 
