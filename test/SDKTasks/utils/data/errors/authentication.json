@@ -1,0 +1,6 @@
+{
+  "code":"AUTHENTICATION",
+  "severity":"CRITICAL",
+  "name":"Authentication error",
+  "description":"Source system authentication failed"
+}
