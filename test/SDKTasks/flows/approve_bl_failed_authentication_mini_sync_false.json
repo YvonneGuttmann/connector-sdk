@@ -1,0 +1,49 @@
+{
+  "title": "approve approval and get error from the bl",
+  "task": "approve",
+  "config": {
+    "blConfig": {
+      "disableMiniSync": true
+    },
+    "controllerConfig": {}
+  },
+  "taskData": {
+    "type": "approve",
+    "id": "approve-0",
+    "approval": "caprizaApproval.json"
+  },
+  "steps": [
+    {
+      "func": "getBackendApproval",
+      "args": [
+        {
+          "id": "approve-0"
+        }
+      ],
+      "output": [ "caprizaApproval.json" ]
+    },
+    {
+      "func": "getApproval",
+      "args": "caprizaApproval.json",
+      "output": "transformedApproval.json"
+    },
+    {
+      "func": "approve",
+      "args": [ { "approval": "caprizaApproval.json" }, {}],
+      "exception": {
+        "error": "AUTHENTICATION"
+      }
+    },
+    {
+      "func": "sendApprovals",
+      "args": [
+        {
+          "approvals": []
+        },
+        {}
+      ],
+      "output": {}
+    },
+    {"func":"updateTask", "args":["approve-0",{"succeeded": false, "payload": "errors/authentication.json"}], "output":{}}
+  ]
+}
