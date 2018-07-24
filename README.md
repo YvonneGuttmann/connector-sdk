@@ -29,8 +29,9 @@ To launch the Connector UI type the following into a terminal window:
 npm run inspector
 ```
 
-# Capriza Connectors
-Backend systems connectors.
+# Support and Documentation
+To further read about Connectors architecture and implementation requirements please refer
+to Capriza[Support Site](https://docs.approvesimple.com/docs/sdk).
 
 ##Architecture
 The architecture of a connector is composed of several layers - Connector controller, a Business Logic (BL) connector and Drivers that enable technical connection to the backend system.

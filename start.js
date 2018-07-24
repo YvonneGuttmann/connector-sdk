@@ -10,6 +10,7 @@ var handlers = require("./lib/taskHandlers.js");
 var jslt = require('jslt');
 var TaskFactory =  require("./lib/task.js");
 var com, transform = jslt.transform;
+var API;
 const ARCHIVE_PATH = "log_archive";
 
 process.title = process.env["CONTROLLER_TITLE"] || path.basename(process.cwd());
@@ -32,14 +33,6 @@ if (process.env.logStream == "file") {
 	logCleaner = new LogCleaner(ARCHIVE_PATH, { hours : 48, size : 50, onlyDirs : true }, logger);
 	logCleaner.startMonitor(30);
 }
-
-//1. get configuration
-var config = require('./lib/config').getConfiguration({logger: logger.child({component: "config"})});
-logger = logger.child ({connectorId: config.controllerConfig.connectorId});
-
-//2. create an instance of the connector according to the configuration
-logger.info ("Initiating connector instance");
-var API;
 
 function createTaskClasses(config, backendFactory){
     return TaskFactory({
@@ -105,74 +98,6 @@ function transformWithErrors(data, template, props = {}){
     return res;
 }
 
-//3. Initializing com manager instance (local or remote)
-try{
-    if ("local" in argv){
-        var localMode = require('@capriza/as-inspector'),
-            watch = localMode.Watcher,
-            LocalAPI = localMode.api;
-
-        startLocalMode(config.controllerConfig);
-        watch(onLocalFileChange)
-    } else {
-        startRemoteMode(config.controllerConfig);
-    }
-} catch (err) {
-    logger.error(`Failed to create ComManager instance ${err.stack}.`);
-    logger.info(`Stopping connector`);
-    setTimeout(() => {
-        process.exit();
-    },100);
-    return;
-}
-
-//4. On Exit hook and exceptions:
-exitHook(callback => {
-    logger.info(`Stopping connector...`);
-    com.stop().catch().then(() => Connector.stop()).then(()=>logger.info(`Bye bye`)).then(()=>process.exit());
-});
-exitHook.uncaughtExceptionHandler(err => logger.error (`Caught global exception: ${err.stack}`));
-exitHook.unhandledRejectionHandler(err => logger.error (`Caught global async rejection: ${err.stack}`));
-
-async function run(attempts){
-    try {
-        logger.info(`Run ${attempts}`);
-        await com.start();
-    }
-    catch (ex) {
-        logger.error(`[Attempt ${attempts}] Could not start connector: ${ex.stack || ex}`);
-        if (attempts <= 20) {
-            var nextAttempt = attempts * 10 * 1000;
-            logger.info (`Trying to start connector again in ${nextAttempt / 1000}s...`);
-            setTimeout (() => run(++attempts), nextAttempt);
-        }
-        else process.exit(2);
-    }
-}
-
-//5. Bootstrap connector
-logger.info ("Initializing connector");
-Connector.init({config,logger,transform})
-    .then(async (taskTypes) => {
-
-        if(API.sendConnectorData) {
-            try {
-                logger.info(`Sending connector info to the api. task types: ${taskTypes}`);
-                await API.sendConnectorData({taskTypes, uiMappings: getUiMappings(), authRequired: taskTypes.includes("authenticate") })
-            } catch (ex) {
-                logger.error(`Failed to send task types to the api: ${ex.stack || ex}`);
-            }
-        } else {
-            logger.info(`sendConnectorData not exists in the API, won't send connector info to API`);
-        }
-
-        run(1)
-    }) //1st attempt
-    .catch(err=>{
-        logger.error(`Connector initialization failed ${err}\n${err.stack}`);
-        process.exit(2);
-    });
-
 function getUiMappings() {
     var res = [];
     var uiTemplates;
@@ -199,3 +124,81 @@ function getUiMappings() {
 
     return res;
 }
+
+async function run(attempts){
+    try {
+        logger.info(`Run ${attempts}`);
+        await com.start();
+    }
+    catch (ex) {
+        logger.error(`[Attempt ${attempts}] Could not start connector: ${ex.stack || ex}`);
+        if (attempts <= 20) {
+            var nextAttempt = attempts * 10 * 1000;
+            logger.info (`Trying to start connector again in ${nextAttempt / 1000}s...`);
+            setTimeout (() => run(++attempts), nextAttempt);
+        }
+        else process.exit(2);
+    }
+}
+
+//On Exit hook and exceptions:
+exitHook(callback => {
+    logger.info(`Stopping connector...`);
+    com.stop().catch().then(() => Connector.stop()).then(()=>logger.info(`Bye bye`)).then(()=>process.exit());
+});
+exitHook.uncaughtExceptionHandler(err => logger.error (`Caught global exception: ${err.stack}`));
+exitHook.unhandledRejectionHandler(err => logger.error (`Caught global async rejection: ${err.stack}`));
+
+(async function(){
+    //1. get configuration
+    var config = await require('./lib/config').getConfiguration({logger: logger.child({component: "config"})});
+    logger = logger.child ({connectorId: config.controllerConfig.connectorId});
+
+    //2. create an instance of the connector according to the configuration
+    logger.info ("Initiating connector instance");
+
+    //3. Initializing com manager instance (local or remote)
+    try{
+        if ("local" in argv){
+            var localMode = require('@capriza/as-inspector'),
+                watch = localMode.Watcher,
+                LocalAPI = localMode.api;
+
+            startLocalMode(config.controllerConfig);
+            watch(onLocalFileChange)
+        } else {
+            startRemoteMode(config.controllerConfig);
+        }
+    } catch (err) {
+        logger.error(`Failed to create ComManager instance ${err.stack}.`);
+        logger.info(`Stopping connector`);
+        setTimeout(() => {
+            process.exit();
+        },100);
+        return;
+    }
+
+    //4. Bootstrap connector
+    logger.info ("Initializing connector");
+    Connector.init({config,logger,transform})
+        .then(async (taskTypes) => {
+
+            if(API.sendConnectorData) {
+                try {
+                    logger.info(`Sending connector info to the api. task types: ${taskTypes}`);
+                    await API.sendConnectorData({taskTypes, uiMappings: getUiMappings(), authRequired: taskTypes.includes("authenticate") })
+                } catch (ex) {
+                    logger.error(`Failed to send task types to the api: ${ex.stack || ex}`);
+                }
+            } else {
+                logger.info(`sendConnectorData not exists in the API, won't send connector info to API`);
+            }
+
+            run(1)
+        }) //1st attempt
+        .catch(err=>{
+            logger.error(`Connector initialization failed ${err}\n${err.stack}`);
+            process.exit(2);
+        });
+
+})();
