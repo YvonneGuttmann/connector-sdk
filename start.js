@@ -11,6 +11,8 @@ var jslt = require('jslt');
 var TaskFactory =  require("./lib/task.js");
 var com, transform = jslt.transform;
 var API;
+var LocalAPI;
+var config;
 const ARCHIVE_PATH = "log_archive";
 
 process.title = process.env["CONTROLLER_TITLE"] || path.basename(process.cwd());
@@ -34,50 +36,49 @@ if (process.env.logStream == "file") {
 	logCleaner.startMonitor(30);
 }
 
-function createTaskClasses(config, backendFactory){
+function createTaskClasses(controllerConfig, backendFactory){
     return TaskFactory({
         handlers,
-        config,
+        controllerConfig,
         backendFactory,
         Connector,
         logger
     });
 }
 
-function startRemoteMode(config) {
+function startRemoteMode(controllerConfig) {
 	logger.info("Remote mode");
 
-	if (!config.creds || !config.creds.apiKey || !config.creds.apiSecret)
+	if (!controllerConfig.creds || !controllerConfig.creds.apiKey || !controllerConfig.creds.apiSecret)
 		throw "API credentials was not found in configuration";
 	
-	var apiUrl = config.apiUrl;
+	var apiUrl = controllerConfig.apiUrl;
 	var requestHeaders = {
-		"x-capriza-api-key"			: config.creds.apiKey,
-		"x-capriza-secret"			: config.creds.apiSecret,
-		"x-capriza-connector-id"	: config.connectorId
+		"x-capriza-api-key"			: controllerConfig.creds.apiKey,
+		"x-capriza-secret"			: controllerConfig.creds.apiSecret,
+		"x-capriza-connector-id"	: controllerConfig.connectorId
 	};
 	
 	const BackendAPI = require("./lib/backendAPI.js");
-	API = new BackendAPI(apiUrl, requestHeaders, {connectorId: config.connectorId}, logger);
+	API = new BackendAPI(apiUrl, requestHeaders, {connectorId: controllerConfig.connectorId}, logger);
 
-    var TaskClasses = createTaskClasses(config, (conf, logger)=>new BackendAPI(apiUrl, requestHeaders, conf, logger));
-	com = new ComManager({ apiUrl, requestHeaders, TaskClasses, logger, config });
+    var TaskClasses = createTaskClasses(controllerConfig, (conf, logger)=>new BackendAPI(apiUrl, requestHeaders, conf, logger));
+	com = new ComManager({ apiUrl, requestHeaders, TaskClasses, logger, controllerConfig });
 }
 
-function startLocalMode(config) {
+function startLocalMode(controllerConfig, LocalServer) {
     logger.info ("Local mode");
     transform = transformWithErrors;
     API = new LocalAPI();
 
-    var TaskClasses = createTaskClasses(config, (conf, logger)=>new LocalAPI(conf, logger));
-    var LocalServer = localMode.LocalServer;
+    var TaskClasses = createTaskClasses(controllerConfig, (conf, logger)=>new LocalAPI(conf, logger));
     com = new LocalServer(TaskClasses, logger);
 }
 
 function onLocalFileChange(context){
     logger.info(`Reloading connector`);
-    Connector.stop().catch().then(()=>{
-        config = require('./lib/config').getConfiguration({logger: logger.child({component: "config"})});
+    Connector.stop().catch().then(async ()=>{
+        config = await require('./lib/config').getConfiguration({logger: logger.child({component: "config"})});
         var TaskClasses = createTaskClasses(config.controllerConfig, (conf, logger)=>new LocalAPI(conf, logger));
         com.setTaskClasses(TaskClasses);
         com.onFileChanged(context);
@@ -149,9 +150,9 @@ exitHook(callback => {
 exitHook.uncaughtExceptionHandler(err => logger.error (`Caught global exception: ${err.stack}`));
 exitHook.unhandledRejectionHandler(err => logger.error (`Caught global async rejection: ${err.stack}`));
 
-(async function(){
+(async () => {
     //1. get configuration
-    var config = await require('./lib/config').getConfiguration({logger: logger.child({component: "config"})});
+    config = await require('./lib/config').getConfiguration({logger: logger.child({component: "config"})});
     logger = logger.child ({connectorId: config.controllerConfig.connectorId});
 
     //2. create an instance of the connector according to the configuration
@@ -161,10 +162,10 @@ exitHook.unhandledRejectionHandler(err => logger.error (`Caught global async rej
     try{
         if ("local" in argv){
             var localMode = require('@capriza/as-inspector'),
-                watch = localMode.Watcher,
-                LocalAPI = localMode.api;
+                watch = localMode.Watcher;
+            LocalAPI = localMode.api;
 
-            startLocalMode(config.controllerConfig);
+            startLocalMode(config.controllerConfig, localMode.LocalServer);
             watch(onLocalFileChange)
         } else {
             startRemoteMode(config.controllerConfig);
