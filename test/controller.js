@@ -40,8 +40,8 @@ describe ("Controller functions", function () {
         MOCK_APPROVAL_1 = { schemaId: "schemaId", private: {id: "approval1", approver: "approver1"}, public: {name: "1"} };
     });
 
-    it("~1 - _addApprovalData function - should add metadata with fingerprints, systemApprovalId and systemUserId", function (done) {
-        var approval = connector._addApprovalData(MOCK_APPROVAL_1);
+    it("~1 - addApprovalData function - should add metadata with fingerprints, systemApprovalId and systemUserId", function (done) {
+        var approval = connector.addApprovalData(MOCK_APPROVAL_1);
         var expectObj = {
             private: { approver: "approver1", id: "approval1" },
             public: {name: "1"},
@@ -54,9 +54,9 @@ describe ("Controller functions", function () {
         done();
     });
 
-    it("~2 - _addApprovalData function - should return approval with error when there is no schemaId in the approval", function (done) {
+    it("~2 - addApprovalData function - should return approval with error when there is no schemaId in the approval", function (done) {
         delete MOCK_APPROVAL_1.schemaId;
-        var approval = connector._addApprovalData(MOCK_APPROVAL_1, console);
+        var approval = connector.addApprovalData(MOCK_APPROVAL_1, console);
         MOCK_APPROVAL_1.error = "TransformException";
         approval.should.deep.include(MOCK_APPROVAL_1);
         done();
