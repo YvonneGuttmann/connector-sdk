@@ -63,7 +63,7 @@ function startRemoteMode(controllerConfig) {
 	API = new BackendAPI(apiUrl, requestHeaders, {connectorId: controllerConfig.connectorId}, logger);
 
     var TaskClasses = createTaskClasses(controllerConfig, (conf, logger)=>new BackendAPI(apiUrl, requestHeaders, conf, logger));
-	com = new ComManager({ apiUrl, requestHeaders, TaskClasses, logger, controllerConfig });
+	com = new ComManager({ apiUrl, requestHeaders, TaskClasses, logger, config: controllerConfig });
 }
 
 function startLocalMode(controllerConfig, LocalServer) {
