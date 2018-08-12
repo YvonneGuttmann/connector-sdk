@@ -20,7 +20,12 @@
           "pasword":"123456"
         }
       ],
-      "outputType": "Result.Success"
+      "outputType": "Result.Success",
+      "output": {
+        "data": {
+          "authenticated": true
+        }
+      }
     },
     {"func":"updateTask", "args":["authenticate-0",{"succeeded": true}], "output": {}}
   ]

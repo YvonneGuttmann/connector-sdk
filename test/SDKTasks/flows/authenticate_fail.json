@@ -21,7 +21,7 @@
         }
       ],
       "outputType": "Result.Success",
-      "output": { "data": { "message": "bad credentials" } }
+      "output": { "data": { "authenticated": false, "message": "bad credentials" } }
     },
     {
       "func": "updateTask",
