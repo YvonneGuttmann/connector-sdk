@@ -100,7 +100,11 @@ module.exports = class Flow {
 
 				step.output = JSON.parse(stringify(retVal) || null);
 				if (retVal && retVal.then) {
-					retVal.then(res => step.output = JSON.parse(stringify(res) || null));
+					retVal.then(res => {
+                        if(res instanceof Result)
+                            step.outputType = `Result.${res.constructor.name}`;
+					    step.output = JSON.parse(stringify(res) || null)
+                    });
 				}
 				return retVal;
 			}
