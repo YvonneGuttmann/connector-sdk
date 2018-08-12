@@ -24,22 +24,13 @@
     {
       "func": "getApproval",
       "args": "caprizaApproval.json",
-      "output": "transformedApproval.json"
+      "outputType": "Result.Success",
+      "output": { "data": { "approval": "transformedApproval.json" } }
     },
     {
       "func": "approve",
       "args": [ { "approval": "caprizaApproval.json" }, {}],
       "exception": "CONNECTOR_ERROR"
-    },
-    {
-      "func": "sendApprovals",
-      "args": [
-        {
-          "approvals": []
-        },
-        {}
-      ],
-      "output": {}
     },
     {"func":"updateTask", "args":["approve-0",{"succeeded": false, "payload": "errors/connectorError.json"}], "output":{}}
   ]

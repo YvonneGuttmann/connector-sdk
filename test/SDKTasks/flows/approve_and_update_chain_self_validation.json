@@ -24,12 +24,13 @@
     {
       "func": "approve",
       "args": [ { "approval": "caprizaApproval.json" }, {}],
-      "output": true
+      "outputType": "Result.Success"
     },
     {
       "func": "getApproval",
       "args": "caprizaApproval.json",
-      "output": "transformedApprovalChainChanged.json"
+      "outputType": "Result.Success",
+      "output": { "data": { "approval": "transformedApprovalChainChanged.json" }}
     },
     {
       "func": "sendApprovals",

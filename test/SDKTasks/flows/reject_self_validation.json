@@ -25,12 +25,12 @@
     {
       "func": "reject",
       "args": [ { "approval": "caprizaApproval.json" }, {}],
-      "output": true
+      "outputType": "Result.Success"
     },
     {
       "func": "getApproval",
       "args": "caprizaApproval.json",
-      "output": null
+      "outputType": "Result.NotFound"
     },
     {
       "func": "sendApprovals",

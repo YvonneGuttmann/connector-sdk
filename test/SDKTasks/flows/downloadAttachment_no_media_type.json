@@ -45,7 +45,8 @@
         },
         {}
       ],
-      "output": {"data":"string"}
+      "outputType": "Result.Success",
+      "output": { "data": { "data":"string" }}
     },
     {"func":"sendAttachment", "args":["attachment-0"], "output":""},
     {"func":"updateTask", "args":["attachment-0", {"succeeded":true}]}

@@ -28,7 +28,8 @@
     {
       "func": "getApproval",
       "args": "caprizaApproval.json",
-      "output": "transformedApproval.json"
+      "outputType": "Result.Success",
+      "output": { "data": { "approval": "transformedApproval.json" } }
     },
     {
       "func": "action$reassign",
@@ -43,7 +44,8 @@
         },
         {}
       ],
-      "output": true
+      "outputType": "Result.Success",
+      "output": {}
     },
     {
       "func": "sendApprovals",

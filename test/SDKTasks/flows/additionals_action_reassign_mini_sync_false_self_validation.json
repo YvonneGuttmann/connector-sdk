@@ -39,7 +39,8 @@
         },
         {}
       ],
-      "output": true
+      "outputType": "Result.Success",
+      "output": {}
     },
     {
       "func": "sendApprovals",

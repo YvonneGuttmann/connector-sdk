@@ -98,26 +98,32 @@
           ]
         }
       ],
-      "output": [
-        {
-          "schemaId": "schemaId",
-          "public": {},
-          "private": {
-            "id": "0349403adba52200a6a2b31be0b8f509",
-            "changes": "yes_change",
-            "approver": "christen.mitchell@example.com"
-          }
-        },
-        {
-          "schemaId": "schemaId",
-          "public": {},
-          "private": {
-            "id": "042a0c7adba52200a6a2b31be0b8f5e0",
-            "changes": "no_change",
-            "approver": "luke.wilson@example.com"
-          }
+      "outputType": "Result.Success",
+      "output": {
+        "data": {
+          "approvals":
+          [
+            {
+              "schemaId": "schemaId",
+              "public": {},
+              "private": {
+                "id": "0349403adba52200a6a2b31be0b8f509",
+                "changes": "yes_change",
+                "approver": "christen.mitchell@example.com"
+              }
+            },
+            {
+              "schemaId": "schemaId",
+              "public": {},
+              "private": {
+                "id": "042a0c7adba52200a6a2b31be0b8f5e0",
+                "changes": "no_change",
+                "approver": "luke.wilson@example.com"
+              }
+            }
+          ]
         }
-      ]
+      }
     },
     {
       "func": "sendApprovals",

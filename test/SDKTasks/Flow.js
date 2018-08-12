@@ -1,5 +1,6 @@
 const assert = require('assert');
 const chalk = require ("chalk");
+const Result = require('../../lib/Result');
 
 module.exports = class Flow {
     constructor(data) {
@@ -63,6 +64,12 @@ module.exports = class Flow {
 		}
 
         if(step.exception) throw step.exception;
+        if(step.outputType && step.outputType.indexOf('Result.') !== -1) {
+            const status = step.outputType.split('.')[1];
+            if(!step.output)
+                step.output = {};
+            return new Result[status](step.output.data, step.output.meta);
+        }
         return step.output;
     }
 
@@ -87,6 +94,10 @@ module.exports = class Flow {
 				var step = { func : key, args : JSON.parse(stringify(Array.from(arguments))) };
 				$this.steps.push(step);
 				var retVal = origValue.apply(this, arguments);
+                if(retVal instanceof Result) {
+                    step.outputType = `Result.${retVal.constructor.name}`;
+                }
+
 				step.output = JSON.parse(stringify(retVal) || null);
 				if (retVal && retVal.then) {
 					retVal.then(res => step.output = JSON.parse(stringify(res) || null));

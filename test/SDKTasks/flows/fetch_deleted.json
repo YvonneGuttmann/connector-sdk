@@ -68,7 +68,13 @@
           "id": "042a0c7adba52200a6a2b31be0b8f5e0",
           "approver": "luke.wilson@example.com"
         }
-      }]}], "output": []},
+      }]}],
+      "outputType": "Result.Success",
+      "output": {
+        "data": {
+          "approvals": []
+        }
+      }},
     {"func": "sendApprovals", "args":[{
       "approvals": [{
         "id": "048a91b4-62c0-4dc2-94d5-802e46910a73",

@@ -26,19 +26,7 @@
     {
       "func": "approve",
       "args": [ { "approval": "caprizaApproval.json" }, {}],
-      "exception": {
-        "error": "AUTHENTICATION"
-      }
-    },
-    {
-      "func": "sendApprovals",
-      "args": [
-        {
-          "approvals": []
-        },
-        {}
-      ],
-      "output": {}
+      "outputType": "Result.AuthenticationError"
     },
     {"func":"updateTask", "args":["approve-0",{"succeeded": false, "payload": "errors/authentication.json"}], "output":{}}
   ]

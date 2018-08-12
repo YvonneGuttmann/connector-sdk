@@ -45,7 +45,8 @@
         },
         {}
       ],
-      "output": {"mediaType":"image/jpeg", "data":"string"}
+      "outputType": "Result.Success",
+      "output": { "data": {"mediaType":"image/jpeg", "data":"string" }}
     },
     {"func":"sendAttachment", "args":["attachment-0","image/jpeg"], "output":""},
     {"func":"updateTask", "args":["attachment-0", {"succeeded":true}]}

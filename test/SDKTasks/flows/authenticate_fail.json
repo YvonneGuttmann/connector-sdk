@@ -20,7 +20,8 @@
           "pasword": "123456"
         }
       ],
-      "exception": "AUTHENTICATION"
+      "outputType": "Result.Success",
+      "output": { "data": { "message": "bad credentials" } }
     },
     {
       "func": "updateTask",

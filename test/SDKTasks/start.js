@@ -19,7 +19,7 @@ async function runTestFlow(flowData) {
 
     var flow = new Flow(flowData);
     console.log(flow.getPreRunString());
-    Connector.init({
+    await Connector.init({
             config: flow.config,
             logger,
             BL,

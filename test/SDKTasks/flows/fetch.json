@@ -7,7 +7,7 @@
   },
   "steps": [
     {"func": "getBackendApprovals", "args": [{}], "output": []},
-    {"func": "fetch", "args": [{"signatureList": []}], "output": [ "transformedApproval.json" ]},
+    {"func": "fetch", "args": [{"signatureList": []}], "outputType": "Result.Success", "output": { "data": { "approvals": [ "transformedApproval.json" ] }  }},
     {"func": "sendApprovals", "args":[{
       "approvals": [
         "transformedApproval.json"

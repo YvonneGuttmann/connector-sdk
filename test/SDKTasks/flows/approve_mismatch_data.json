@@ -19,7 +19,8 @@
     {
       "func": "getApproval",
       "args": "caprizaApproval.json",
-      "output": "transformedApprovalChanged.json"
+      "outputType": "Result.Success",
+      "output": { "data": { "approval": "transformedApprovalChanged.json" }}
     },
     {
       "func": "sendApprovals",

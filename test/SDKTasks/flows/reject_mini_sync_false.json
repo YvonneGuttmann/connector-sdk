@@ -28,12 +28,17 @@
     {
       "func": "getApproval",
       "args": "caprizaApproval.json",
-      "output": "transformedApproval.json"
+      "outputType": "Result.Success",
+      "output": {
+        "data": {
+          "approval": "transformedApproval.json"
+        }
+      }
     },
     {
       "func": "reject",
       "args": [ { "approval": "caprizaApproval.json", "rejectionReason": "a reason to reject" }, {}],
-      "output": true
+      "outputType": "Result.Success"
     },
     {
       "func": "sendApprovals",

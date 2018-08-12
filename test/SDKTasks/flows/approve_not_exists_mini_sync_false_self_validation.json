@@ -26,13 +26,15 @@
     {
       "func": "approve",
       "args": [ { "approval": "caprizaApproval.json" }, {}],
-      "exception": {
-        "error": "APPROVAL_NOT_EXIST"
-      }
+      "outputType": "Result.NotFound"
     },
     {
       "func": "sendApprovals",
-      "args": [{ "approvals": [ "deletedApproval.json" ]}, {}],
+      "args": [{
+        "approvals": [ "deletedApproval.json" ],
+        "rawApprovals": [],
+        "transformedApprovals": []
+      }, {}],
       "output": {}
     },
     {"func":"updateTask", "args":[

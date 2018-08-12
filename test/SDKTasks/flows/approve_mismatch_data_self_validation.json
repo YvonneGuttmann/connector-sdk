@@ -25,14 +25,16 @@
     {
       "func": "approve",
       "args": [ { "approval": "caprizaApproval.json" }, {}],
-      "exception": {
-        "error": "APPROVAL_DATA_MISMATCH",
-        "approval": "transformedApprovalChanged.json"
-      }
+      "outputType": "Result.DataMismatch",
+      "output": { "data": { "approval": "transformedApprovalChanged.json" } }
     },
     {
       "func": "sendApprovals",
-      "args": [{ "approvals": [ "sendApprovalChangedSyncVer.json" ]}, {}],
+      "args": [{
+        "approvals": [ "sendApprovalChangedSyncVer.json" ],
+        "rawApprovals": [ "transformedApprovalChanged.json" ],
+        "transformedApprovals": [ "transformedApprovalChanged.json" ]
+      }, {}],
       "output": {}
     },
     {"func":"updateTask", "args":[

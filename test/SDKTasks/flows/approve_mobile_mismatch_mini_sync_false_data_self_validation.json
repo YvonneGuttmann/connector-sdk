@@ -20,11 +20,6 @@
       "output": [ "caprizaApprovalChanged.json" ]
     },
     {
-      "func": "sendApprovals",
-      "args": [{ "approvals": [ ]}, {}],
-      "output": {}
-    },
-    {
       "func":"updateTask",
       "args":
       [
