@@ -32,7 +32,7 @@
       "func": "sendApprovals",
       "args": [{
         "approvals": [ "sendApprovalChangedSyncVer.json" ],
-        "rawApprovals": [ "transformedApprovalChanged.json" ],
+        "rawApprovals": [ "rawApprovalChanged.json" ],
         "transformedApprovals": [ "transformedApprovalChanged.json" ]
       }, {}],
       "output": {}

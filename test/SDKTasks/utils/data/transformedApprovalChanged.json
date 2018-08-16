@@ -1,15 +1,15 @@
 {
   "schemaId": "schemaId",
   "public": {
-    "title": "new name"
+    "name": "change title"
   },
   "private": {
-    "id": "082a0c7adba52200a6a2b31be0b8f5df",
+    "id": 14124,
     "approver": "yehuda"
   },
   "metadata": {
     "fingerprints": {
-      "sync": "e3b4eaa8e8736dafb8c12ef8d0f17f413fc84c25"
+      "sync": "d0f296a26f6bfe74ff2423154dbd5fa4f076bdd5"
     },
     "taskId": "taskId"
   },
