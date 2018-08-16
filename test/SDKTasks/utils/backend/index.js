@@ -36,6 +36,10 @@ var TestAPI = module.exports = class TestAPI {
 
 	}
 
+    async sendFeedback() {
+        return this.flow.exec('sendFeedback', arguments);
+    }
+
     getUITemplate(schemaId) {
         try{
             if (this.uiTemplates[schemaId]){
