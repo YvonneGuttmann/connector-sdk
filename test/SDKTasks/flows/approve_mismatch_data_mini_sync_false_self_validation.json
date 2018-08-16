@@ -10,7 +10,7 @@
   },
   "taskData": {
     "type": "approve",
-    "id": "approve-0",
+    "id": "taskId",
     "approval": "caprizaApproval.json"
   },
   "steps": [
@@ -18,7 +18,7 @@
       "func": "getBackendApproval",
       "args": [
         {
-          "id": "approve-0"
+          "id": "approvalId"
         }
       ],
       "output": [ "caprizaApproval.json" ]
@@ -28,7 +28,7 @@
       "args": [ { "approval": "caprizaApproval.json" }, {}],
       "exception": {
         "error": "APPROVAL_DATA_MISMATCH",
-        "approval": "transformedApprovalChanged.json"
+        "approval": "rawApprovalChanged.json"
       }
     },
     {
@@ -37,7 +37,7 @@
       "output": {}
     },
     {"func":"updateTask", "args":[
-      "approve-0",
+      "taskId",
       {
         "succeeded":false,
         "payload": "errors/approvalMismatchData.json"

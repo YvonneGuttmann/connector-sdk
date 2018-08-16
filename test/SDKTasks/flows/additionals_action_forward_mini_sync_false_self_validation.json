@@ -9,7 +9,7 @@
   },
   "taskData": {
     "type": "action$forward",
-    "id": "approve-0",
+    "id": "taskId",
     "approval": "caprizaApproval.json",
     "volatile": {
       "commentText": "comments go here",
@@ -21,7 +21,7 @@
       "func": "getBackendApproval",
       "args": [
         {
-          "id": "approve-0"
+          "id": "approvalId"
         }
       ],
       "output": [ "caprizaApproval.json" ]
@@ -29,7 +29,7 @@
     {
       "func":"updateTask",
       "args":[
-        "approve-0",
+        "taskId",
         {
           "succeeded": false,
           "payload": "errors/taskInvalid.json"

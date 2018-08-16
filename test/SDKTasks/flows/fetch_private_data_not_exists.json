@@ -3,7 +3,7 @@
   "task": "sync",
   "taskData": {
     "type":"sync",
-    "id":"sync"
+    "id":"taskId"
   },
   "steps": [
     {"func": "getBackendApprovals", "args": [{}], "output": []},
@@ -39,7 +39,7 @@
           },
           "systemUserId": "christen.mitchell@example.com",
           "systemApprovalId": "082a0c7adba52200a6a2b31be0b8f5df",
-          "error":"Invalid approval: missing schemaId or private data"
+          "error":"public.name.{{title}} - Missing required value"
         }
       ],
       "transformedApprovals": [
@@ -56,10 +56,10 @@
           },
           "systemUserId": "christen.mitchell@example.com",
           "systemApprovalId": "082a0c7adba52200a6a2b31be0b8f5df",
-          "error":"Invalid approval: missing schemaId or private data"
+          "error":"public.name.{{title}} - Missing required value"
         }
       ]
     }, {}], "output": {}},
-    {"func": "updateTask", "args": ["sync", {"succeeded": true}], "output": {}}
+    {"func": "updateTask", "args": ["taskId", {"succeeded": true}], "output": {}}
   ]
 }

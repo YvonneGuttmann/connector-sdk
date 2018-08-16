@@ -3,7 +3,7 @@
   "task": "approve",
   "taskData": {
     "type": "approve",
-    "id": "approve-0",
+    "id": "taskId",
     "approval": "caprizaApproval.json"
   },
   "steps": [
@@ -11,7 +11,7 @@
       "func": "getBackendApproval",
       "args": [
         {
-          "id": "approve-0"
+          "id": "approvalId"
         }
       ],
       "output": [ "caprizaApproval.json" ]
@@ -19,7 +19,7 @@
     {
       "func": "getApproval",
       "args": "caprizaApproval.json",
-      "output": "transformedApproval.json"
+      "output": "rawApproval.json"
     },
     {
       "func": "approve",
@@ -36,6 +36,6 @@
       ],
       "output": {}
     },
-    {"func":"updateTask", "args":["approve-0",{"succeeded": false, "payload": "errors/connectorError.json"}], "output":{}}
+    {"func":"updateTask", "args":["taskId",{"succeeded": false, "payload": "errors/connectorError.json"}], "output":{}}
   ]
 }
