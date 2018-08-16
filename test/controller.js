@@ -45,7 +45,7 @@ describe ("Controller functions", function () {
         var expectObj = {
             private: { approver: "approver1", id: "approval1" },
             public: {name: "1"},
-            metadata: { fingerprints: { sync: "ad13439f104f0fa02e29d80a3eb7aa0f27808fe1" } },
+            metadata: { fingerprints: { sync: "ad13439f104f0fa02e29d80a3eb7aa0f27808fe1" }, taskId: undefined },
             schemaId: "schemaId",
             systemApprovalId: "approval1",
             systemUserId: "approver1"
