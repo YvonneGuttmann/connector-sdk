@@ -23,7 +23,7 @@ async function runTestFlow(flowData) {
             config: flow.config,
             logger,
             BL,
-            transform: (a) => { return a },
+            transformer: require('./utils/bl/resources/transformer'),
             testFlow: flow
         });
 
