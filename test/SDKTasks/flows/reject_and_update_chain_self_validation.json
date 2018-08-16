@@ -8,7 +8,7 @@
   },
   "taskData": {
     "type": "reject",
-    "id": "approve-0",
+    "id": "taskId",
     "approval": "caprizaApproval.json"
   },
   "steps": [
@@ -16,7 +16,7 @@
       "func": "getBackendApproval",
       "args": [
         {
-          "id": "approve-0"
+          "id": "approvalId"
         }
       ],
       "output": [ "caprizaApproval.json" ]
@@ -32,7 +32,7 @@
       "outputType": "Result.Success",
       "output": {
         "data": {
-          "approval": "transformedApprovalChainChanged.json"
+          "approval": "rawApprovalChainChanged.json"
         }
       }
     },
@@ -40,14 +40,14 @@
       "func": "sendApprovals",
       "args": [
         {
-          "approvals": [ "transformedApprovalChainChanged.json", "deletedApproval.json" ],
-          "rawApprovals": [ "transformedApprovalChainChanged.json" ],
+          "approvals": [ "deletedApproval.json" , "transformedApprovalChainChanged.json" ],
+          "rawApprovals": [ "rawApprovalChainChanged.json" ],
           "transformedApprovals": [ "transformedApprovalChainChanged.json" ]
         },
         {}
       ],
       "output": {}
     },
-    {"func":"updateTask", "args":["approve-0",{"succeeded": true}], "output":{}}
+    {"func":"updateTask", "args":["taskId",{"succeeded": true}], "output":{}}
   ]
 }

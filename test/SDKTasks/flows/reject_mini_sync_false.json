@@ -9,7 +9,7 @@
   },
   "taskData": {
     "type": "reject",
-    "id": "approve-0",
+    "id": "taskId",
     "approval": "caprizaApproval.json",
     "volatile": {
       "rejectionReason": "a reason to reject"
@@ -20,7 +20,7 @@
       "func": "getBackendApproval",
       "args": [
         {
-          "id": "approve-0"
+          "id": "approvalId"
         }
       ],
       "output": [ "caprizaApproval.json" ]
@@ -52,6 +52,6 @@
       ],
       "output": {}
     },
-    {"func":"updateTask", "args":["approve-0",{"succeeded": true}], "output":{}}
+    {"func":"updateTask", "args":["taskId",{"succeeded": true}], "output":{}}
   ]
 }

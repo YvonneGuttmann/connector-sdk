@@ -3,22 +3,22 @@
   "task": "sync",
   "taskData": {
     "type":"sync",
-    "id":"sync"
+    "id":"taskId"
   },
   "steps": [
     {"func": "getBackendApprovals", "args": [{}], "output": []},
-    {"func": "fetch", "args": [{"signatureList": []}], "outputType": "Result.Success", "output": { "data": { "approvals": [ "transformedApproval.json" ] }  }},
+    {"func": "fetch", "args": [{"signatureList": []}], "outputType": "Result.Success", "output": { "data": { "approvals": [ "rawApproval.json" ] }  }},
     {"func": "sendApprovals", "args":[{
       "approvals": [
         "transformedApproval.json"
       ],
       "rawApprovals": [
-        "transformedApproval.json"
+        "rawApproval.json"
       ],
       "transformedApprovals": [
         "transformedApproval.json"
       ]
     }, {}], "output": {}},
-    {"func": "updateTask", "args": ["sync", {"succeeded": true}], "output": {}}
+    {"func": "updateTask", "args": ["taskId", {"succeeded": true}], "output": {}}
   ]
 }

@@ -9,7 +9,7 @@
   },
   "taskData": {
     "type": "approve",
-    "id": "approve-0",
+    "id": "taskId",
     "approval": "caprizaApproval.json"
   },
   "steps": [
@@ -17,7 +17,7 @@
       "func": "getBackendApproval",
       "args": [
         {
-          "id": "approve-0"
+          "id": "approvalId"
         }
       ],
       "output": [ "caprizaApproval.json" ]
@@ -37,7 +37,7 @@
       "output": {}
     },
     {"func":"updateTask", "args":[
-      "approve-0",
+      "taskId",
       {
         "succeeded":false,
         "payload": "errors/approvalNotExists.json"

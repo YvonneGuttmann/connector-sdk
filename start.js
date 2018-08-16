@@ -39,7 +39,7 @@ if (process.env.logStream == "file") {
 function createTaskClasses(controllerConfig, backendFactory){
     return TaskFactory({
         handlers,
-        controllerConfig,
+        config: controllerConfig,
         backendFactory,
         Connector,
         logger
@@ -47,7 +47,7 @@ function createTaskClasses(controllerConfig, backendFactory){
 }
 
 function startRemoteMode(controllerConfig) {
-	logger.info("Remote mode");
+    logger.info("Remote mode");
 
 	if (!controllerConfig.creds || !controllerConfig.creds.apiKey || !controllerConfig.creds.apiSecret)
 		throw "API credentials was not found in configuration";
@@ -61,7 +61,6 @@ function startRemoteMode(controllerConfig) {
 	
 	const BackendAPI = require("./lib/backendAPI.js");
 	API = new BackendAPI(apiUrl, requestHeaders, {connectorId: controllerConfig.connectorId}, logger);
-
     var TaskClasses = createTaskClasses(controllerConfig, (conf, logger)=>new BackendAPI(apiUrl, requestHeaders, conf, logger));
 	com = new ComManager({ apiUrl, requestHeaders, TaskClasses, logger, config: controllerConfig });
 }

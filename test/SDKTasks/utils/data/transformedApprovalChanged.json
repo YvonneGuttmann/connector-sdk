@@ -1,18 +1,18 @@
 {
   "schemaId": "schemaId",
   "public": {
-    "newProperty": "hello world"
+    "title": "new name"
   },
   "private": {
     "id": "082a0c7adba52200a6a2b31be0b8f5df",
-    "approver": "christen.mitchell@example.com"
+    "approver": "yehuda"
   },
   "metadata": {
     "fingerprints": {
       "sync": "e3b4eaa8e8736dafb8c12ef8d0f17f413fc84c25"
-    }
+    },
+    "taskId": "taskId"
   },
-  "systemUserId": "christen.mitchell@example.com",
-  "systemApprovalId": "082a0c7adba52200a6a2b31be0b8f5df"
-
+  "systemUserId": "yehuda",
+  "systemApprovalId": 14124
 }
