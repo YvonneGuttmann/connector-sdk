@@ -1,15 +1,18 @@
 {
   "schemaId": "schemaId",
-  "public": {},
+  "public": {
+    "name": "approval title"
+  },
   "private": {
-    "id": "082a0c7adba52200a6a2b31be0b8f5df",
-    "approver": "christen.mitchell@example.com"
+    "id": 14124,
+    "approver": "yehuda"
   },
   "metadata": {
     "fingerprints": {
-      "sync": "e4dc438aef1efc0e5e21330c0e3b572c36759afb"
-    }
+      "sync": "b9832e63ae20483a68d25fa1b3d7b013d37dfe30"
+    },
+    "taskId": "taskId"
   },
-  "systemUserId": "christen.mitchell@example.com",
-  "systemApprovalId": "082a0c7adba52200a6a2b31be0b8f5df"
+  "systemUserId": "yehuda",
+  "systemApprovalId": 14124
 }

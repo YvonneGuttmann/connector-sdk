@@ -1,15 +1,15 @@
 {
-  "id": "approve-0",
+  "id": "approvalId",
   "syncver": 243143,
-  "systemId": "8320de1c-b777-4196-afa4-8eea0fe90956",
-  "systemUserId": "christen.mitchell@example.com",
+  "systemUserId": "yehuda",
+  "systemApprovalId": 14124,
   "metadata": {
     "fingerprints": {
       "sync": "a"
     }
   },
   "private": {
-    "id": "082a0c7adba52200a6a2b31be0b8f5df",
-    "approver": "christen.mitchell@example.com"
+    "id": 14124,
+    "approver": "yehuda"
   }
 }

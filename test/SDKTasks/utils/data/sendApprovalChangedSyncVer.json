@@ -1,17 +1,22 @@
 {
-  "id":"approve-0",
+  "id":"approvalId",
   "syncver":243143,
-  "systemId":"8320de1c-b777-4196-afa4-8eea0fe90956",
-  "systemUserId":"christen.mitchell@example.com",
-  "metadata":{"fingerprints":{"sync":"a21f231a40a863382adf2a70693110a8e6301c1c"}},
+  "systemUserId": "yehuda",
+  "systemApprovalId": 14124,
+  "metadata":{
+    "fingerprints":
+    {
+      "sync":"d0f296a26f6bfe74ff2423154dbd5fa4f076bdd5"
+    },
+    "taskId": "taskId"
+  },
   "private":{
-    "id":"082a0c7adba52200a6a2b31be0b8f5df",
-    "approver":"christen.mitchell@example.com"
+    "id":14124,
+    "approver":"yehuda"
   },
   "schemaId":"schemaId",
   "public":
   {
-    "newProperty":"hello world"
-  },
-  "systemApprovalId":"082a0c7adba52200a6a2b31be0b8f5df"
+    "name":"change title"
+  }
 }
