@@ -103,7 +103,7 @@ function getUiMappings() {
     var res = [];
     var uiTemplates;
     try{
-        uiTemplates = require(`./resources/ui-templates.json`);
+        uiTemplates = require(path.resolve(`./resources/ui-templates.json`));
     } catch(ex) {
         logger.error(`Failed to load ui-templates.json ${ex.message}`);
         return;
@@ -181,9 +181,9 @@ exitHook.unhandledRejectionHandler(err => logger.error (`Caught global async rej
 
     //4. Loading ui-templates.json
     try{
-        var uiTemplates = require(`./resources/ui-templates.json`);
+        var uiTemplates = require(path.resolve(`./resources/ui-templates.json`));
     } catch(ex) {
-        logger.error(`Failed to load ui-templates.json ${ex.message}`);
+        logger.error(`Failed to load ui-templates.json !! ${ex.message}`);
         return;
     }
 
