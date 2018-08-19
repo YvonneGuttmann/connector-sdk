@@ -34,7 +34,7 @@ const MOCK_BL = {
 
 describe ("Controller functions", function () {
     beforeEach (function (){
-        Connector.init({config: { controllerConfig: {} }, logger: console, BL: MOCK_BL});
+        Connector.init({config: { controllerConfig: {} }, logger: console, BL: MOCK_BL, uiTemplates: { "schemaId": {}}} );
         var logger = loggerFactory.create({}).child({component: "index.js", module: "connectors", connectorName: "MOCK", connectorVersion: ""});
         connector = new Connector({logger: logger});
         MOCK_APPROVAL_1 = { schemaId: "schemaId", private: {id: "approval1", approver: "approver1"}, public: {name: "1"} };

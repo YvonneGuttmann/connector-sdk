@@ -24,6 +24,7 @@ async function runTestFlow(flowData) {
             logger,
             BL,
             transformer: require('./utils/bl/resources/transformer'),
+            uiTemplates: require('./utils/bl/resources/ui-templates.json'),
             testFlow: flow
         });
 

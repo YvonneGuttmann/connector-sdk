@@ -61,6 +61,7 @@ function startRemoteMode(controllerConfig) {
 	
 	const BackendAPI = require("./lib/backendAPI.js");
 	API = new BackendAPI(apiUrl, requestHeaders, {connectorId: controllerConfig.connectorId}, logger);
+
     var TaskClasses = createTaskClasses(controllerConfig, (conf, logger)=>new BackendAPI(apiUrl, requestHeaders, conf, logger));
 	com = new ComManager({ apiUrl, requestHeaders, TaskClasses, logger, config: controllerConfig });
 }
@@ -102,9 +103,9 @@ function getUiMappings() {
     var res = [];
     var uiTemplates;
     try{
-        uiTemplates = require(path.resolve(`./resources/ui-templates.json`));
+        uiTemplates = require(`./resources/ui-templates.json`);
     } catch(ex) {
-        logger.info(`There is no ui-templates.json file`);
+        logger.error(`Failed to load ui-templates.json ${ex.message}`);
         return;
     }
 
@@ -178,9 +179,17 @@ exitHook.unhandledRejectionHandler(err => logger.error (`Caught global async rej
         return;
     }
 
-    //4. Bootstrap connector
+    //4. Loading ui-templates.json
+    try{
+        var uiTemplates = require(`./resources/ui-templates.json`);
+    } catch(ex) {
+        logger.error(`Failed to load ui-templates.json ${ex.message}`);
+        return;
+    }
+
+    //5. Bootstrap connector
     logger.info ("Initializing connector");
-    Connector.init({config,logger,transform})
+    Connector.init({config,logger,transform, uiTemplates})
         .then(async (taskTypes) => {
 
             if(API.sendConnectorData) {
