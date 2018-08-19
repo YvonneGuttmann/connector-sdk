@@ -13,6 +13,7 @@ var com, transform = jslt.transform;
 var API;
 var LocalAPI;
 var config;
+var uiTemplates;
 const ARCHIVE_PATH = "log_archive";
 
 process.title = process.env["CONTROLLER_TITLE"] || path.basename(process.cwd());
@@ -83,7 +84,7 @@ function onLocalFileChange(context){
         com.setTaskClasses(TaskClasses);
         com.onFileChanged(context);
         LocalAPI.resetState();
-    }).then(async ()=>Connector.init({config,logger,transform})).then(()=>logger.info(`Done reloading connector`));
+    }).then(async ()=>Connector.init({config,logger,transform, uiTemplates})).then(()=>logger.info(`Done reloading connector`));
 }
 
 function transformWithErrors(data, template, props = {}){
@@ -101,7 +102,7 @@ function transformWithErrors(data, template, props = {}){
 
 function getUiMappings() {
     var res = [];
-    var uiTemplates;
+    let uiTemplates;
     try{
         uiTemplates = require(path.resolve(`./resources/ui-templates.json`));
     } catch(ex) {
@@ -181,7 +182,7 @@ exitHook.unhandledRejectionHandler(err => logger.error (`Caught global async rej
 
     //4. Loading ui-templates.json
     try{
-        var uiTemplates = require(path.resolve(`./resources/ui-templates.json`));
+        uiTemplates = require(path.resolve(`./resources/ui-templates.json`));
     } catch(ex) {
         logger.error(`Failed to load ui-templates.json !! ${ex.message}`);
         return;
