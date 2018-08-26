@@ -1,5 +1,5 @@
 {
-  "title": "fetching approvals (1 new) when signature list is empty",
+  "title": "fetching approvals (1) but id property not exists",
   "task": "sync",
   "taskData": {
     "type":"sync",
@@ -11,22 +11,11 @@
       "outputType": "Result.Success",
       "output": {
         "data": {
-          "approvals": [
-            {
-              "schemaId": "schemaId",
-              "public": {},
-              "private": {
-                "approver": "christen.mitchell@example.com"
-              },
-              "metadata": {
-                "fingerprints": {
-                  "sync": "e4dc438aef1efc0e5e21330c0e3b572c36759afb"
-                }
-              },
-              "systemUserId": "christen.mitchell@example.com",
-              "systemApprovalId": "082a0c7adba52200a6a2b31be0b8f5df"
-            }
-          ]
+          "approvals": [ {
+            "schemaId": "schemaId",
+            "title": "approval title",
+            "approve-by": "ee"
+          } ]
         }
       }
     },
@@ -35,35 +24,22 @@
       "rawApprovals": [
         {
           "schemaId": "schemaId",
-          "public": {},
-          "private": {
-            "approver": "christen.mitchell@example.com"
-          },
-          "metadata": {
-            "fingerprints": {
-              "sync": "e4dc438aef1efc0e5e21330c0e3b572c36759afb"
-            }
-          },
-          "systemUserId": "christen.mitchell@example.com",
-          "systemApprovalId": "082a0c7adba52200a6a2b31be0b8f5df",
-          "error":"public.name.{{title}} - Missing required value"
+          "title": "approval title",
+          "approve-by": "ee"
         }
       ],
       "transformedApprovals": [
         {
-          "schemaId": "schemaId",
-          "public": {},
-          "private": {
-            "approver": "christen.mitchell@example.com"
+          "schemaId":"schemaId",
+          "public":
+          {
+            "name":"approval title"
           },
-          "metadata": {
-            "fingerprints": {
-              "sync": "e4dc438aef1efc0e5e21330c0e3b572c36759afb"
-            }
+          "private":
+          {
+            "approver":"ee"
           },
-          "systemUserId": "christen.mitchell@example.com",
-          "systemApprovalId": "082a0c7adba52200a6a2b31be0b8f5df",
-          "error":"public.name.{{title}} - Missing required value"
+          "error": "Exception with transforming approval: Invalid approval: missing schemaId or private data"
         }
       ]
     }, {}], "output": {}},

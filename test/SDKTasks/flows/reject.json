@@ -25,7 +25,7 @@
       "outputType": "Result.Success",
       "output": {
         "data": {
-          "approval": "transformedApproval.json"
+          "approval": "rawApproval.json"
         }
       }
     },
