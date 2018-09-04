@@ -3,8 +3,7 @@ var expect = chai.expect;
 var config = require("../lib/config.js");
 
 var Logger = require("../lib/log").Logger;
-var loggerFactory = new Logger("console");
-var logger = loggerFactory.create({component: "test/config.js"});
+var logger = new Logger({ consoleMode : "text" });
 
 
 describe("load config file", function () {

@@ -15,16 +15,21 @@ var LocalAPI;
 var config;
 var uiTemplates;
 const ARCHIVE_PATH = "log_archive";
+const fs = require("fs");
 
 process.title = process.env["CONTROLLER_TITLE"] || path.basename(process.cwd());
 var [connectorName, connectorVersion] = process.title.split("@");
 
 //logger
+if (!fs.existsSync("log")) fs.mkdirSync("log");
 process.env.logStream = "dev" in argv ? "console" : "file"; //in dev mode write log to console, in production write log to file
-var loggerFactory = new Logger(process.env.logStream);
-var logger = loggerFactory.create({}).child({component: "index.js", module: "connectors", connectorName, connectorVersion});
+var logger = new Logger(process.env.logStream == "console" ?
+	{ consoleMode : "text" } :
+	{ consoleMode : "json", fileMode: "text", chindings : { connectorName, connectorVersion } });
+	
+logger.startLogRotation();
+
 if (process.env.logStream == "file") {
-	let fs = require("fs");
 	if (!fs.existsSync(ARCHIVE_PATH)) fs.mkdirSync(ARCHIVE_PATH);
 	
 	let logCleaner = new LogCleaner("log", { hours : 1, size : 50, onlyDirs : true}, logger);

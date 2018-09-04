@@ -4,8 +4,7 @@ var hash = require ("object-hash");
 var chai = require('chai');
 var expect = chai.expect;
 var Logger = require ("../lib/log").Logger;
-var loggerFactory = new Logger("console");
-var logger = loggerFactory.create({component: "test/syncher.js"});
+var logger = new Logger({ consoleMode : "text" });
 
 describe ("syncher", function (){
     it("~1 should return hashList as removed if no data fetched", function (){
