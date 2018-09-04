@@ -153,8 +153,14 @@ exitHook(callback => {
     logger.info(`Stopping connector...`);
     com.stop().catch().then(() => Connector.stop()).then(()=>logger.info(`Bye bye`)).then(()=>process.exit());
 });
-exitHook.uncaughtExceptionHandler(err => logger.error (`Caught global exception: ${err.stack}`));
-exitHook.unhandledRejectionHandler(err => logger.error (`Caught global async rejection: ${err.stack}`));
+
+process.on('uncaughtException', err => {
+    logger.error(`Caught global exception. Error: ${err.message || err}\nStack trace:\n${err.stack}`);
+});
+
+process.on('unhandledRejection', reason => {
+    logger.error(`Caught global async rejection: ${reason}`)
+});
 
 (async () => {
     //1. get configuration
