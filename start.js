@@ -62,7 +62,8 @@ function startRemoteMode(controllerConfig) {
 	var requestHeaders = {
 		"x-capriza-api-key"			: controllerConfig.creds.apiKey,
 		"x-capriza-secret"			: controllerConfig.creds.apiSecret,
-		"x-capriza-connector-id"	: controllerConfig.connectorId
+		"x-capriza-connector-id"	: controllerConfig.connectorId,
+		"x-capriza-sdk-version"		: require("./package.json").version
 	};
 	
 	const BackendAPI = require("./lib/backendAPI.js");
