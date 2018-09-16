@@ -210,10 +210,10 @@ process.on('unhandledRejection', reason => {
                     logger.info(`Sending connector info to the api. task types: ${taskTypes}`);
                     await API.sendConnectorData({taskTypes, uiMappings: getUiMappings(), authRequired: taskTypes.includes("authenticate") })
                 } catch (ex) {
-                    logger.error(`Failed to send task types to the api: ${ex.stack || ex}`);
+                    logger.error(`Failed to send connector info to the api: ${ex.stack || ex}`);
                 }
             } else {
-                logger.info(`sendConnectorData not exists in the API, won't send connector info to API`);
+                logger.info(`sendConnectorData does not exist in the API, won't send connector info to API`);
             }
 
             run(1)
