@@ -1,91 +1,144 @@
 {
-  "title": "partial sync and 1 approval marked as exists",
-  "task": "sync",
-  "taskData": {
-    "type":"sync",
-    "id":"sync-exists",
-    "syncType": "partial"
-  },
-  "steps": [
-    {"func": "getBackendApprovals", "args": [{}], "output": [{
-      "id": "048a91b4-62c0-4dc2-94d5-802e46910a73",
-      "syncver": 673616,
-      "systemId": "a664d73b-b8e1-40d5-b86a-570be084a284",
-      "systemUserId": "christen.mitchell@example.com",
-      "metadata": {
-        "fingerprints": {
-          "sync": "7e0bc2bd6e8cc20a626ce492e55eeeff868faba1",
-          "action": "38ea97eed8501d5144fc2604045f7185f9aed339"
-        }
-      },
-      "private": {
-        "id": "0349403adba52200a6a2b31be0b8f509",
-        "approver": "christen.mitchell@example.com"
-      }
-    },{
-      "id": "ecdcf5d5-509f-4e37-be85-f12a2fcaad5e",
-      "syncver": 673617,
-      "systemId": "a664d73b-b8e1-40d5-b86a-570be084a284",
-      "systemUserId": "luke.wilson@example.com",
-      "metadata": {
-        "fingerprints": {
-          "sync": "6d1b9b788f5b98550d8caaba853e7a73c7bb713e",
-          "action": "38ea97eed8501d5144fc2604045f7185f9aed339"
-        }
-      },
-      "private": {
-        "id": "042a0c7adba52200a6a2b31be0b8f5e0",
-        "approver": "luke.wilson@example.com"
-      }
-    }]},
-    {"func": "fetch", "args": [{"signatureList": [{
-      "id": "048a91b4-62c0-4dc2-94d5-802e46910a73",
-      "syncver": 673616,
-      "systemId": "a664d73b-b8e1-40d5-b86a-570be084a284",
-      "systemUserId": "christen.mitchell@example.com",
-      "metadata": {
-        "fingerprints": {
-          "sync": "7e0bc2bd6e8cc20a626ce492e55eeeff868faba1",
-          "action": "38ea97eed8501d5144fc2604045f7185f9aed339"
-        }
-      },
-      "private": {
-        "id": "0349403adba52200a6a2b31be0b8f509",
-        "approver": "christen.mitchell@example.com"
-      }
-    },
-      {
-        "id": "ecdcf5d5-509f-4e37-be85-f12a2fcaad5e",
-        "syncver": 673617,
-        "systemId": "a664d73b-b8e1-40d5-b86a-570be084a284",
-        "systemUserId": "luke.wilson@example.com",
-        "metadata": {
-          "fingerprints": {
-            "sync": "6d1b9b788f5b98550d8caaba853e7a73c7bb713e",
-            "action": "38ea97eed8501d5144fc2604045f7185f9aed339"
-          }
-        },
-        "private": {
-          "id": "042a0c7adba52200a6a2b31be0b8f5e0",
-          "approver": "luke.wilson@example.com"
-        }
-      }], "fetchType": "partial" }],
-      "output": {
-        "approvals": [
-          {
-            "exists": true,
-            "private": {
-              "id": "0349403adba52200a6a2b31be0b8f509",
-              "approver": "christen.mitchell@example.com"
-            }
-          }
-        ],
-        "partialSync": true }},
-    {"func": "sendApprovals", "args":[{
-      "approvals": [],
-      "rawApprovals": [{"exists":true,"private":{"id":"0349403adba52200a6a2b31be0b8f509","approver":"christen.mitchell@example.com"}}],
-      "transformedApprovals": [{"exists":true,"private":{"id":"0349403adba52200a6a2b31be0b8f509","approver":"christen.mitchell@example.com"}}]
-    }, {}], "output": null},
-    {"func": "updateTask", "args": ["sync-exists", {"succeeded": true}], "output": {}}
-  ]
+	"title": "partial sync and 1 approval marked as exists",
+	"task": "sync",
+	"taskData": {
+		"type": "sync",
+		"id": "sync-exists",
+		"syncType": "partial"
+	},
+	"steps": [
+		{
+			"func": "getBackendApprovals",
+			"args": [
+				{}
+			],
+			"output": [
+				{
+					"id": "048a91b4-62c0-4dc2-94d5-802e46910a73",
+					"syncver": 673616,
+					"systemId": "a664d73b-b8e1-40d5-b86a-570be084a284",
+					"systemUserId": "christen.mitchell@example.com",
+					"metadata": {
+						"fingerprints": {
+							"sync": "7e0bc2bd6e8cc20a626ce492e55eeeff868faba1",
+							"action": "38ea97eed8501d5144fc2604045f7185f9aed339"
+						}
+					},
+					"private": {
+						"id": "0349403adba52200a6a2b31be0b8f509",
+						"approver": "christen.mitchell@example.com"
+					}
+				},
+				{
+					"id": "ecdcf5d5-509f-4e37-be85-f12a2fcaad5e",
+					"syncver": 673617,
+					"systemId": "a664d73b-b8e1-40d5-b86a-570be084a284",
+					"systemUserId": "luke.wilson@example.com",
+					"metadata": {
+						"fingerprints": {
+							"sync": "6d1b9b788f5b98550d8caaba853e7a73c7bb713e",
+							"action": "38ea97eed8501d5144fc2604045f7185f9aed339"
+						}
+					},
+					"private": {
+						"id": "042a0c7adba52200a6a2b31be0b8f5e0",
+						"approver": "luke.wilson@example.com"
+					}
+				}
+			]
+		},
+		{
+			"func": "fetch",
+			"args": [
+				{
+					"signatureList": [
+						{
+							"id": "048a91b4-62c0-4dc2-94d5-802e46910a73",
+							"syncver": 673616,
+							"systemId": "a664d73b-b8e1-40d5-b86a-570be084a284",
+							"systemUserId": "christen.mitchell@example.com",
+							"metadata": {
+								"fingerprints": {
+									"sync": "7e0bc2bd6e8cc20a626ce492e55eeeff868faba1",
+									"action": "38ea97eed8501d5144fc2604045f7185f9aed339"
+								}
+							},
+							"private": {
+								"id": "0349403adba52200a6a2b31be0b8f509",
+								"approver": "christen.mitchell@example.com"
+							}
+						},
+						{
+							"id": "ecdcf5d5-509f-4e37-be85-f12a2fcaad5e",
+							"syncver": 673617,
+							"systemId": "a664d73b-b8e1-40d5-b86a-570be084a284",
+							"systemUserId": "luke.wilson@example.com",
+							"metadata": {
+								"fingerprints": {
+									"sync": "6d1b9b788f5b98550d8caaba853e7a73c7bb713e",
+									"action": "38ea97eed8501d5144fc2604045f7185f9aed339"
+								}
+							},
+							"private": {
+								"id": "042a0c7adba52200a6a2b31be0b8f5e0",
+								"approver": "luke.wilson@example.com"
+							}
+						}
+					],
+					"fetchType": "partial"
+				}
+			],
+			"output": {
+				"approvals": [
+					{
+						"exists": true,
+						"private": {
+							"id": "0349403adba52200a6a2b31be0b8f509",
+							"approver": "christen.mitchell@example.com"
+						}
+					}
+				],
+				"partialSync": true
+			}
+		},
+		{
+			"func": "sendApprovals",
+			"args": [
+				{
+					"approvals": [],
+					"rawApprovals": [
+						{
+							"exists": true,
+							"private": {
+								"id": "0349403adba52200a6a2b31be0b8f509",
+								"approver": "christen.mitchell@example.com"
+							}
+						}
+					],
+					"transformedApprovals": [
+						{
+							"exists": true,
+							"private": {
+								"id": "0349403adba52200a6a2b31be0b8f509",
+								"approver": "christen.mitchell@example.com"
+							}
+						}
+					]
+				},
+				{}
+			],
+			"output": null
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"sync-exists",
+				{
+					"status": "Success",
+					"meta": {}
+				}
+			],
+			"output": {}
+		}
+	]
 }

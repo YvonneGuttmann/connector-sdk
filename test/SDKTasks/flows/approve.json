@@ -1,49 +1,75 @@
 {
-  "title": "approve approval and mark as removed",
-  "task": "approve",
-  "taskData": {
-    "type": "approve",
-    "id": "taskId",
-    "approval": "caprizaApproval.json"
-  },
-  "steps": [
-    {
-      "func": "getBackendApproval",
-      "args": [
-        {
-          "id": "approvalId"
-        }
-      ],
-      "output": [ "caprizaApproval.json" ]
-    },
-    {
-      "func": "getApproval",
-      "args": "caprizaApproval.json",
-      "outputType": "Result.Success",
-      "output": { "data": { "approval": "rawApproval.json" }}
-    },
-    {
-      "func": "approve",
-      "args": [ { "approval": "caprizaApproval.json" }, {}],
-      "outputType": "Result.Success"
-    },
-    {
-      "func": "getApproval",
-      "args": "caprizaApproval.json",
-      "outputType": "Result.NotFound"
-    },
-    {
-      "func": "sendApprovals",
-      "args": [
-        {
-          "approvals": [ "deletedApproval.json" ],
-          "rawApprovals": [],
-          "transformedApprovals": []
-        },
-        {}
-      ],
-      "output": {}
-    },
-    {"func":"updateTask", "args":["taskId",{"succeeded": true}], "output":{}}
-  ]
+	"title": "approve approval and mark as removed",
+	"task": "approve",
+	"taskData": {
+		"type": "approve",
+		"id": "taskId",
+		"approval": "caprizaApproval.json"
+	},
+	"steps": [
+		{
+			"func": "getBackendApproval",
+			"args": [
+				{
+					"id": "approvalId"
+				}
+			],
+			"output": [
+				"caprizaApproval.json"
+			]
+		},
+		{
+			"func": "getApproval",
+			"args": "caprizaApproval.json",
+			"outputType": "Result.Success",
+			"output": {
+				"data": {
+					"approval": "rawApproval.json"
+				}
+			}
+		},
+		{
+			"func": "approve",
+			"args": [
+				{
+					"approval": "caprizaApproval.json"
+				},
+				{}
+			],
+			"outputType": "Result.Success"
+		},
+		{
+			"func": "getApproval",
+			"args": "caprizaApproval.json",
+			"outputType": "Result.NotFound"
+		},
+		{
+			"func": "sendApprovals",
+			"args": [
+				{
+					"approvals": [
+						"deletedApproval.json"
+					],
+					"rawApprovals": [],
+					"transformedApprovals": []
+				},
+				{}
+			],
+			"output": {}
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"taskId",
+				{
+					"status": "Success",
+					"meta": {
+						"miniSyncStatus": "NotFound",
+						"entity": "approval"
+					}
+				}
+			],
+			"output": {}
+		}
+	]
 }

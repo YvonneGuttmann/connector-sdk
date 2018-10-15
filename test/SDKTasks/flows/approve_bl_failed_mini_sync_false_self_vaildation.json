@@ -1,32 +1,53 @@
 {
-  "title": "approve approval and get error from the bl (disableMiniSync: true, selfValidation: true)",
-  "task": "approve",
-  "config": {
-    "blConfig": {
-      "disableMiniSync": true,
-      "selfValidation": true
-    }
-  },
-  "taskData": {
-    "type": "approve",
-    "id": "taskId",
-    "approval": "caprizaApproval.json"
-  },
-  "steps": [
-    {
-      "func": "getBackendApproval",
-      "args": [
-        {
-          "id": "approvalId"
-        }
-      ],
-      "output": [ "caprizaApproval.json" ]
-    },
-    {
-      "func": "approve",
-      "args": [ { "approval": "caprizaApproval.json" }, {}],
-      "exception": "CONNECTOR_ERROR"
-    },
-    {"func":"updateTask", "args":["taskId",{"succeeded": false, "payload": "errors/connectorError.json"}], "output":{}}
-  ]
+	"title": "approve approval and get error from the bl (disableMiniSync: true, selfValidation: true)",
+	"task": "approve",
+	"config": {
+		"blConfig": {
+			"disableMiniSync": true,
+			"selfValidation": true
+		}
+	},
+	"taskData": {
+		"type": "approve",
+		"id": "taskId",
+		"approval": "caprizaApproval.json"
+	},
+	"steps": [
+		{
+			"func": "getBackendApproval",
+			"args": [
+				{
+					"id": "approvalId"
+				}
+			],
+			"output": [
+				"caprizaApproval.json"
+			]
+		},
+		{
+			"func": "approve",
+			"args": [
+				{
+					"approval": "caprizaApproval.json"
+				},
+				{}
+			],
+			"exception": "CONNECTOR_ERROR"
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"taskId",
+				{
+					"status": "InternalError",
+					"meta": {
+						"entity": "task",
+						"taskType": "approve",
+						"message": "Unexpected error: \"CONNECTOR_ERROR\""
+					}
+				}
+			],
+			"output": {}
+		}
+	]
 }

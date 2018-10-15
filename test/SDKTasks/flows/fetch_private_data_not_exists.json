@@ -1,48 +1,77 @@
 {
-  "title": "fetching approvals (1) but id property not exists",
-  "task": "sync",
-  "taskData": {
-    "type":"sync",
-    "id":"taskId"
-  },
-  "steps": [
-    {"func": "getBackendApprovals", "args": [{}], "output": []},
-    {"func": "fetch", "args": [{"signatureList": []}],
-      "outputType": "Result.Success",
-      "output": {
-        "data": {
-          "approvals": [ {
-            "schemaId": "schemaId",
-            "title": "approval title",
-            "approve-by": "ee"
-          } ]
-        }
-      }
-    },
-    {"func": "sendApprovals", "args":[{
-      "approvals": [],
-      "rawApprovals": [
-        {
-          "schemaId": "schemaId",
-          "title": "approval title",
-          "approve-by": "ee"
-        }
-      ],
-      "transformedApprovals": [
-        {
-          "schemaId":"schemaId",
-          "public":
-          {
-            "name":"approval title"
-          },
-          "private":
-          {
-            "approver":"ee"
-          },
-          "error": "Exception with transforming approval: Invalid approval: missing schemaId or private data"
-        }
-      ]
-    }, {}], "output": {}},
-    {"func": "updateTask", "args": ["taskId", {"succeeded": true}], "output": {}}
-  ]
+	"title": "fetching approvals (1) but id property not exists",
+	"task": "sync",
+	"taskData": {
+		"type": "sync",
+		"id": "taskId"
+	},
+	"steps": [
+		{
+			"func": "getBackendApprovals",
+			"args": [
+				{}
+			],
+			"output": []
+		},
+		{
+			"func": "fetch",
+			"args": [
+				{
+					"signatureList": []
+				}
+			],
+			"outputType": "Result.Success",
+			"output": {
+				"data": {
+					"approvals": [
+						{
+							"schemaId": "schemaId",
+							"title": "approval title",
+							"approve-by": "ee"
+						}
+					]
+				}
+			}
+		},
+		{
+			"func": "sendApprovals",
+			"args": [
+				{
+					"approvals": [],
+					"rawApprovals": [
+						{
+							"schemaId": "schemaId",
+							"title": "approval title",
+							"approve-by": "ee"
+						}
+					],
+					"transformedApprovals": [
+						{
+							"schemaId": "schemaId",
+							"public": {
+								"name": "approval title"
+							},
+							"private": {
+								"approver": "ee"
+							},
+							"error": "Exception with transforming approval: Invalid approval: missing schemaId or private data"
+						}
+					]
+				},
+				{}
+			],
+			"output": {}
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"taskId",
+				{
+					"status": "Success",
+					"meta": {}
+				}
+			],
+			"output": {}
+		}
+	]
 }

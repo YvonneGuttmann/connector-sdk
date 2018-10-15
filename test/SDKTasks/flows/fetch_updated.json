@@ -1,50 +1,63 @@
 {
-  "title": "fetching 0 approvals and report 1 updated approvals to back-end",
-  "task": "sync",
-  "taskData": {
-    "type": "sync",
-    "id": "sync-update"
-  },
-  "steps": [
-    {
-      "func": "getBackendApprovals",
-      "args": [
-        {}
-      ],
-      "output": [ "caprizaApproval.json" ]
-    },
-    {
-      "func": "fetch",
-      "args": [
-        {
-          "signatureList": [ "caprizaApproval.json" ]
-        }
-      ],
-      "outputType": "Result.Success",
-      "output": {
-        "data": {
-          "approvals": [ "rawApprovalChanged.json" ]
-        }
-      }
-    },
-    {
-      "func": "sendApprovals",
-      "args": {
-        "approvals": [ "transformedApprovalChanged.json" ],
-        "rawApprovals": [ "rawApprovalChanged.json" ],
-        "transformedApprovals": [ "transformedApprovalChanged.json" ]
-      },
-      "output": {}
-    },
-    {
-      "func": "updateTask",
-      "args": [
-        "sync-update",
-        {
-          "succeeded": true
-        }
-      ],
-      "output": {}
-    }
-  ]
+	"title": "fetching 0 approvals and report 1 updated approvals to back-end",
+	"task": "sync",
+	"taskData": {
+		"type": "sync",
+		"id": "sync-update"
+	},
+	"steps": [
+		{
+			"func": "getBackendApprovals",
+			"args": [
+				{}
+			],
+			"output": [
+				"caprizaApproval.json"
+			]
+		},
+		{
+			"func": "fetch",
+			"args": [
+				{
+					"signatureList": [
+						"caprizaApproval.json"
+					]
+				}
+			],
+			"outputType": "Result.Success",
+			"output": {
+				"data": {
+					"approvals": [
+						"rawApprovalChanged.json"
+					]
+				}
+			}
+		},
+		{
+			"func": "sendApprovals",
+			"args": {
+				"approvals": [
+					"transformedApprovalChanged.json"
+				],
+				"rawApprovals": [
+					"rawApprovalChanged.json"
+				],
+				"transformedApprovals": [
+					"transformedApprovalChanged.json"
+				]
+			},
+			"output": {}
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"sync-update",
+				{
+					"status": "Success",
+					"meta": {}
+				}
+			],
+			"output": {}
+		}
+	]
 }

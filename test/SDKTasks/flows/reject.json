@@ -1,56 +1,79 @@
 {
-  "title": "reject approval and mark as removed",
-  "task": "reject",
-  "taskData": {
-    "type": "reject",
-    "id": "taskId",
-    "approval": "caprizaApproval.json",
-    "volatile": {
-      "rejectionReason": "a reason to reject"
-    }
-  },
-  "steps": [
-    {
-      "func": "getBackendApproval",
-      "args": [
-        {
-          "id": "approvalId"
-        }
-      ],
-      "output": [ "caprizaApproval.json" ]
-    },
-    {
-      "func": "getApproval",
-      "args": "caprizaApproval.json",
-      "outputType": "Result.Success",
-      "output": {
-        "data": {
-          "approval": "rawApproval.json"
-        }
-      }
-    },
-    {
-      "func": "reject",
-      "args": [ { "approval": "caprizaApproval.json", "rejectionReason": "a reason to reject" }, {}],
-      "outputType": "Result.Success"
-    },
-    {
-      "func": "getApproval",
-      "args": "caprizaApproval.json",
-      "outputType": "Result.NotFound"
-    },
-    {
-      "func": "sendApprovals",
-      "args": [
-        {
-          "approvals": [ "deletedApproval.json" ],
-          "rawApprovals": [],
-          "transformedApprovals": []
-        },
-        {}
-      ],
-      "output": {}
-    },
-    {"func":"updateTask", "args":["taskId",{"succeeded": true}], "output":{}}
-  ]
+	"title": "reject approval and mark as removed",
+	"task": "reject",
+	"taskData": {
+		"type": "reject",
+		"id": "taskId",
+		"approval": "caprizaApproval.json",
+		"volatile": {
+			"rejectionReason": "a reason to reject"
+		}
+	},
+	"steps": [
+		{
+			"func": "getBackendApproval",
+			"args": [
+				{
+					"id": "approvalId"
+				}
+			],
+			"output": [
+				"caprizaApproval.json"
+			]
+		},
+		{
+			"func": "getApproval",
+			"args": "caprizaApproval.json",
+			"outputType": "Result.Success",
+			"output": {
+				"data": {
+					"approval": "rawApproval.json"
+				}
+			}
+		},
+		{
+			"func": "reject",
+			"args": [
+				{
+					"approval": "caprizaApproval.json",
+					"rejectionReason": "a reason to reject"
+				},
+				{}
+			],
+			"outputType": "Result.Success"
+		},
+		{
+			"func": "getApproval",
+			"args": "caprizaApproval.json",
+			"outputType": "Result.NotFound"
+		},
+		{
+			"func": "sendApprovals",
+			"args": [
+				{
+					"approvals": [
+						"deletedApproval.json"
+					],
+					"rawApprovals": [],
+					"transformedApprovals": []
+				},
+				{}
+			],
+			"output": {}
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"taskId",
+				{
+					"status": "Success",
+					"meta": {
+						"miniSyncStatus": "NotFound",
+						"entity": "approval"
+					}
+				}
+			],
+			"output": {}
+		}
+	]
 }

@@ -1,38 +1,46 @@
 {
-  "title": "additional actions: forward (not implemented in the BL) (disableMiniSync: true)",
-  "task": "action$forward",
-  "config": {
-    "blConfig": {
-      "disableMiniSync": true
-    }
-  },
-  "taskData": {
-    "type": "action$forward",
-    "id": "taskId",
-    "approval": "caprizaApproval.json",
-    "volatile": {
-      "commentText": "comments go here",
-      "assignTo": "a@a.com"
-    }
-  },
-  "steps": [
-    {
-      "func": "getBackendApproval",
-      "args": [
-        {
-          "id": "approvalId"
-        }
-      ],
-      "output": [ "caprizaApproval.json" ]
-    },
-    {
-      "func":"updateTask",
-      "args":[
-        "taskId",
-        {
-          "succeeded": false,
-          "payload": "errors/taskInvalid.json"
-        }],
-      "output":{}}
-  ]
+	"title": "additional actions: forward (not implemented in the BL) (disableMiniSync: true)",
+	"task": "action$forward",
+	"config": {
+		"blConfig": {
+			"disableMiniSync": true
+		}
+	},
+	"taskData": {
+		"type": "action$forward",
+		"id": "taskId",
+		"approval": "caprizaApproval.json",
+		"volatile": {
+			"commentText": "comments go here",
+			"assignTo": "a@a.com"
+		}
+	},
+	"steps": [
+		{
+			"func": "getBackendApproval",
+			"args": [
+				{
+					"id": "approvalId"
+				}
+			],
+			"output": [
+				"caprizaApproval.json"
+			]
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"taskId",
+				{
+					"status": "NotImplemented",
+					"meta": {
+						"entity": "task",
+						"taskType": "action$forward",
+						"message": "action$forward was not implemented in the BL"
+					}
+				}
+			],
+			"output": {}
+		}
+	]
 }

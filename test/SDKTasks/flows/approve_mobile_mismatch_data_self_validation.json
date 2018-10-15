@@ -1,34 +1,41 @@
 {
-  "title": "approve approval and get mobile mismatch data (selfValidation: true)",
-  "task": "approve",
-  "config": {
-    "blConfig": {
-      "selfValidation": true
-    },
-    "controllerConfig": {}
-  },
-  "taskData": {
-    "type": "approve",
-    "id": "taskId",
-    "approval": "caprizaApproval.json"
-  },
-  "steps": [
-    {
-      "func": "getBackendApproval",
-      "args": [{ "id": "approvalId" }],
-      "output": [ "caprizaApprovalChanged.json" ]
-    },
-    {
-      "func":"updateTask",
-      "args":
-      [
-        "taskId",
-        {
-          "succeeded":false,
-          "payload": "errors/approvalMismatchData.json"
-        }
-      ],
-      "output": {}
-    }
-  ]
+	"title": "approve approval and get mobile mismatch data (selfValidation: true)",
+	"task": "approve",
+	"config": {
+		"blConfig": {
+			"selfValidation": true
+		},
+		"controllerConfig": {}
+	},
+	"taskData": {
+		"type": "approve",
+		"id": "taskId",
+		"approval": "caprizaApproval.json"
+	},
+	"steps": [
+		{
+			"func": "getBackendApproval",
+			"args": [
+				{
+					"id": "approvalId"
+				}
+			],
+			"output": [
+				"caprizaApprovalChanged.json"
+			]
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"taskId",
+				{
+					"status": "DataMismatch",
+					"meta": {
+						"entity": "approval"
+					}
+				}
+			],
+			"output": {}
+		}
+	]
 }

@@ -1,24 +1,62 @@
 {
-  "title": "fetching approvals (1 new) when signature list is empty",
-  "task": "sync",
-  "taskData": {
-    "type":"sync",
-    "id":"taskId"
-  },
-  "steps": [
-    {"func": "getBackendApprovals", "args": [{}], "output": []},
-    {"func": "fetch", "args": [{"signatureList": []}], "outputType": "Result.Success", "output": { "data": { "approvals": [ "rawApproval.json" ] }  }},
-    {"func": "sendApprovals", "args":[{
-      "approvals": [
-        "transformedApproval.json"
-      ],
-      "rawApprovals": [
-        "rawApproval.json"
-      ],
-      "transformedApprovals": [
-        "transformedApproval.json"
-      ]
-    }, {}], "output": {}},
-    {"func": "updateTask", "args": ["taskId", {"succeeded": true}], "output": {}}
-  ]
+	"title": "fetching approvals (1 new) when signature list is empty",
+	"task": "sync",
+	"taskData": {
+		"type": "sync",
+		"id": "taskId"
+	},
+	"steps": [
+		{
+			"func": "getBackendApprovals",
+			"args": [
+				{}
+			],
+			"output": []
+		},
+		{
+			"func": "fetch",
+			"args": [
+				{
+					"signatureList": []
+				}
+			],
+			"outputType": "Result.Success",
+			"output": {
+				"data": {
+					"approvals": [
+						"rawApproval.json"
+					]
+				}
+			}
+		},
+		{
+			"func": "sendApprovals",
+			"args": [
+				{
+					"approvals": [
+						"transformedApproval.json"
+					],
+					"rawApprovals": [
+						"rawApproval.json"
+					],
+					"transformedApprovals": [
+						"transformedApproval.json"
+					]
+				},
+				{}
+			],
+			"output": {}
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"taskId",
+				{
+					"status": "Success",
+					"meta": {}
+				}
+			],
+			"output": {}
+		}
+	]
 }

@@ -1,32 +1,45 @@
 {
-  "title": "make authenticate",
-  "task": "authenticate",
-  "taskData": {
-    "type": "authenticate",
-    "id": "authenticate-0",
-    "volatile":{
-      "system": {
-        "username": "yehuda.livnoni",
-        "pasword":"123456"
-      }
-    }
-  },
-  "steps": [
-    {
-      "func": "authenticate",
-      "args": [
-        {
-          "username": "yehuda.livnoni",
-          "pasword":"123456"
-        }
-      ],
-      "outputType": "Result.Success",
-      "output": {
-        "data": {
-          "authenticated": true
-        }
-      }
-    },
-    {"func":"updateTask", "args":["authenticate-0",{"succeeded": true}], "output": {}}
-  ]
+	"title": "make authenticate",
+	"task": "authenticate",
+	"taskData": {
+		"type": "authenticate",
+		"id": "authenticate-0",
+		"volatile": {
+			"system": {
+				"username": "yehuda.livnoni",
+				"pasword": "123456"
+			}
+		}
+	},
+	"steps": [
+		{
+			"func": "authenticate",
+			"args": [
+				{
+					"username": "yehuda.livnoni",
+					"pasword": "123456"
+				}
+			],
+			"outputType": "Result.Success",
+			"output": {
+				"data": {
+					"authenticated": true
+				}
+			}
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"authenticate-0",
+				{
+					"status": "Success",
+					"meta": {
+						"entity": "user",
+						"authenticated": true
+					}
+				}
+			],
+			"output": {}
+		}
+	]
 }

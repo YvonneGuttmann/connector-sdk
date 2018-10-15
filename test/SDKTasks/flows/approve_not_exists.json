@@ -1,37 +1,52 @@
 {
-  "title": "approve approval which not exists",
-  "task": "approve",
-  "taskData": {
-    "type": "approve",
-    "id": "taskId",
-    "approval": "caprizaApproval.json"
-  },
-  "steps": [
-    {
-      "func": "getBackendApproval",
-      "args": [
-        {
-          "id": "approvalId"
-        }
-      ],
-      "output": [ "caprizaApproval.json" ]
-    },
-    {
-      "func": "getApproval",
-      "args": "caprizaApproval.json",
-      "outputType": "Result.NotFound"
-    },
-    {
-      "func": "sendApprovals",
-      "args": [{ "approvals": [ "deletedApproval.json" ]}, {}],
-      "output": {}
-    },
-    {"func":"updateTask", "args":[
-      "taskId",
-      {
-        "succeeded":false,
-        "payload": "errors/approvalNotExists.json"
-      }
-    ], "output":{}}
-  ]
+	"title": "approve approval which not exists",
+	"task": "approve",
+	"taskData": {
+		"type": "approve",
+		"id": "taskId",
+		"approval": "caprizaApproval.json"
+	},
+	"steps": [
+		{
+			"func": "getBackendApproval",
+			"args": [
+				{
+					"id": "approvalId"
+				}
+			],
+			"output": [
+				"caprizaApproval.json"
+			]
+		},
+		{
+			"func": "getApproval",
+			"args": "caprizaApproval.json",
+			"outputType": "Result.NotFound"
+		},
+		{
+			"func": "sendApprovals",
+			"args": [
+				{
+					"approvals": [
+						"deletedApproval.json"
+					]
+				},
+				{}
+			],
+			"output": {}
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"taskId",
+				{
+					"status": "NotFound",
+					"meta": {
+						"entity": "approval"
+					}
+				}
+			],
+			"output": {}
+		}
+	]
 }

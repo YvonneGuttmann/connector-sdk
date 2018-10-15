@@ -1,28 +1,41 @@
 {
-  "title": "fetching approvals. BL throw exception",
-  "task": "sync",
-  "taskData": {
-    "type":"sync",
-    "id":"sync-fail"
-  },
-  "steps": [
-    {
-      "func": "getBackendApprovals",
-      "args": [{}],
-      "output": []
-    },
-    {
-      "func": "fetch",
-      "args": [{"signatureList": []}],
-      "exception": "CONNECTOR_ERROR"},
-    {
-      "func": "updateTask",
-      "args": ["sync-fail",
-        {
-          "succeeded": false,
-          "payload": "CONNECTOR_ERROR"
-
-        }],
-      "output": {}}
-  ]
+	"title": "fetching approvals. BL throw exception",
+	"task": "sync",
+	"taskData": {
+		"type": "sync",
+		"id": "sync-fail"
+	},
+	"steps": [
+		{
+			"func": "getBackendApprovals",
+			"args": [
+				{}
+			],
+			"output": []
+		},
+		{
+			"func": "fetch",
+			"args": [
+				{
+					"signatureList": []
+				}
+			],
+			"exception": "CONNECTOR_ERROR"
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"sync-fail",
+				{
+					"status": "InternalError",
+					"meta": {
+						"entity": "task",
+						"taskType": "sync",
+						"message": "Unexpected error: \"CONNECTOR_ERROR\""
+					}
+				}
+			],
+			"output": {}
+		}
+	]
 }
