@@ -1,49 +1,71 @@
 {
-  "title": "reject approval and mark as removed",
-  "task": "reject",
-  "config": {
-    "blConfig": {
-      "selfValidation": true
-    },
-    "controllerConfig": {}
-  },
-  "taskData": {
-    "type": "reject",
-    "id": "taskId",
-    "approval": "caprizaApproval.json"
-  },
-  "steps": [
-    {
-      "func": "getBackendApproval",
-      "args": [
-        {
-          "id": "approvalId"
-        }
-      ],
-      "output": [ "caprizaApproval.json" ]
-    },
-    {
-      "func": "reject",
-      "args": [ { "approval": "caprizaApproval.json" }, {}],
-      "output": true
-    },
-    {
-      "func": "getApproval",
-      "args": "caprizaApproval.json",
-      "output": null
-    },
-    {
-      "func": "sendApprovals",
-      "args": [
-        {
-          "approvals": [ "deletedApproval.json" ],
-          "rawApprovals": [],
-          "transformedApprovals": []
-        },
-        {}
-      ],
-      "output": {}
-    },
-    {"func":"updateTask", "args":["taskId",{"succeeded": true}], "output":{}}
-  ]
+	"title": "reject approval and mark as removed",
+	"task": "reject",
+	"config": {
+		"blConfig": {
+			"selfValidation": true
+		},
+		"controllerConfig": {}
+	},
+	"taskData": {
+		"type": "reject",
+		"id": "taskId",
+		"approval": "caprizaApproval.json"
+	},
+	"steps": [
+		{
+			"func": "getBackendApproval",
+			"args": [
+				{
+					"id": "approvalId"
+				}
+			],
+			"output": [
+				"caprizaApproval.json"
+			]
+		},
+		{
+			"func": "reject",
+			"args": [
+				{
+					"approval": "caprizaApproval.json"
+				},
+				{}
+			],
+			"outputType": "Result.Success"
+		},
+		{
+			"func": "getApproval",
+			"args": "caprizaApproval.json",
+			"outputType": "Result.NotFound"
+		},
+		{
+			"func": "sendApprovals",
+			"args": [
+				{
+					"approvals": [
+						"deletedApproval.json"
+					],
+					"rawApprovals": [],
+					"transformedApprovals": []
+				},
+				{}
+			],
+			"output": {}
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"taskId",
+				{
+					"status": "Success",
+					"meta": {
+						"miniSyncStatus": "NotFound",
+						"entity": "approval"
+					}
+				}
+			],
+			"output": {}
+		}
+	]
 }

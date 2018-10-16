@@ -1,42 +1,46 @@
 {
-  "title": "authentication failed - bad credentials",
-  "task": "authenticate",
-  "taskData": {
-    "type": "authenticate",
-    "id": "authenticate-fail",
-    "volatile": {
-      "system": {
-        "username": "yehuda.livnoni",
-        "pasword": "123456"
-      }
-    }
-  },
-  "steps": [
-    {
-      "func": "authenticate",
-      "args": [
-        {
-          "username": "yehuda.livnoni",
-          "pasword": "123456"
-        }
-      ],
-      "exception": "AUTHENTICATION"
-    },
-    {
-      "func": "updateTask",
-      "args": [
-        "authenticate-fail",
-        {
-          "succeeded": false,
-          "payload": {
-            "code": "AUTHENTICATION",
-            "severity": "CRITICAL",
-            "name": "Authentication error",
-            "description": "Source system authentication failed"
-          }
-        }
-      ],
-      "output": {}
-    }
-  ]
+	"title": "authentication failed - bad credentials",
+	"task": "authenticate",
+	"taskData": {
+		"type": "authenticate",
+		"id": "authenticate-fail",
+		"volatile": {
+			"system": {
+				"username": "yehuda.livnoni",
+				"pasword": "123456"
+			}
+		}
+	},
+	"steps": [
+		{
+			"func": "authenticate",
+			"args": [
+				{
+					"username": "yehuda.livnoni",
+					"pasword": "123456"
+				}
+			],
+			"outputType": "Result.Success",
+			"output": {
+				"data": {
+					"authenticated": false,
+					"message": "bad credentials"
+				}
+			}
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"authenticate-fail",
+				{
+					"status": "Success",
+					"meta": {
+						"entity": "user",
+						"authenticated": false
+					}
+				}
+			],
+			"output": {}
+		}
+	]
 }

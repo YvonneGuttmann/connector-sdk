@@ -3,8 +3,7 @@ const chalk = require("chalk");
 const path = require('path');
 var Connector = require("../../lib/connector").Connector;
 var Logger = require("../../lib/log").Logger;
-var loggerFactory = new Logger(process.env.logStream);
-var logger = loggerFactory.create({}).child({component: "index.js", module: "connectors", connectorName: "MOCK", connectorVersion: ""});
+var logger = new Logger({ consoleMode : "text" });
 const BL = require('./utils/bl/index');
 const Backend = require('./utils/backend/index');
 var handlers = require("../../lib/taskHandlers.js");
@@ -19,11 +18,12 @@ async function runTestFlow(flowData) {
 
     var flow = new Flow(flowData);
     console.log(flow.getPreRunString());
-    Connector.init({
+    await Connector.init({
             config: flow.config,
             logger,
             BL,
             transformer: require('./utils/bl/resources/transformer'),
+            uiTemplates: require('./utils/bl/resources/ui-templates.json'),
             testFlow: flow
         });
 

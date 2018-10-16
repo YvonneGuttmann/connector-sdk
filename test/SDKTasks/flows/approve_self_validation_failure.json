@@ -1,42 +1,53 @@
 {
-  "title": "approve approval and failed in the BL when self validation is true",
-  "task": "approve",
-  "config": {
-    "blConfig": {
-      "selfValidation": true
-    },
-    "controllerConfig": {}
-  },
-  "taskData": {
-    "type": "approve",
-    "id": "taskId",
-    "approval": "caprizaApproval.json"
-  },
-  "steps": [
-    {
-      "func": "getBackendApproval",
-      "args": [
-        {
-          "id": "approvalId"
-        }
-      ],
-      "output": [ "caprizaApproval.json" ]
-    },
-    {
-      "func": "approve",
-      "args": [ { "approval": "caprizaApproval.json" }, {}],
-      "exception": "CONNECTOR_ERROR"
-    },
-    {
-      "func": "sendApprovals",
-      "args": [
-        {
-          "approvals": []
-        },
-        {}
-      ],
-      "output": {}
-    },
-    {"func":"updateTask", "args":["taskId",{"succeeded": false, "payload": "errors/connectorError.json"}], "output":{}}
-  ]
+	"title": "approve approval and failed in the BL when self validation is true",
+	"task": "approve",
+	"config": {
+		"blConfig": {
+			"selfValidation": true
+		},
+		"controllerConfig": {}
+	},
+	"taskData": {
+		"type": "approve",
+		"id": "taskId",
+		"approval": "caprizaApproval.json"
+	},
+	"steps": [
+		{
+			"func": "getBackendApproval",
+			"args": [
+				{
+					"id": "approvalId"
+				}
+			],
+			"output": [
+				"caprizaApproval.json"
+			]
+		},
+		{
+			"func": "approve",
+			"args": [
+				{
+					"approval": "caprizaApproval.json"
+				},
+				{}
+			],
+			"exception": "CONNECTOR_ERROR"
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"taskId",
+				{
+					"status": "InternalError",
+					"meta": {
+						"entity": "task",
+						"taskType": "approve",
+						"message": "Unexpected error: \"CONNECTOR_ERROR\""
+					}
+				}
+			],
+			"output": {}
+		}
+	]
 }

@@ -1,53 +1,77 @@
 {
-  "title": "get attachment and download it",
-  "task": "getAttachment",
-  "taskData": {
-    "type": "getAttachment",
-    "id": "attachment-0",
-    "approval": {
-      "id": "attachment-0",
-      "metadata": {
-        "fingerprints": {
-          "sync": "10bad52d5b7b3772fe9c39d9cad8ba1302219876",
-          "action": "38ea97eed8501d5144fc2604045f7185f9aed339"
-        }
-      },
-      "public": {},
-      "private": {
-        "id": "082a0c7adba52200a6a2b31be0b8f5df",
-        "approver": "christen.mitchell@example.com"
-      }
-    },
-    "volatile": {
-      "attachmentId": "fa8c86a6db62130037227d9ebf9619f0"
-    }
-  },
-  "steps": [
-    {
-      "func": "downloadAttachment",
-      "args": [
-        {
-          "attachmentId": "fa8c86a6db62130037227d9ebf9619f0",
-          "approval": {
-            "id": "attachment-0",
-            "metadata": {
-              "fingerprints": {
-                "sync": "10bad52d5b7b3772fe9c39d9cad8ba1302219876",
-                "action": "38ea97eed8501d5144fc2604045f7185f9aed339"
-              }
-            },
-            "public": {},
-            "private": {
-              "id": "082a0c7adba52200a6a2b31be0b8f5df",
-              "approver": "christen.mitchell@example.com"
-            }
-          }
-        },
-        {}
-      ],
-      "output": {"mediaType":"image/jpeg", "data":"string"}
-    },
-    {"func":"sendAttachment", "args":["attachment-0","image/jpeg"], "output":""},
-    {"func":"updateTask", "args":["attachment-0", {"succeeded":true}]}
-  ]
+	"title": "get attachment and download it",
+	"task": "getAttachment",
+	"taskData": {
+		"type": "getAttachment",
+		"id": "attachment-0",
+		"approval": {
+			"id": "attachment-0",
+			"metadata": {
+				"fingerprints": {
+					"sync": "10bad52d5b7b3772fe9c39d9cad8ba1302219876",
+					"action": "38ea97eed8501d5144fc2604045f7185f9aed339"
+				}
+			},
+			"public": {},
+			"private": {
+				"id": "082a0c7adba52200a6a2b31be0b8f5df",
+				"approver": "christen.mitchell@example.com"
+			}
+		},
+		"volatile": {
+			"attachmentId": "fa8c86a6db62130037227d9ebf9619f0"
+		}
+	},
+	"steps": [
+		{
+			"func": "downloadAttachment",
+			"args": [
+				{
+					"attachmentId": "fa8c86a6db62130037227d9ebf9619f0",
+					"approval": {
+						"id": "attachment-0",
+						"metadata": {
+							"fingerprints": {
+								"sync": "10bad52d5b7b3772fe9c39d9cad8ba1302219876",
+								"action": "38ea97eed8501d5144fc2604045f7185f9aed339"
+							}
+						},
+						"public": {},
+						"private": {
+							"id": "082a0c7adba52200a6a2b31be0b8f5df",
+							"approver": "christen.mitchell@example.com"
+						}
+					}
+				},
+				{}
+			],
+			"outputType": "Result.Success",
+			"output": {
+				"data": {
+					"mediaType": "image/jpeg",
+					"data": "string"
+				}
+			}
+		},
+		{
+			"func": "sendAttachment",
+			"args": [
+				"attachment-0",
+				"image/jpeg"
+			],
+			"output": ""
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"attachment-0",
+				{
+					"status": "Success",
+					"meta": {
+						"entity": "attachment"
+					}
+				}
+			]
+		}
+	]
 }

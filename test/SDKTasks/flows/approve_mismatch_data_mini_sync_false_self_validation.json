@@ -1,47 +1,75 @@
 {
-  "title": "approve approval and get mismatch data (selfValidation: true, disableMiniSync: true)",
-  "task": "approve",
-  "config": {
-    "blConfig": {
-      "selfValidation": true,
-      "disableMiniSync": true
-    },
-    "controllerConfig": {}
-  },
-  "taskData": {
-    "type": "approve",
-    "id": "taskId",
-    "approval": "caprizaApproval.json"
-  },
-  "steps": [
-    {
-      "func": "getBackendApproval",
-      "args": [
-        {
-          "id": "approvalId"
-        }
-      ],
-      "output": [ "caprizaApproval.json" ]
-    },
-    {
-      "func": "approve",
-      "args": [ { "approval": "caprizaApproval.json" }, {}],
-      "exception": {
-        "error": "APPROVAL_DATA_MISMATCH",
-        "approval": "rawApprovalChanged.json"
-      }
-    },
-    {
-      "func": "sendApprovals",
-      "args": [{ "approvals": [ "sendApprovalChangedSyncVer.json" ]}, {}],
-      "output": {}
-    },
-    {"func":"updateTask", "args":[
-      "taskId",
-      {
-        "succeeded":false,
-        "payload": "errors/approvalMismatchData.json"
-      }
-    ], "output":{}}
-  ]
+	"title": "approve approval and get mismatch data (selfValidation: true, disableMiniSync: true)",
+	"task": "approve",
+	"config": {
+		"blConfig": {
+			"selfValidation": true,
+			"disableMiniSync": true
+		},
+		"controllerConfig": {}
+	},
+	"taskData": {
+		"type": "approve",
+		"id": "taskId",
+		"approval": "caprizaApproval.json"
+	},
+	"steps": [
+		{
+			"func": "getBackendApproval",
+			"args": [
+				{
+					"id": "approvalId"
+				}
+			],
+			"output": [
+				"caprizaApproval.json"
+			]
+		},
+		{
+			"func": "approve",
+			"args": [
+				{
+					"approval": "caprizaApproval.json"
+				},
+				{}
+			],
+			"outputType": "Result.DataMismatch",
+			"output": {
+				"data": {
+					"approval": "rawApprovalChanged.json"
+				}
+			}
+		},
+		{
+			"func": "sendApprovals",
+			"args": [
+				{
+					"approvals": [
+						"sendApprovalChangedSyncVer.json"
+					],
+					"rawApprovals": [
+						"rawApprovalChanged.json"
+					],
+					"transformedApprovals": [
+						"transformedApprovalChanged.json"
+					]
+				},
+				{}
+			],
+			"output": {}
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"taskId",
+				{
+					"status": "DataMismatch",
+					"meta": {
+						"entity": "approval"
+					}
+				}
+			],
+			"output": {}
+		}
+	]
 }

@@ -1,62 +1,86 @@
 {
-  "title": "additional actions: reassign",
-  "task": "action$reassign",
-  "taskData": {
-    "type": "action$reassign",
-    "id": "taskId",
-    "approval": "caprizaApproval.json",
-    "volatile": {
-      "commentText": "comments go here",
-      "assignTo": "a@a.com"
-    }
-  },
-  "steps": [
-    {
-      "func": "getBackendApproval",
-      "args": [
-        {
-          "id": "approvalId"
-        }
-      ],
-      "output": [ "caprizaApproval.json" ]
-    },
-    {
-      "func": "getApproval",
-      "args": "caprizaApproval.json",
-      "output": "rawApproval.json"
-    },
-    {
-      "func": "action$reassign",
-      "args": [
-        {
-          "action": "action$reassign",
-          "approval": "caprizaApproval.json",
-          "data": {
-            "commentText": "comments go here",
-            "assignTo": "a@a.com"
-          }
-        },
-        {}
-      ],
-      "output": true
-    },
-    {
-      "func": "getApproval",
-      "args": "caprizaApproval.json",
-      "output": null
-    },
-    {
-      "func": "sendApprovals",
-      "args": [
-        {
-          "approvals": [ "deletedApproval.json" ],
-          "rawApprovals": [],
-          "transformedApprovals": []
-        },
-        {}
-      ],
-      "output": {}
-    },
-    {"func":"updateTask", "args":["taskId",{"succeeded": true}], "output":{}}
-  ]
+	"title": "additional actions: reassign",
+	"task": "action$reassign",
+	"taskData": {
+		"type": "action$reassign",
+		"id": "taskId",
+		"approval": "caprizaApproval.json",
+		"volatile": {
+			"commentText": "comments go here",
+			"assignTo": "a@a.com"
+		}
+	},
+	"steps": [
+		{
+			"func": "getBackendApproval",
+			"args": [
+				{
+					"id": "approvalId"
+				}
+			],
+			"output": [
+				"caprizaApproval.json"
+			]
+		},
+		{
+			"func": "getApproval",
+			"args": "caprizaApproval.json",
+			"outputType": "Result.Success",
+			"output": {
+				"data": {
+					"approval": "rawApproval.json"
+				}
+			}
+		},
+		{
+			"func": "action$reassign",
+			"args": [
+				{
+					"action": "action$reassign",
+					"approval": "caprizaApproval.json",
+					"data": {
+						"commentText": "comments go here",
+						"assignTo": "a@a.com"
+					}
+				},
+				{}
+			],
+			"outputType": "Result.Success",
+			"output": {}
+		},
+		{
+			"func": "getApproval",
+			"args": "caprizaApproval.json",
+			"outputType": "Result.NotFound",
+			"output": {}
+		},
+		{
+			"func": "sendApprovals",
+			"args": [
+				{
+					"approvals": [
+						"deletedApproval.json"
+					],
+					"rawApprovals": [],
+					"transformedApprovals": []
+				},
+				{}
+			],
+			"output": {}
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"taskId",
+				{
+					"status": "Success",
+					"meta": {
+						"miniSyncStatus": "NotFound",
+						"entity": "approval"
+					}
+				}
+			],
+			"output": {}
+		}
+	]
 }

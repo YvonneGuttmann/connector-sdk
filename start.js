@@ -13,17 +13,23 @@ var com, transform = jslt.transform;
 var API;
 var LocalAPI;
 var config;
+var uiTemplates;
 const ARCHIVE_PATH = "log_archive";
+const fs = require("fs");
 
 process.title = process.env["CONTROLLER_TITLE"] || path.basename(process.cwd());
 var [connectorName, connectorVersion] = process.title.split("@");
 
 //logger
+if (!fs.existsSync("log")) fs.mkdirSync("log");
 process.env.logStream = "dev" in argv ? "console" : "file"; //in dev mode write log to console, in production write log to file
-var loggerFactory = new Logger(process.env.logStream);
-var logger = loggerFactory.create({}).child({component: "index.js", module: "connectors", connectorName, connectorVersion});
+var logger = new Logger(process.env.logStream == "console" ?
+	{ consoleMode : "text" } :
+	{ consoleMode : "json", fileMode: "text", chindings : { connectorName, connectorVersion } });
+	
+logger.startLogRotation();
+
 if (process.env.logStream == "file") {
-	let fs = require("fs");
 	if (!fs.existsSync(ARCHIVE_PATH)) fs.mkdirSync(ARCHIVE_PATH);
 	
 	let logCleaner = new LogCleaner("log", { hours : 1, size : 50, onlyDirs : true}, logger);
@@ -56,11 +62,13 @@ function startRemoteMode(controllerConfig) {
 	var requestHeaders = {
 		"x-capriza-api-key"			: controllerConfig.creds.apiKey,
 		"x-capriza-secret"			: controllerConfig.creds.apiSecret,
-		"x-capriza-connector-id"	: controllerConfig.connectorId
+		"x-capriza-connector-id"	: controllerConfig.connectorId,
+		"x-capriza-sdk-version"		: require("./package.json").version
 	};
 	
 	const BackendAPI = require("./lib/backendAPI.js");
 	API = new BackendAPI(apiUrl, requestHeaders, {connectorId: controllerConfig.connectorId}, logger);
+
     var TaskClasses = createTaskClasses(controllerConfig, (conf, logger)=>new BackendAPI(apiUrl, requestHeaders, conf, logger));
 	com = new ComManager({ apiUrl, requestHeaders, TaskClasses, logger, config: controllerConfig });
 }
@@ -82,7 +90,7 @@ function onLocalFileChange(context){
         com.setTaskClasses(TaskClasses);
         com.onFileChanged(context);
         LocalAPI.resetState();
-    }).then(async ()=>Connector.init({config,logger,transform})).then(()=>logger.info(`Done reloading connector`));
+    }).then(async ()=>Connector.init({config,logger,transform, uiTemplates})).then(()=>logger.info(`Done reloading connector`));
 }
 
 function transformWithErrors(data, template, props = {}){
@@ -100,11 +108,11 @@ function transformWithErrors(data, template, props = {}){
 
 function getUiMappings() {
     var res = [];
-    var uiTemplates;
+    let uiTemplates;
     try{
         uiTemplates = require(path.resolve(`./resources/ui-templates.json`));
     } catch(ex) {
-        logger.info(`There is no ui-templates.json file`);
+        logger.error(`Failed to load ui-templates.json ${ex.message}`);
         return;
     }
 
@@ -184,9 +192,17 @@ process.on('unhandledRejection', reason => {
         return;
     }
 
-    //4. Bootstrap connector
+    //4. Loading ui-templates.json
+    try{
+        uiTemplates = require(path.resolve(`./resources/ui-templates.json`));
+    } catch(ex) {
+        logger.error(`Failed to load ui-templates.json !! ${ex.message}`);
+        return;
+    }
+
+    //5. Bootstrap connector
     logger.info ("Initializing connector");
-    Connector.init({config,logger,transform})
+    Connector.init({config,logger,transform, uiTemplates})
         .then(async (taskTypes) => {
 
             if(API.sendConnectorData) {
@@ -194,10 +210,10 @@ process.on('unhandledRejection', reason => {
                     logger.info(`Sending connector info to the api. task types: ${taskTypes}`);
                     await API.sendConnectorData({taskTypes, uiMappings: getUiMappings(), authRequired: taskTypes.includes("authenticate") })
                 } catch (ex) {
-                    logger.error(`Failed to send task types to the api: ${ex.stack || ex}`);
+                    logger.error(`Failed to send connector info to the api: ${ex.stack || ex}`);
                 }
             } else {
-                logger.info(`sendConnectorData not exists in the API, won't send connector info to API`);
+                logger.info(`sendConnectorData does not exist in the API, won't send connector info to API`);
             }
 
             run(1)

@@ -53,5 +53,13 @@ var TestAPI = module.exports = class TestAPI {
         }
     }
 
+    async getConnectorState(){
+        return this.flow.exec('getConnectorState', arguments);
+    }
+
+    async setConnectorState(){
+        return this.flow.exec('setConnectorState', arguments);
+    }
+
 
 };

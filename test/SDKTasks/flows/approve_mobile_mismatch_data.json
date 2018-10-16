@@ -1,33 +1,35 @@
 {
-  "title": "approve approval and get mobile mismatch data",
-  "task": "approve",
-  "taskData": {
-    "type": "approve",
-    "id": "taskId",
-    "approval": "caprizaApproval.json"
-  },
-  "steps": [
-    {
-      "func": "getBackendApproval",
-      "args": [{ "id": "approvalId" }],
-      "output": [ "caprizaApprovalChanged.json" ]
-    },
-    {
-      "func": "sendApprovals",
-      "args": [{ "approvals": [ ]}, {}],
-      "output": {}
-    },
-    {
-      "func":"updateTask",
-      "args":
-      [
-        "taskId",
-        {
-          "succeeded":false,
-          "payload": "errors/approvalMismatchData.json"
-        }
-      ],
-      "output": {}
-    }
-  ]
+	"title": "approve approval and get mobile mismatch data",
+	"task": "approve",
+	"taskData": {
+		"type": "approve",
+		"id": "taskId",
+		"approval": "caprizaApproval.json"
+	},
+	"steps": [
+		{
+			"func": "getBackendApproval",
+			"args": [
+				{
+					"id": "approvalId"
+				}
+			],
+			"output": [
+				"caprizaApprovalChanged.json"
+			]
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"taskId",
+				{
+					"status": "DataMismatch",
+					"meta": {
+						"entity": "approval"
+					}
+				}
+			],
+			"output": {}
+		}
+	]
 }

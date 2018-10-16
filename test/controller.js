@@ -9,39 +9,40 @@ const Connector = require("../lib/connector").Connector;
 var connector;
 var MOCK_APPROVAL_1;
 var Logger = require ("../lib/log").Logger;
-var loggerFactory = new Logger(process.env.logStream);
+var logger = new Logger({ consoleMode : "text" });
 
-const MOCK_BL = {
-    settings: {},
-    fetch(){
-        return Promise.resolve([]);
-    },
-    getApproval(){
-        // return newApproval;
-        return {};
-    },
-    approve (){
-        // newApproval = null; //removed after approved
-        return true;
-    },
-    reject () {
-        return true;
-    },
-    downloadAttachment() {
-
+class BLClass {
+    constructor() {
+        this.logger = console;
     }
-};
+
+    static init(context) {
+        BLClass.settings = context.config;
+    }
+
+    static stop() { }
+
+    async fetch() { return []; }
+
+    async getApproval() { return {}; }
+
+    async approve() { return true; }
+
+    async reject() { return true; }
+
+    async downloadAttachment() { }
+
+}
 
 describe ("Controller functions", function () {
     beforeEach (function (){
-        Connector.init({config: { controllerConfig: {} }, logger: console, BL: MOCK_BL});
-        var logger = loggerFactory.create({}).child({component: "index.js", module: "connectors", connectorName: "MOCK", connectorVersion: ""});
+        Connector.init({config: { controllerConfig: {} }, logger: console, BL: BLClass, uiTemplates: { "schemaId": {}}} );
         connector = new Connector({logger: logger});
         MOCK_APPROVAL_1 = { schemaId: "schemaId", private: {id: "approval1", approver: "approver1"}, public: {name: "1"} };
     });
 
-    it("~1 - addApprovalData function - should add metadata with fingerprints, systemApprovalId and systemUserId", function (done) {
-        var approval = connector.addApprovalData(MOCK_APPROVAL_1);
+    it("~1 - _addApprovalData function - should add metadata with fingerprints, systemApprovalId and systemUserId", function (done) {
+        var approval = connector._addApprovalData(MOCK_APPROVAL_1);
         var expectObj = {
             private: { approver: "approver1", id: "approval1" },
             public: {name: "1"},
@@ -54,9 +55,9 @@ describe ("Controller functions", function () {
         done();
     });
 
-    it("~2 - addApprovalData function - should return approval with error when there is no schemaId in the approval", function (done) {
+    it("~2 - _addApprovalData function - should return approval with error when there is no schemaId in the approval", function (done) {
         delete MOCK_APPROVAL_1.schemaId;
-        var approval = connector.addApprovalData(MOCK_APPROVAL_1, console);
+        var approval = connector._addApprovalData(MOCK_APPROVAL_1, console);
         MOCK_APPROVAL_1.error = "TransformException";
         approval.should.deep.include(MOCK_APPROVAL_1);
         done();
@@ -72,8 +73,7 @@ describe ("Controller functions", function () {
     });
 
     it("~4 - _createApprovalFingerprints function - with action", function (done) {
-        Connector.init({config: { controllerConfig: { "actionFingerprint": { "id": "{{approval.id}}" } } }, logger: console, MOCK_BL});
-        var logger = loggerFactory.create({}).child({component: "index.js", module: "connectors", connectorName: "MOCK", connectorVersion: ""});
+        Connector.init({config: { controllerConfig: { "actionFingerprint": { "id": "{{approval.id}}" } } }, logger: console, BL: BLClass});
         connector = new Connector({logger: logger});
 
         var fingerprints = connector._createApprovalFingerprints(MOCK_APPROVAL_1);
@@ -86,8 +86,7 @@ describe ("Controller functions", function () {
     });
 
     it("~5 - _createApprovalFingerprints function - changed approval property - only sync should be changed", function (done) {
-        Connector.init({config: { controllerConfig: { "actionFingerprint": { "id": "{{private.id}}" } } }, logger: console, MOCK_BL});
-        var logger = loggerFactory.create({}).child({component: "index.js", module: "connectors", connectorName: "MOCK", connectorVersion: ""});
+        Connector.init({config: { controllerConfig: { "actionFingerprint": { "id": "{{private.id}}" } } }, logger: console, BL: BLClass});
         connector = new Connector({logger: logger});
 
         var fingerprints = connector._createApprovalFingerprints(MOCK_APPROVAL_1);
@@ -107,14 +106,8 @@ describe ("Controller functions", function () {
     });
 
     it("~6 - _createApprovalFingerprints function - changed approval property - sync and action should be changed", function (done) {
-        Connector.init({config: { controllerConfig: { "actionFingerprint": { "id": "{{private.id}}" } } }, logger: console, MOCK_BL});
-        var logger = loggerFactory.create({}).child({component: "index.js", module: "connectors", connectorName: "MOCK", connectorVersion: ""});
+        Connector.init({config: { controllerConfig: { "actionFingerprint": { "id": "{{private.id}}" } } }, logger: console, BL: BLClass});
         connector = new Connector({logger: logger});
-        // connector.config = {
-        //     "actionFingerprint": {
-        //         "id": "{{private.id}}"
-        //     }
-        // };
 
         var fingerprints = connector._createApprovalFingerprints(MOCK_APPROVAL_1);
         var expectObj = {
@@ -173,8 +166,7 @@ describe ("Controller functions", function () {
     });
 
     it("~9 _compareActionFingerPrints - should check action hash and return true", function (done) {
-        Connector.init({config: { controllerConfig: { "actionFingerprint": { "id": "{{private.id}}" } } }, logger: console, MOCK_BL});
-        var logger = loggerFactory.create({}).child({component: "index.js", module: "connectors", connectorName: "MOCK", connectorVersion: ""});
+        Connector.init({config: { controllerConfig: { "actionFingerprint": { "id": "{{private.id}}" } } }, logger: console, BL: BLClass});
         connector = new Connector({logger: logger});
 
 
@@ -191,8 +183,7 @@ describe ("Controller functions", function () {
     });
 
     it("~10 _compareActionFingerPrints - should check action hash and return false", function (done) {
-        Connector.init({config: { controllerConfig: { "actionFingerprint": { "id": "{{private.id}}" } } }, logger: console, MOCK_BL});
-        var logger = loggerFactory.create({}).child({component: "index.js", module: "connectors", connectorName: "MOCK", connectorVersion: ""});
+        Connector.init({config: { controllerConfig: { "actionFingerprint": { "id": "{{private.id}}" } } }, logger: console, BL: BLClass});
         connector = new Connector({logger: logger});
 
         let app1 = {
@@ -211,7 +202,7 @@ describe ("Controller functions", function () {
         done();
     });
 
-    it("~11 _validateApprovalData - validate succeeded - should return null", function (done) {
+    it("~11 _uiTemplateValidation - validate succeeded - should return null", function (done) {
         let input = {
             public: {
                 number: 1,
@@ -226,12 +217,12 @@ describe ("Controller functions", function () {
             date: "{{date:date}}"
         };
 
-        let err = connector._validateApprovalData(input, template, console);
+        let err = connector._uiTemplateValidation(input, template);
         expect(err).to.equal(null);
         done();
     });
 
-    it("~12 _validateApprovalData - validate failed - should return error", function (done) {
+    it("~12 _uiTemplateValidation - validate failed - should return error", function (done) {
         let input = {
             public: {
                 number: 1,
@@ -246,7 +237,7 @@ describe ("Controller functions", function () {
             date: "{{date:date}}"
         };
 
-        let err = connector._validateApprovalData(input, template, console);
+        let err = connector._uiTemplateValidation(input, template);
         expect(err).to.not.equal(null);
         done();
     })

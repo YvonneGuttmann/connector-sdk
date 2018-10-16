@@ -1,11 +1,25 @@
 {
-  "title": "trying to authenticate without credentials",
-  "task": "authenticate",
-  "taskData": {
-    "type": "authenticate",
-    "id": "authenticate-noCreds"
-  },
-  "steps": [
-    {"func":"updateTask", "args":["authenticate-noCreds",{"succeeded": false, "payload": "AUTHENTICATION"}], "output": {}}
-  ]
+	"title": "trying to authenticate without credentials",
+	"task": "authenticate",
+	"taskData": {
+		"type": "authenticate",
+		"id": "authenticate-noCreds"
+	},
+	"steps": [
+		{
+			"func": "updateTask",
+			"args": [
+				"authenticate-noCreds",
+				{
+					"status": "InternalError",
+					"meta": {
+						"entity": "task",
+						"taskType": "authenticate",
+						"message": "Failed to perform authenticate task - data.volatile doesn't exist!"
+					}
+				}
+			],
+			"output": {}
+		}
+	]
 }

@@ -1,45 +1,52 @@
 {
-  "title": "approve approval and get error from the bl",
-  "task": "approve",
-  "config": {
-    "blConfig": {
-      "disableMiniSync": true,
-      "selfValidation": true
-    },
-    "controllerConfig": {}
-  },
-  "taskData": {
-    "type": "approve",
-    "id": "taskId",
-    "approval": "caprizaApproval.json"
-  },
-  "steps": [
-    {
-      "func": "getBackendApproval",
-      "args": [
-        {
-          "id": "approvalId"
-        }
-      ],
-      "output": [ "caprizaApproval.json" ]
-    },
-    {
-      "func": "approve",
-      "args": [ { "approval": "caprizaApproval.json" }, {}],
-      "exception": {
-        "error": "AUTHENTICATION"
-      }
-    },
-    {
-      "func": "sendApprovals",
-      "args": [
-        {
-          "approvals": []
-        },
-        {}
-      ],
-      "output": {}
-    },
-    {"func":"updateTask", "args":["taskId",{"succeeded": false, "payload": "errors/authentication.json"}], "output":{}}
-  ]
+	"title": "approve approval and get error from the bl",
+	"task": "approve",
+	"config": {
+		"blConfig": {
+			"disableMiniSync": true,
+			"selfValidation": true
+		},
+		"controllerConfig": {}
+	},
+	"taskData": {
+		"type": "approve",
+		"id": "taskId",
+		"approval": "caprizaApproval.json"
+	},
+	"steps": [
+		{
+			"func": "getBackendApproval",
+			"args": [
+				{
+					"id": "approvalId"
+				}
+			],
+			"output": [
+				"caprizaApproval.json"
+			]
+		},
+		{
+			"func": "approve",
+			"args": [
+				{
+					"approval": "caprizaApproval.json"
+				},
+				{}
+			],
+			"outputType": "Result.AuthenticationError"
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"taskId",
+				{
+					"status": "AuthenticationError",
+					"meta": {
+						"entity": "approval"
+					}
+				}
+			],
+			"output": {}
+		}
+	]
 }

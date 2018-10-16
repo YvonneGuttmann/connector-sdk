@@ -1,228 +1,63 @@
 {
-  "title": "fetching 0 approvals and report 1 updated approvals to back-end",
-  "task": "sync",
-  "taskData": {
-    "type": "sync",
-    "id": "sync-update"
-  },
-  "steps": [
-    {
-      "func": "getBackendApprovals",
-      "args": [
-        {}
-      ],
-      "output": [
-        {
-          "id": "d9aa61e7-d12a-451b-a269-b780f8318318",
-          "syncver": 674563,
-          "systemId": "a664d73b-b8e1-40d5-b86a-570be084a284",
-          "systemUserId": "christen.mitchell@example.com",
-          "metadata": {
-            "fingerprints": {
-              "sync": "0349403adba52200a6a2b31be0b8f509"
-            }
-          },
-          "private": {
-            "id": "0349403adba52200a6a2b31be0b8f509",
-            "changes": "no_change",
-            "approver": "christen.mitchell@example.com"
-          },
-          "schemaId": "schemaId",
-          "public": {},
-          "systemApprovalId": "0349403adba52200a6a2b31be0b8f509"
-        },
-        {
-          "id": "26ce3b6a-d601-4efa-8b7c-2127017133be",
-          "syncver": 674564,
-          "systemId": "a664d73b-b8e1-40d5-b86a-570be084a284",
-          "systemUserId": "luke.wilson@example.com",
-          "metadata": {
-            "fingerprints": {
-              "sync": "042a0c7adba52200a6a2b31be0b8f5e0"
-            }
-          },
-          "private": {
-            "id": "042a0c7adba52200a6a2b31be0b8f5e0",
-            "changes": "no_change",
-            "approver": "luke.wilson@example.com"
-          },
-          "schemaId": "schemaId",
-          "public": {},
-          "systemApprovalId": "042a0c7adba52200a6a2b31be0b8f5e0"
-        }
-      ]
-    },
-    {
-      "func": "fetch",
-      "args": [
-        {
-          "signatureList": [
-            {
-              "id": "d9aa61e7-d12a-451b-a269-b780f8318318",
-              "syncver": 674563,
-              "systemId": "a664d73b-b8e1-40d5-b86a-570be084a284",
-              "systemUserId": "christen.mitchell@example.com",
-              "metadata": {
-                "fingerprints": {
-                  "sync": "0349403adba52200a6a2b31be0b8f509"
-                }
-              },
-              "private": {
-                "id": "0349403adba52200a6a2b31be0b8f509",
-                "changes": "no_change",
-                "approver": "christen.mitchell@example.com"
-              },
-              "schemaId": "schemaId",
-              "public": {},
-              "systemApprovalId": "0349403adba52200a6a2b31be0b8f509"
-            },
-            {
-              "id": "26ce3b6a-d601-4efa-8b7c-2127017133be",
-              "syncver": 674564,
-              "systemId": "a664d73b-b8e1-40d5-b86a-570be084a284",
-              "systemUserId": "luke.wilson@example.com",
-              "metadata": {
-                "fingerprints": {
-                  "sync": "042a0c7adba52200a6a2b31be0b8f5e0"
-                }
-              },
-              "private": {
-                "id": "042a0c7adba52200a6a2b31be0b8f5e0",
-                "changes": "no_change",
-                "approver": "luke.wilson@example.com"
-              },
-              "schemaId": "schemaId",
-              "public": {},
-              "systemApprovalId": "042a0c7adba52200a6a2b31be0b8f5e0"
-            }
-          ]
-        }
-      ],
-      "output": [
-        {
-          "schemaId": "schemaId",
-          "public": {},
-          "private": {
-            "id": "0349403adba52200a6a2b31be0b8f509",
-            "changes": "yes_change",
-            "approver": "christen.mitchell@example.com"
-          }
-        },
-        {
-          "schemaId": "schemaId",
-          "public": {},
-          "private": {
-            "id": "042a0c7adba52200a6a2b31be0b8f5e0",
-            "changes": "no_change",
-            "approver": "luke.wilson@example.com"
-          }
-        }
-      ]
-    },
-    {
-      "func": "sendApprovals",
-      "args": {
-        "approvals": [
-          {
-            "id": "d9aa61e7-d12a-451b-a269-b780f8318318",
-            "syncver": 674563,
-            "systemId": "a664d73b-b8e1-40d5-b86a-570be084a284",
-            "systemUserId": "christen.mitchell@example.com",
-            "metadata": {
-              "fingerprints": {
-                "sync": "8ed9f854827353a808d23706e86deea01d02932c"
-              }
-            },
-            "private": {
-              "id": "0349403adba52200a6a2b31be0b8f509",
-              "changes": "yes_change",
-              "approver": "christen.mitchell@example.com"
-            },
-            "schemaId": "schemaId",
-            "public": {},
-            "systemApprovalId": "0349403adba52200a6a2b31be0b8f509"
-          }
-        ],
-        "rawApprovals": [
-          {
-            "schemaId": "schemaId",
-            "public": {},
-            "private": {
-              "id": "0349403adba52200a6a2b31be0b8f509",
-              "changes": "yes_change",
-              "approver": "christen.mitchell@example.com"
-            },
-            "metadata": {
-              "fingerprints": {
-                "sync": "8ed9f854827353a808d23706e86deea01d02932c"
-              }
-            },
-            "systemUserId": "christen.mitchell@example.com",
-            "systemApprovalId": "0349403adba52200a6a2b31be0b8f509"
-          },
-          {
-            "schemaId": "schemaId",
-            "public": {},
-            "private": {
-              "id": "042a0c7adba52200a6a2b31be0b8f5e0",
-              "changes": "no_change",
-              "approver": "luke.wilson@example.com"
-            },
-            "metadata": {
-              "fingerprints": {
-                "sync": "ce9fba58618f769ee3fd2e71226d71ab71a33ff4"
-              }
-            },
-            "systemUserId": "luke.wilson@example.com",
-            "systemApprovalId": "042a0c7adba52200a6a2b31be0b8f5e0"
-          }
-        ],
-        "transformedApprovals": [
-          {
-            "schemaId": "schemaId",
-            "public": {},
-            "private": {
-              "id": "0349403adba52200a6a2b31be0b8f509",
-              "changes": "yes_change",
-              "approver": "christen.mitchell@example.com"
-            },
-            "metadata": {
-              "fingerprints": {
-                "sync": "8ed9f854827353a808d23706e86deea01d02932c"
-              }
-            },
-            "systemUserId": "christen.mitchell@example.com",
-            "systemApprovalId": "0349403adba52200a6a2b31be0b8f509"
-          },
-          {
-            "schemaId": "schemaId",
-            "public": {},
-            "private": {
-              "id": "042a0c7adba52200a6a2b31be0b8f5e0",
-              "changes": "no_change",
-              "approver": "luke.wilson@example.com"
-            },
-            "metadata": {
-              "fingerprints": {
-                "sync": "ce9fba58618f769ee3fd2e71226d71ab71a33ff4"
-              }
-            },
-            "systemUserId": "luke.wilson@example.com",
-            "systemApprovalId": "042a0c7adba52200a6a2b31be0b8f5e0"
-          }
-        ]
-      },
-      "output": {}
-    },
-    {
-      "func": "updateTask",
-      "args": [
-        "sync-update",
-        {
-          "succeeded": true
-        }
-      ],
-      "output": {}
-    }
-  ]
+	"title": "fetching 0 approvals and report 1 updated approvals to back-end",
+	"task": "sync",
+	"taskData": {
+		"type": "sync",
+		"id": "sync-update"
+	},
+	"steps": [
+		{
+			"func": "getBackendApprovals",
+			"args": [
+				{}
+			],
+			"output": [
+				"caprizaApproval.json"
+			]
+		},
+		{
+			"func": "fetch",
+			"args": [
+				{
+					"signatureList": [
+						"caprizaApproval.json"
+					]
+				}
+			],
+			"outputType": "Result.Success",
+			"output": {
+				"data": {
+					"approvals": [
+						"rawApprovalChanged.json"
+					]
+				}
+			}
+		},
+		{
+			"func": "sendApprovals",
+			"args": {
+				"approvals": [
+					"transformedApprovalChanged.json"
+				],
+				"rawApprovals": [
+					"rawApprovalChanged.json"
+				],
+				"transformedApprovals": [
+					"transformedApprovalChanged.json"
+				]
+			},
+			"output": {}
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"sync-update",
+				{
+					"status": "Success",
+					"meta": {}
+				}
+			],
+			"output": {}
+		}
+	]
 }
