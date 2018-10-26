@@ -1,6 +1,6 @@
 {
   "name": "@capriza/connector-controller",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "Capriza connectors controller",
   "license": "MIT",
   "main": "index.js",
@@ -27,7 +27,7 @@
     "url": "git://github.com/capriza/connector-sdk"
   },
   "dependencies": {
-    "@capriza/as-inspector": "^0.1.14",
+    "@capriza/as-inspector": "^0.2.0",
     "@capriza/schemas": "^1.0.0",
     "archiver": "2.1.1",
     "async-exit-hook": "2.0.1",
