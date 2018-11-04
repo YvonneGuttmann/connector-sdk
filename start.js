@@ -16,6 +16,7 @@ var config;
 var uiTemplates;
 const ARCHIVE_PATH = "log_archive";
 const fs = require("fs");
+const packageDetails = require('./package.json');
 
 process.title = process.env["CONTROLLER_TITLE"] || path.basename(process.cwd());
 var [connectorName, connectorVersion] = process.title.split("@");
@@ -170,6 +171,7 @@ process.on('unhandledRejection', reason => {
 
     //2. create an instance of the connector according to the configuration
     logger.info ("Initiating connector instance");
+    logger.info (`SDK Version ${packageDetails.version}`);
 
     //3. Initializing com manager instance (local or remote)
     try{
