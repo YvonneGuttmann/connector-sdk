@@ -1,6 +1,6 @@
 {
   "name": "@capriza/connector-controller",
-  "version": "2.0.14",
+  "version": "2.0.15",
   "description": "Capriza connectors controller",
   "license": "MIT",
   "main": "index.js",
@@ -28,7 +28,6 @@
   },
   "dependencies": {
     "@capriza/as-inspector": "^0.2.0",
-    "@capriza/schemas": "^1.0.0",
     "archiver": "2.1.1",
     "async-exit-hook": "2.0.1",
     "aws-sdk": "^2.279.1",
@@ -54,12 +53,12 @@
     "ws": "^5.1.1"
   },
   "devDependencies": {
-    "chalk": "^2.3.2",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
+    "chalk": "^2.3.2",
+    "junit-report-builder": "^1.3.1",
     "mocha": "^4.0.1",
-    "mock-require": "^2.0.2",
-    "mocha-jenkins-reporter": "0.3.10",
-    "junit-report-builder": "^1.3.1"
+    "mocha-jenkins-reporter": "^0.4.1",
+    "mock-require": "^2.0.2"
   }
 }
