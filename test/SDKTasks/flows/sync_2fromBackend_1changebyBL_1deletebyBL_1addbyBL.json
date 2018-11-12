@@ -1,0 +1,73 @@
+{
+  "title": "Syncing approvals: 2 from backend, changing 1 by  BL, delete 1 by BL, add 1 by BL",
+  "task": "sync",
+  "taskData": {
+    "type": "sync",
+    "id": "taskId"
+  },
+  "steps": [
+    {
+      "func": "getBackendApprovals",
+      "args": [
+        {}
+      ],
+      "output": [
+        "caprizaApproval.json",
+        "newApproval.json"
+      ]
+    },
+    {
+      "func": "fetch",
+      "args": [
+        {
+          "signatureList": [
+            "caprizaApproval.json",
+            "newApproval.json"
+          ]
+        }
+      ],
+      "outputType": "Result.Success",
+      "output": {
+        "data": {
+          "approvals": [
+            "rawApprovalChanged.json",
+            "rawmoreApproval.json"
+          ]
+        }
+      }
+    },
+    {
+      "func": "sendApprovals",
+      "args": [
+        {
+          "approvals": [
+            "sendApprovalChangedSyncVer.json",
+            "transformedmoreApproval.json",
+            "newApprovalDeleted.json"
+          ],
+          "rawApprovals": [
+            "rawApprovalChanged.json",
+            "rawmoreApproval.json"
+          ],
+          "transformedApprovals": [
+            "transformedApprovalChanged.json",
+            "transformedmoreApproval.json"
+          ]
+        },
+        {}
+      ],
+      "output": {}
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "taskId",
+        {
+          "status": "Success",
+          "meta": {}
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

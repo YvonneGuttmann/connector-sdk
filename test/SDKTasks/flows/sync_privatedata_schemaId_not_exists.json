@@ -1,0 +1,60 @@
+{
+  "title": "Sync approval but schemaId property not exists",
+  "task": "sync",
+  "taskData": {
+    "type": "sync",
+    "id": "taskId"
+  },
+  "steps": [
+    {
+      "func": "getBackendApprovals",
+      "args": [
+        {}
+      ],
+      "output": []
+    },
+    {
+      "func": "fetch",
+      "args": [
+        {
+          "signatureList": []
+        }
+      ],
+      "outputType": "Result.Success",
+      "output": {
+        "data": {
+          "approvals": [
+            "privateWithoutSchemaId_rawApproval.json"
+          ]
+        }
+      }
+    },
+    {
+      "func": "sendApprovals",
+      "args": [
+        {
+          "approvals": [],
+          "rawApprovals": [
+            "privateWithoutSchemaId_rawApproval.json"
+          ],
+          "transformedApprovals": [
+            "privateWithoutSchemaId_transformedApproval.json"
+          ]
+        },
+        {}
+      ],
+      "output": {}
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "taskId",
+        {
+          "status": "Success",
+          "meta": {}
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

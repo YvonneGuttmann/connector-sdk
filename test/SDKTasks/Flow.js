@@ -9,7 +9,7 @@ module.exports = class Flow {
         this.name = data.flowName;
         this.title = data.title;
         this.task = data.task;
-        this.taskData = data.taskData;
+            this.taskData = data.taskData;
         this.steps = data.steps || [];
         this.config = data.config || {};
         if(!this.config.blConfig) this.config.blConfig = {};
@@ -62,6 +62,10 @@ module.exports = class Flow {
 				}
 			}
 		}
+
+		if (step.updateState && args[0].state){
+		    Object.assign(args[0].state, step.updateState);
+        }
 
         if(step.exception) throw step.exception;
         if(step.outputType && step.outputType.indexOf('Result.') !== -1) {

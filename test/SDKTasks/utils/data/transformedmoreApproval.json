@@ -1,0 +1,18 @@
+{
+  "schemaId": "schemaId",
+  "public": {
+    "name": "approval title"
+  },
+  "private": {
+    "id": 14125,
+    "approver": "david"
+  },
+  "metadata": {
+    "fingerprints": {
+      "sync": "0cd32f799cc6104b6a886d0ae58b9821f5b23c4b"
+    },
+    "taskId": "taskId"
+  },
+  "systemUserId": "david",
+  "systemApprovalId": 14125
+}

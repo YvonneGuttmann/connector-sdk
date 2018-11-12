@@ -1,0 +1,47 @@
+{
+  "title": "Sync approvals: 1 from backend, result status - AuthenticationError",
+  "task": "sync",
+  "taskData": {
+    "type": "sync",
+    "id": "sync-fail"
+  },
+  "steps": [
+    {
+      "func": "getBackendApprovals",
+      "args": [
+        {}
+      ],
+      "output": [
+        "caprizaApproval.json"
+      ]
+    },
+    {
+      "func": "fetch",
+      "args": [
+        {
+          "signatureList": [
+            "caprizaApproval.json"
+          ]
+        }
+      ],
+      "outputType": "Result.AuthenticationError",
+      "output": {
+        "data": {
+          "approvals": []
+        }
+      }
+    },
+
+    {
+      "func": "updateTask",
+      "args": [
+        "sync-fail",
+        {
+          "status": "AuthenticationError",
+          "meta": {"taskType":"sync"}
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

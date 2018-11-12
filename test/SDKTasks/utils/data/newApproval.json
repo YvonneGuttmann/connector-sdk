@@ -1,0 +1,16 @@
+{
+  "id": "approvalId",
+  "syncver": 243144,
+  "systemUserId": "eliran",
+  "systemApprovalId": 14126,
+  "metadata": {
+    "fingerprints": {
+      "sync": "b9832e63ae20483a68d25fa1b3d7b013d37dfe31"
+    },
+    "taskId": "taskId"
+  },
+  "private": {
+    "id": 14126,
+    "approver": "eliran"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "schemaId": "schemaId",
+  "public": {
+    "name": "approval title"
+  },
+  "private": {
+    "approver": "ee"
+  },
+  "error": "Exception with transforming approval: Invalid approval: missing schemaId or private data"
+}

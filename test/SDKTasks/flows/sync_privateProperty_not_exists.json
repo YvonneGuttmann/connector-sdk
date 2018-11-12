@@ -1,0 +1,62 @@
+{
+  "title": "Sync approval but private property not exists",
+  "task": "sync",
+  "taskData": {
+    "type": "sync",
+    "id": "taskId"
+  },
+  "steps": [
+    {
+      "func": "getBackendApprovals",
+      "args": [
+        {}
+      ],
+      "output": [
+      ]
+    },
+    {
+      "func": "fetch",
+      "args": [
+        {
+          "signatureList": [
+          ]
+        }
+      ],
+      "outputType": "Result.Success",
+      "output": {
+        "data": {
+          "approvals": [
+            "private_rawApproval.json"
+          ]
+        }
+      }
+    },
+    {
+      "func": "sendApprovals",
+      "args": [
+        {
+          "approvals": [],
+          "rawApprovals": [
+            "private_rawApproval.json"
+          ],
+          "transformedApprovals": [
+            "private_transformedApproval.json"
+          ]
+        },
+        {}
+      ],
+      "output": {}
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "taskId",
+        {
+          "status": "Success",
+          "meta": {}
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

@@ -4,7 +4,8 @@
   "systemUserId": "yehuda",
   "systemApprovalId": 14124,
   "metadata": {
-    "fingerprints": {
+    "fingerprints":
+    {
       "sync": "b9832e63ae20483a68d25fa1b3d7b013d37dfe30"
     },
     "taskId": "taskId"

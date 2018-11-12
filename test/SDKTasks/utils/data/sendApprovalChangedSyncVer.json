@@ -1,9 +1,9 @@
 {
-  "id":"approvalId",
-  "syncver":243143,
+  "id": "approvalId",
+  "syncver": 243143,
   "systemUserId": "yehuda",
   "systemApprovalId": 14124,
-  "metadata":{
+  "metadata": {
     "fingerprints":
     {
       "sync":"d0f296a26f6bfe74ff2423154dbd5fa4f076bdd5"

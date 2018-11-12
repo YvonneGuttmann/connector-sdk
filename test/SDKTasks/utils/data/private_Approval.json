@@ -1,0 +1,17 @@
+{
+  "id": "approvalId",
+  "syncver": 2,
+  "systemUserId": "tomer",
+  "systemApprovalId": 14141,
+  "metadata": {
+    "fingerprints":
+    {
+      "sync": "465c3b539dbcfd6e4fc98f73d325821e78ac0d6d"
+    },
+    "taskId": "taskId"
+  },
+  "private": {
+    "id": 14141,
+    "approver": "tomer"
+  }
+}
