@@ -7,7 +7,7 @@
 		"volatile": {
 			"system": {
 				"username": "yehuda.livnoni",
-				"pasword": "123456"
+				"password": "123456"
 			}
 		}
 	},
@@ -17,7 +17,7 @@
 			"args": [
 				{
 					"username": "yehuda.livnoni",
-					"pasword": "123456"
+					"password": "123456"
 				}
 			],
 			"outputType": "Result.Success",
