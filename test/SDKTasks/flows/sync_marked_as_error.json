@@ -1,0 +1,62 @@
+{
+  "title": "Sync - approval marked as error",
+  "task": "sync",
+  "taskData": {
+    "type": "sync",
+    "id": "sync-error"
+  },
+  "steps": [
+    {
+      "func": "getBackendApprovals",
+      "args": [
+        {}
+      ],
+      "output": [
+        "caprizaApproval.json"
+        ]
+    },
+    {
+      "func": "fetch",
+      "args": [
+        {
+          "signatureList": [
+            "caprizaApproval.json"
+          ]
+        }
+      ],
+      "output": {
+        "approvals": [
+          "errorApproval.json"
+        ]
+      }
+    },
+    {
+      "func": "sendApprovals",
+      "args": [
+        {
+          "approvals": [
+
+          ],
+          "rawApprovals": [
+            "errorApproval.json"
+          ],
+          "transformedApprovals": [
+            "errorApproval.json"
+          ]
+        }
+      ],
+      "output": null
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "sync-error",
+        {
+          "status": "Success",
+          "meta": {}
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

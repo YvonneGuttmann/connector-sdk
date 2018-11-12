@@ -1,0 +1,62 @@
+{
+  "title": "Sync - approval marked as deleted",
+  "task": "sync",
+  "taskData": {
+    "type": "sync",
+    "id": "sync-deleted"
+  },
+  "steps": [
+    {
+      "func": "getBackendApprovals",
+      "args": [
+        {}
+      ],
+      "output": [
+        "caprizaApproval.json"
+      ]
+    },
+    {
+      "func": "fetch",
+      "args": [
+        {
+          "signatureList": [
+            "caprizaApproval.json"
+          ]
+        }
+      ],
+      "output": {
+        "approvals": [
+          "deletedApproval.json"
+        ]
+      }
+    },
+    {
+      "func": "sendApprovals",
+      "args": [
+        {
+          "approvals": [
+            "deletedApproval.json"
+          ],
+          "rawApprovals": [
+            "deletedApproval.json"
+          ],
+          "transformedApprovals": [
+            "deletedApproval.json"
+          ]
+        }
+      ],
+      "output": null
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "sync-deleted",
+        {
+          "status": "Success",
+          "meta": {}
+        }
+      ],
+      "output": {}
+    }
+  ]
+}
