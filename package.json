@@ -1,6 +1,6 @@
 {
   "name": "@capriza/connector-controller",
-  "version": "2.0.19",
+  "version": "2.0.20",
   "description": "Capriza connectors controller",
   "license": "MIT",
   "main": "index.js",
