@@ -1,0 +1,66 @@
+{
+  "title": "mappedUsers exist in fetch function",
+  "task": "sync",
+  "taskData": {
+    "type": "sync",
+    "id": "taskId",
+    "mappedUsers" : ["a","b","c","d"]
+  },
+  "steps": [
+    {
+      "func": "getBackendApprovals",
+      "args": [
+        {}
+      ],
+      "output": [
+        "caprizaApproval.json"
+      ]
+    },
+    {
+      "func": "fetch",
+      "args": [
+        {
+          "signatureList": [
+            "caprizaApproval.json"
+          ],
+          "mappedUsers" : ["a","b","c","d"]
+        }
+      ],
+      "outputType": "Result.Success",
+      "output": {
+        "data": {
+          "approvals": [
+            "rawApproval.json"
+          ]
+        }
+      }
+    },
+    {
+      "func": "sendApprovals",
+      "args": [
+        {
+          "approvals": [],
+          "rawApprovals": [
+            "rawApproval.json"
+          ],
+          "transformedApprovals": [
+            "transformedApproval.json"
+          ]
+        },
+        {}
+      ],
+      "output": {}
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "taskId",
+        {
+          "status": "Success",
+          "meta": {}
+        }
+      ],
+      "output": {}
+    }
+  ]
+}
