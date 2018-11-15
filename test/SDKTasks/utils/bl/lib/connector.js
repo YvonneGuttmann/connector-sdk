@@ -25,5 +25,8 @@ class BLClass {
 
     downloadAttachment(data) { return this.flow.exec('downloadAttachment', arguments); }
 
+    mapUserIds(data) { return this.flow.exec('mapUserIds', arguments); }
+
+    sendFeedback(data) { return this.flow.exec('sendFeedback', arguments); }
 }
 module.exports = BLClass;

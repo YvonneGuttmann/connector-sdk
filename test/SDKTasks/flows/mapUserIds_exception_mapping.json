@@ -1,0 +1,39 @@
+{
+  "title": "Mapping users : throw exception in the BL",
+  "task": "mapUserIds",
+  "taskData": {
+    "payload": {
+      "ids": [
+        "yehuda","ron"
+      ]
+    },
+    "type": "mapUserIds",
+    "id": "taskId"
+  },
+  "steps": [
+    {
+      "func": "mapUserIds",
+      "args": [
+        {
+          "ids": [
+          "yehuda","ron"
+        ]
+        }
+      ],
+      "exception": "error at the BL"
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "taskId",
+        {
+          "status": "InternalError",
+          "meta": {"entity":"task",
+          "taskType":"mapUserIds",
+          "message":"Unexpected error: \"error at the BL\""}
+          }
+      ],
+      "output": {}
+    }
+  ]
+}

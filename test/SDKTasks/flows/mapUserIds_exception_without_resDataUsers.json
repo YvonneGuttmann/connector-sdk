@@ -1,0 +1,35 @@
+{
+  "title": "Mapping users : res.data.users doesnt exsist",
+  "task": "mapUserIds",
+  "taskData": {
+    "payload": {},
+    "type": "mapUserIds",
+    "id": "taskId"
+  },
+  "steps": [
+    {
+      "func": "mapUserIds",
+      "args": [
+        {}
+      ],
+      "outputType": "Result.Success",
+      "output": {}
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "taskId",
+        {
+          "status": "BadArguments",
+          "meta":
+          {
+            "entity":"task",
+            "taskType":"mapUserIds",
+            "message":"Failed to perform mapUserIds - there is no users property in BL result or not an array!"
+          }
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

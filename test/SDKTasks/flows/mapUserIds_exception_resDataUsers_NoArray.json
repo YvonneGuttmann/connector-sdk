@@ -1,0 +1,51 @@
+{
+  "title": "Mapping users : res.data.users instanceof Array doesnt exsist",
+  "task": "mapUserIds",
+  "taskData": {
+    "payload": {
+      "ids": [
+        "yehuda","ron"
+      ]
+    },
+    "type": "mapUserIds",
+    "id": "taskId"
+  },
+  "steps": [
+    {
+      "func": "mapUserIds",
+      "args": [
+        { "ids": [
+          "yehuda","ron"
+        ]
+        }
+      ],
+      "outputType": "Result.Success",
+      "output": {
+        "data": {
+          "users":
+          {
+            "id": "yehuda",
+            "email": "yehuda@capriza.com"
+          }
+        }
+      }
+    },
+
+    {
+      "func": "updateTask",
+      "args": [
+        "taskId",
+        {
+          "status": "BadArguments",
+          "meta":
+          {
+            "entity":"task",
+            "taskType":"mapUserIds",
+            "message":"Failed to perform mapUserIds - there is no users property in BL result or not an array!"
+          }
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

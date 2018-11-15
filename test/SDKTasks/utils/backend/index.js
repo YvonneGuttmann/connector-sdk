@@ -33,7 +33,7 @@ var TestAPI = module.exports = class TestAPI {
 	}
 
 	async sendUserIds(data) {
-
+        return this.flow.exec('sendUserIds', arguments);
 	}
 
     async sendFeedback() {
