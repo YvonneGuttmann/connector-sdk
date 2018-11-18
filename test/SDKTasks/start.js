@@ -13,10 +13,10 @@ const assert = require('assert');
 var testsFlowsErrors = [];
 var TestAnalyzer = require("./utils/junitBuilder.js");
 var testAnalyzer = new TestAnalyzer('flow-test-report.xml');
+var ignoreFuncs;
 
 async function runTestFlow(flowData) {
-
-    var flow = new Flow(flowData);
+    var flow = new Flow(flowData, { ignoreFuncs });
     console.log(flow.getPreRunString());
     await Connector.init({
             config: flow.config,
@@ -35,8 +35,9 @@ async function runTestFlow(flowData) {
     } catch (ex) {
 
     }
-
+	
     postProcess(flow);
+	return flow;
 }
 
 function createTaskClasses(config, backendFactory) {
@@ -52,19 +53,16 @@ function createTaskClasses(config, backendFactory) {
 function postProcess(flow) {
     testAnalyzer.addJunitSuite(`[Total ${flow.steps.length} steps] ${flow.title}`, flow.output);
 
-    var error;
-    if (flow.hasError()) {
-        error = `${JSON.stringify(flow.hasError())}`;
-    } else if (!flow.isFinished()) {
-        error = `Steps are still exists in the flow ${JSON.stringify(flow.getPendingSteps())}`;
+    var error = flow.hasError();
+    if (!error && !flow.isFinished()) {
+        error = `Steps still exist in the flow ${JSON.stringify(flow.getPendingSteps())}`;
     }
 
     if (error) {
-        console.log(chalk.red(`Error in test flow: ${error}`));
-        console.log(chalk.red(`Test flow status: failed`));
+        console.log("Test status: " + chalk.red(`FAILED (step #${error && error.stepNumber})`));
         testsFlowsErrors.push({ message: error });
     } else {
-        console.log(chalk.green(`Test flow status: succeeded`));
+        console.log("Test status: " + chalk.green(`PASSED`));
     }
 
     for(var key in require.cache) {
@@ -74,14 +72,37 @@ function postProcess(flow) {
 
 }
 
-
 async function start() {
+	const argsDef = {
+		"--ignore"	: 1,
+		"--fix"		: 0
+	};
+	
+	const args = {};
+	for (let i = 2; i < process.argv.length; ++i) {
+		let arg = process.argv[i];
+		if (argsDef.hasOwnProperty(arg))
+			args[arg] = argsDef[arg] ? process.argv[++i] : true;
+		else {
+			console.error(`Unknown option: ${arg}`);
+			process.exit();
+			return;
+		}			
+	}
+	
+	ignoreFuncs = args["--ignore"] && args["--ignore"].split(",");
+	
     const flows = fs.readdirSync(path.join(__dirname,'./flows/'));
 
     var enableTests = flows
         .map( f => {
-            return Object.assign(require(path.join(__dirname,'./flows/' + f)), {flowName: f.split(".json")[0]})})
-        .filter( f => !f.disable);
+            return {
+				name	 : f.split(".json")[0],
+				data	 : require(path.join(__dirname, "flows", f)),
+				filename : path.join(__dirname, "flows", f) 
+			};
+		})
+        .filter( f => !f.data.disable);
 
     console.log(chalk.yellow(`Total tests flows: ${flows.length}`));
     console.log(chalk.yellow(`Total enabled tests flows: ${enableTests.length}`));
@@ -89,14 +110,18 @@ async function start() {
     console.log(chalk.yellow(`Running tests flows`));
 
     for (var i = 0 ; i < enableTests.length ; i++) {
-        console.log(chalk.yellow(`Running test flow #${i + 1}: ${enableTests[i].flowName}`));
-        await runTestFlow(enableTests[i], i);
-        console.log(chalk.yellow(`finished test flow #${i + 1}`));
-        console.log(chalk.yellow(`------------------------------------------------`));
+        console.log("\n" + chalk.yellow(`Running test #${i + 1}: ${enableTests[i].name}`));
+        let flow = await runTestFlow(enableTests[i].data, i);
+		if (flow.ignoredError) {
+			if (args["--fix"]) {
+				console.log("Fixing...");
+				fs.writeFileSync(enableTests[i].filename, JSON.stringify(flow._origData, null, "\t"));
+			}
+		}
+		
     }
 
     testAnalyzer.writeReport();
-
 }
 
 (async function runTests() {
@@ -105,7 +130,7 @@ async function start() {
         console.log(chalk.green(`Done`));
     } else {
         console.log(chalk.red(`Done with ${testsFlowsErrors.length} errors`));
-        console.log(chalk.red(`Errors: \n${JSON.stringify(testsFlowsErrors)}`));
+//        console.log(chalk.red(`Errors: \n${JSON.stringify(testsFlowsErrors)}`));
     }
     process.exit(0);
 

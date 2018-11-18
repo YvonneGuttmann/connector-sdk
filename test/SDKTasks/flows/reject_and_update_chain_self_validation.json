@@ -70,7 +70,8 @@
 					"status": "Success",
 					"meta": {
 						"miniSyncStatus": "Success",
-						"entity": "approval"
+						"entity": "approval",
+						"taskType": "reject"
 					}
 				}
 			],

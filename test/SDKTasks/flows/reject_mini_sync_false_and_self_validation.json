@@ -56,7 +56,8 @@
 				{
 					"status": "Success",
 					"meta": {
-						"entity": "approval"
+						"entity": "approval",
+						"taskType": "reject"
 					}
 				}
 			],

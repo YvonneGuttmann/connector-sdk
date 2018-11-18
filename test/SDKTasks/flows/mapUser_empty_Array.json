@@ -1,41 +1,46 @@
 {
-  "title": "Mapping users : sending empty array",
-  "task": "mapUserIds",
-  "taskData": {
-    "payload": {
-      "ids": [
-        "yehuda","ron"
-      ]
-    },
-    "type": "mapUserIds",
-    "id": "taskId"
-  },
-  "steps": [
-    {
-      "func": "mapUserIds",
-      "args": [
-        { "ids": [
-          "yehuda","ron"
-        ]
-        }
-      ],
-      "outputType": "Result.Success",
-      "output": {
-        "data": {
-          "users": []
-        }
-      }
-    },
-    {
-      "func": "updateTask",
-      "args": [
-        "taskId",
-        {
-          "status": "Success",
-          "meta": {}
-        }
-      ],
-      "output": {}
-    }
-  ]
+	"title": "Mapping users : sending empty array",
+	"task": "mapUserIds",
+	"taskData": {
+		"payload": {
+			"ids": [
+				"yehuda",
+				"ron"
+			]
+		},
+		"type": "mapUserIds",
+		"id": "taskId"
+	},
+	"steps": [
+		{
+			"func": "mapUserIds",
+			"args": [
+				{
+					"ids": [
+						"yehuda",
+						"ron"
+					]
+				}
+			],
+			"outputType": "Result.Success",
+			"output": {
+				"data": {
+					"users": []
+				}
+			}
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"taskId",
+				{
+					"status": "Success",
+					"meta": {
+						"taskType": "mapUserIds"
+					}
+				}
+			],
+			"output": {}
+		}
+	]
 }

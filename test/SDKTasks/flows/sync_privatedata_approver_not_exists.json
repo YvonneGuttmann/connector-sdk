@@ -1,60 +1,62 @@
 {
-  "title": "Sync approval but approver property not exists",
-  "task": "sync",
-  "taskData": {
-    "type": "sync",
-    "id": "taskId"
-  },
-  "steps": [
-    {
-      "func": "getBackendApprovals",
-      "args": [
-        {}
-      ],
-      "output": []
-    },
-    {
-      "func": "fetch",
-      "args": [
-        {
-          "signatureList": []
-        }
-      ],
-      "outputType": "Result.Success",
-      "output": {
-        "data": {
-          "approvals": [
-            "privateWithoutApprover_rawApproval.json"
-          ]
-        }
-      }
-    },
-    {
-      "func": "sendApprovals",
-      "args": [
-        {
-          "approvals": [],
-          "rawApprovals": [
-           "privateWithoutApprover_rawApproval.json"
-          ],
-          "transformedApprovals": [
-            "privateWithoutApprover_transformedApproval.json"
-          ]
-        },
-        {}
-      ],
-      "output": {}
-    },
-    {
-      "func": "updateTask",
-      "args": [
-        "taskId",
-        {
-          "status": "Success",
-          "meta": {}
-        }
-      ],
-      "output": {}
-    }
-  ]
+	"title": "Sync approval but approver property not exists",
+	"task": "sync",
+	"taskData": {
+		"type": "sync",
+		"id": "taskId"
+	},
+	"steps": [
+		{
+			"func": "getBackendApprovals",
+			"args": [
+				{}
+			],
+			"output": []
+		},
+		{
+			"func": "fetch",
+			"args": [
+				{
+					"signatureList": []
+				}
+			],
+			"outputType": "Result.Success",
+			"output": {
+				"data": {
+					"approvals": [
+						"privateWithoutApprover_rawApproval.json"
+					]
+				}
+			}
+		},
+		{
+			"func": "sendApprovals",
+			"args": [
+				{
+					"approvals": [],
+					"rawApprovals": [
+						"privateWithoutApprover_rawApproval.json"
+					],
+					"transformedApprovals": [
+						"privateWithoutApprover_transformedApproval.json"
+					]
+				},
+				{}
+			],
+			"output": {}
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"taskId",
+				{
+					"status": "Success",
+					"meta": {
+						"taskType": "sync"
+					}
+				}
+			],
+			"output": {}
+		}
+	]
 }

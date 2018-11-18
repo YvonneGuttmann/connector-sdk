@@ -1,66 +1,71 @@
 {
-  "title": "Mapping users : for each id should fit to ids and email",
-  "task": "mapUserIds",
-  "taskData": {
-  "payload": {
-    "ids": [
-        "yehuda","ron"
-      ]
-  },
-    "type": "mapUserIds",
-    "id": "taskId"
-  },
-  "steps": [
-    {
-      "func": "mapUserIds",
-      "args": [
-        { "ids": [
-          "yehuda","ron"
-        ]
-        }
-      ],
-      "outputType": "Result.Success",
-      "output": {
-        "data": {
-          "users": [
-            {
-            "id": "yehuda",
-            "email": "yehuda@capriza.com"
-          },
-            {
-              "id": "ron",
-              "email": "ron@capriza.com"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "func": "sendUserIds",
-      "args": [
-          [
-            {
-            "id": "yehuda",
-            "email" :"yehuda@capriza.com"
-          },
-            {
-              "id": "ron",
-              "email": "ron@capriza.com"
-            }
-          ]
-      ],
-      "output": {}
-    },
-    {
-      "func": "updateTask",
-      "args": [
-        "taskId",
-        {
-          "status": "Success",
-          "meta": {}
-        }
-      ],
-      "output": {}
-    }
-  ]
+	"title": "Mapping users : for each id should fit to ids and email",
+	"task": "mapUserIds",
+	"taskData": {
+		"payload": {
+			"ids": [
+				"yehuda",
+				"ron"
+			]
+		},
+		"type": "mapUserIds",
+		"id": "taskId"
+	},
+	"steps": [
+		{
+			"func": "mapUserIds",
+			"args": [
+				{
+					"ids": [
+						"yehuda",
+						"ron"
+					]
+				}
+			],
+			"outputType": "Result.Success",
+			"output": {
+				"data": {
+					"users": [
+						{
+							"id": "yehuda",
+							"email": "yehuda@capriza.com"
+						},
+						{
+							"id": "ron",
+							"email": "ron@capriza.com"
+						}
+					]
+				}
+			}
+		},
+		{
+			"func": "sendUserIds",
+			"args": [
+				[
+					{
+						"id": "yehuda",
+						"email": "yehuda@capriza.com"
+					},
+					{
+						"id": "ron",
+						"email": "ron@capriza.com"
+					}
+				]
+			],
+			"output": {}
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"taskId",
+				{
+					"status": "Success",
+					"meta": {
+						"taskType": "mapUserIds"
+					}
+				}
+			],
+			"output": {}
+		}
+	]
 }

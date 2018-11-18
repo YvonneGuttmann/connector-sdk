@@ -3,8 +3,10 @@ const chalk = require ("chalk");
 const Result = require('../../lib/Result');
 
 module.exports = class Flow {
-    constructor(data) {
+    constructor(data, props = {}) {
         this.verifySteps(data.steps);
+		this._origData = data;
+		data = JSON.parse(JSON.stringify(data));
         parseData(data);
         this.name = data.flowName;
         this.title = data.title;
@@ -16,6 +18,8 @@ module.exports = class Flow {
         if(!this.config.controllerConfig) this.config.controllerConfig = {};
         this.counter = 0;
         this.output = [];
+		this.props = props || {};
+		this._ignoreFuncs = props.ignoreFuncs || [];
     }
 
     verifySteps(step) {
@@ -53,10 +57,18 @@ module.exports = class Flow {
 		if (step.args) {
 			for (var i = 0; i < step.args.length; ++i) {
 				if (JSON.stringify(step.args[i]) != stringify(args[i])) {
-					console.log(`Mismatch in argument ${i}:`);
-					console.log("expected=\n" + JSON.stringify(step.args[i]));
-					console.log("actual=\n" + stringify(args[i]));
-                    let message = `Function ${funcName}.\nActual arguments:\n${stringify(args)}.\nExpected arguments: \n${JSON.stringify(step.args)}`;
+					if (this._ignoreFuncs.includes(funcName)) {
+						this._origData.steps[this.counter - 1].args = [...args];
+						this.ignoredError = true;
+						break;
+					}
+										
+                    let message = `
+
+Function   : ${funcName}
+Argument   : ${i + 1},
+Actual     : ${stringify(args[i])}
+Expected   : ${JSON.stringify(step.args[i])}`;
                     this._updateError(stepOutput, this.counter, message);
 					break;
 				}
@@ -139,7 +151,7 @@ module.exports = class Flow {
     }
 
     getPreRunString() {
-        return chalk.yellow(`Title: ${this.title}`) + '\n' + chalk.yellow(`Number of steps: ${this.steps.length}`);
+        return chalk.yellow(`Title: ${this.title} (${this.steps.length} steps)`);
     }
 
 };

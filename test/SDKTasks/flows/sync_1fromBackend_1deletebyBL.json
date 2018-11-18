@@ -1,62 +1,62 @@
 {
-  "title": "Syncing approvals: 1 from backend, delete 1 by  BL",
-  "task": "sync",
-  "taskData": {
-    "type": "sync",
-    "id": "taskId"
-  },
-  "steps": [
-    {
-      "func": "getBackendApprovals",
-      "args": [
-        {}
-      ],
-      "output": [
-        "caprizaApproval.json"
-      ]
-    },
-    {
-      "func": "fetch",
-      "args": [
-        {
-          "signatureList": [
-            "caprizaApproval.json"
-          ]
-        }
-      ],
-      "outputType": "Result.Success",
-      "output": {
-        "data": {
-          "approvals": []
-        }
-      }
-    },
-    {
-      "func": "sendApprovals",
-      "args": [
-        {
-          "approvals": [
-           "deletedApproval.json"
-          ],
-          "rawApprovals": [
-          ],
-          "transformedApprovals": [
-          ]
-        },
-        {}
-      ],
-      "output": {}
-    },
-    {
-      "func": "updateTask",
-      "args": [
-        "taskId",
-        {
-          "status": "Success",
-          "meta": {}
-        }
-      ],
-      "output": {}
-    }
-  ]
+	"title": "Syncing approvals: 1 from backend, delete 1 by  BL",
+	"task": "sync",
+	"taskData": {
+		"type": "sync",
+		"id": "taskId"
+	},
+	"steps": [
+		{
+			"func": "getBackendApprovals",
+			"args": [
+				{}
+			],
+			"output": [
+				"caprizaApproval.json"
+			]
+		},
+		{
+			"func": "fetch",
+			"args": [
+				{
+					"signatureList": [
+						"caprizaApproval.json"
+					]
+				}
+			],
+			"outputType": "Result.Success",
+			"output": {
+				"data": {
+					"approvals": []
+				}
+			}
+		},
+		{
+			"func": "sendApprovals",
+			"args": [
+				{
+					"approvals": [
+						"deletedApproval.json"
+					],
+					"rawApprovals": [],
+					"transformedApprovals": []
+				},
+				{}
+			],
+			"output": {}
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"taskId",
+				{
+					"status": "Success",
+					"meta": {
+						"taskType": "sync"
+					}
+				}
+			],
+			"output": {}
+		}
+	]
 }

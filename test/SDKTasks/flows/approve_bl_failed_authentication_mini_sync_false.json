@@ -51,7 +51,8 @@
 				{
 					"status": "AuthenticationError",
 					"meta": {
-						"entity": "approval"
+						"entity": "approval",
+						"taskType": "approve"
 					}
 				}
 			],

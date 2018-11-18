@@ -30,8 +30,8 @@
 					"status": "NotImplemented",
 					"meta": {
 						"entity": "task",
-						"taskType": "action$forward",
-						"message": "action$forward was not implemented in the BL"
+						"message": "action$forward was not implemented in the BL",
+						"taskType": "action$forward"
 					}
 				}
 			],

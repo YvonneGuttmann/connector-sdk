@@ -54,7 +54,9 @@
 				"sync-update",
 				{
 					"status": "Success",
-					"meta": {}
+					"meta": {
+						"taskType": "sync"
+					}
 				}
 			],
 			"output": {}

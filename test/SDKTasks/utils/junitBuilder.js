@@ -7,7 +7,7 @@ module.exports =  class TestAnalyzer{
     }
 
     addJunitSuite(testSuiteName, testOutput){
-        console.log(`export junit test: ${testSuiteName}`);
+        //console.log(`export junit test: ${testSuiteName}`);
         var suite = builder.testSuite().name(testSuiteName);
         for(var i =0; i<testOutput.length; i++){
             if(testOutput[i].failure.status){

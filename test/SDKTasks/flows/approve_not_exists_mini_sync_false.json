@@ -48,7 +48,8 @@
 				{
 					"status": "NotFound",
 					"meta": {
-						"entity": "approval"
+						"entity": "approval",
+						"taskType": "approve"
 					}
 				}
 			],

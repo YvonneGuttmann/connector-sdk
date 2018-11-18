@@ -68,7 +68,8 @@
 				{
 					"status": "Success",
 					"meta": {
-						"entity": "attachment"
+						"entity": "attachment",
+						"taskType": "getAttachment"
 					}
 				}
 			]

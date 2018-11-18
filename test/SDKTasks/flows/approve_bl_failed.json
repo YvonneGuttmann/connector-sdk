@@ -45,9 +45,9 @@
 				{
 					"status": "InternalError",
 					"meta": {
-						"entity": "task",
-						"taskType": "approve",
-						"message": "Unexpected error: \"CONNECTOR_ERROR\""
+						"entity": "sdk",
+						"message": "Unexpected error: \"CONNECTOR_ERROR\"",
+						"taskType": "approve"
 					}
 				}
 			],

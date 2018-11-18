@@ -1,67 +1,78 @@
 {
-  "title": "Data transformation checking if connector state was not updated by connector BL",
-  "task": "sync",
-  "taskData": {
-    "type": "sync",
-    "id": "taskId",
-    "state" :  { "state": { "data" : "10UTC"} }
-  },
-  "steps": [
-    {
-      "func": "getBackendApprovals",
-      "args": [
-        {}
-      ],
-      "output": [
-        "caprizaApproval.json"
-      ]
-    },
-    {
-      "func": "fetch",
-      "args": [
-        {
-          "signatureList": [
-            "caprizaApproval.json"
-          ],
-        "state" : { "data" : "10UTC"}
-        }
-      ],
-      "updateState" : { "data" : "11UTC", "update" : false },
-      "outputType": "Result.Success",
-      "output": {
-        "data": {
-          "approvals": [
-              "rawApproval.json"
-          ]
-        }
-      }
-    },
-    {
-      "func": "sendApprovals",
-      "args": [
-        {
-          "approvals": [],
-          "rawApprovals": [
-            "rawApproval.json"
-          ],
-          "transformedApprovals": [
-            "transformedApproval.json"
-          ]
-        },
-        {}
-      ],
-      "output": {}
-    },
-    {
-      "func": "updateTask",
-      "args": [
-        "taskId",
-        {
-          "status": "Success",
-          "meta": {}
-        }
-      ],
-      "output": {}
-    }
-  ]
+	"title": "Data transformation checking if connector state was not updated by connector BL",
+	"task": "sync",
+	"taskData": {
+		"type": "sync",
+		"id": "taskId",
+		"state": {
+			"state": {
+				"data": "10UTC"
+			}
+		}
+	},
+	"steps": [
+		{
+			"func": "getBackendApprovals",
+			"args": [
+				{}
+			],
+			"output": [
+				"caprizaApproval.json"
+			]
+		},
+		{
+			"func": "fetch",
+			"args": [
+				{
+					"signatureList": [
+						"caprizaApproval.json"
+					],
+					"state": {
+						"data": "10UTC"
+					}
+				}
+			],
+			"updateState": {
+				"data": "11UTC",
+				"update": false
+			},
+			"outputType": "Result.Success",
+			"output": {
+				"data": {
+					"approvals": [
+						"rawApproval.json"
+					]
+				}
+			}
+		},
+		{
+			"func": "sendApprovals",
+			"args": [
+				{
+					"approvals": [],
+					"rawApprovals": [
+						"rawApproval.json"
+					],
+					"transformedApprovals": [
+						"transformedApproval.json"
+					]
+				},
+				{}
+			],
+			"output": {}
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"taskId",
+				{
+					"status": "Success",
+					"meta": {
+						"taskType": "sync"
+					}
+				}
+			],
+			"output": {}
+		}
+	]
 }

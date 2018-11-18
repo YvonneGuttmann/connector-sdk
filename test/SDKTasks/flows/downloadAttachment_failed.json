@@ -54,9 +54,9 @@
 				{
 					"status": "InternalError",
 					"meta": {
-						"entity": "task",
-						"taskType": "getAttachment",
-						"message": "Unexpected error: \"CONNECTOR_ERROR\""
+						"entity": "sdk",
+						"message": "Unexpected error: \"CONNECTOR_ERROR\"",
+						"taskType": "getAttachment"
 					}
 				}
 			]

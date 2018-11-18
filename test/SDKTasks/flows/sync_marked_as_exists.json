@@ -1,61 +1,62 @@
 {
-  "title": "Sync - approval marked as exists",
-  "task": "sync",
-  "taskData": {
-    "type": "sync",
-    "id": "sync-exists"
-  },
-  "steps": [
-    {
-      "func": "getBackendApprovals",
-      "args": [
-        {}
-      ],
-      "output": [
-        "caprizaApproval.json"
-      ]
-    },
-    {
-      "func": "fetch",
-      "args": [
-        {
-          "signatureList": [
-            "caprizaApproval.json"
-          ]
-        }
-      ],
-      "output": {
-        "approvals": [
-          "existsApproval.json"
-        ]
-      }
-    },
-    {
-      "func": "sendApprovals",
-      "args": [
-        {
-          "approvals": [
-          ],
-          "rawApprovals": [
-            "existsApproval.json"
-          ],
-          "transformedApprovals": [
-            "existsApproval.json"
-          ]
-        }
-      ],
-      "output": null
-    },
-    {
-      "func": "updateTask",
-      "args": [
-        "sync-exists",
-        {
-          "status": "Success",
-          "meta": {}
-        }
-      ],
-      "output": {}
-    }
-  ]
+	"title": "Sync - approval marked as exists",
+	"task": "sync",
+	"taskData": {
+		"type": "sync",
+		"id": "sync-exists"
+	},
+	"steps": [
+		{
+			"func": "getBackendApprovals",
+			"args": [
+				{}
+			],
+			"output": [
+				"caprizaApproval.json"
+			]
+		},
+		{
+			"func": "fetch",
+			"args": [
+				{
+					"signatureList": [
+						"caprizaApproval.json"
+					]
+				}
+			],
+			"output": {
+				"approvals": [
+					"existsApproval.json"
+				]
+			}
+		},
+		{
+			"func": "sendApprovals",
+			"args": [
+				{
+					"approvals": [],
+					"rawApprovals": [
+						"existsApproval.json"
+					],
+					"transformedApprovals": [
+						"existsApproval.json"
+					]
+				}
+			],
+			"output": null
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"sync-exists",
+				{
+					"status": "Success",
+					"meta": {
+						"taskType": "sync"
+					}
+				}
+			],
+			"output": {}
+		}
+	]
 }

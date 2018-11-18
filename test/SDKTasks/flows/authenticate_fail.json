@@ -36,7 +36,8 @@
 					"status": "Success",
 					"meta": {
 						"entity": "user",
-						"authenticated": false
+						"authenticated": false,
+						"taskType": "authenticate"
 					}
 				}
 			],

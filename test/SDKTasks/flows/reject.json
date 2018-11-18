@@ -69,7 +69,8 @@
 					"status": "Success",
 					"meta": {
 						"miniSyncStatus": "NotFound",
-						"entity": "approval"
+						"entity": "approval",
+						"taskType": "reject"
 					}
 				}
 			],
