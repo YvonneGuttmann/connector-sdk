@@ -1,18 +1,19 @@
 {
   "name": "@capriza/connector-controller",
-  "version": "2.0.26",
+  "version": "2.0.27",
   "description": "Capriza connectors controller",
   "license": "MIT",
   "main": "index.js",
   "files": [
     "lib",
     "outpost",
+    "bin",
     "test",
     "index.js",
     "start.js"
   ],
   "bin": {
-    "as-cli": "bin/as-cli"
+    "as-cli": "./bin/as-cli"
   },
   "scripts": {
     "sdkTest": "node test/SDKTasks/start.js",
