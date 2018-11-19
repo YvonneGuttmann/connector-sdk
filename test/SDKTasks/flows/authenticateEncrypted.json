@@ -1,0 +1,60 @@
+{
+	"title": "make authenticate encrypted",
+	"task": "authenticate",
+	"taskData": {
+		"type": "authenticate",
+		"id": "authenticate-0",
+		"volatile": {
+			"system": {
+				"data": "CMIi21hE3CpbjudtxTkpU81TdCdD7FKquTj/wqEZloVyVtbx2SQCrLukmJSeR1f1",
+				"appPublic": "030ca6750c881eb4afedef12de9d01be61952ef8581efe3b0dd16aa63fe92d77f7",
+				"connPublic": "026d59ac26b38969a6e62519ff0a9ae289cd2c568d43d0d5e8562fdfe182369fa8",
+				"iv": "OlrMWyh6n0b6csQj+fshvQ=="
+			}
+		}
+	},
+	"config": {
+		"caprizaConfig": {
+			"apiUrl": "https://api.approvesimpledev.com/v1",
+			"connectorId": "4f5a8290-35e4-4072-a940-2644dfb8ec50",
+			"creds": {
+				"apiKey": "60b5c5514d42d38e16df37d00dc04c1b",
+				"apiSecret": "8c26f346ed7ad913b39db2cb988bc6c555aceffb48b02fc1c2be0a729fbb50c7"
+			},
+			"crypto": {
+				"daysExpiration": 30,
+				"privateKey": "b5b7b29348f6c590b473815e5d4e00f4bcb597c4cce9d9242aaf0a0d5c3b1a3f",
+				"publicKey": "026d59ac26b38969a6e62519ff0a9ae289cd2c568d43d0d5e8562fdfe182369fa8"
+			}
+		}
+	},
+	"steps": [
+		{
+			"func": "authenticate",
+			"args": [
+				{"username":"eliran","password":"nadav"}
+			],
+			"outputType": "Result.Success",
+			"output": {
+				"data": {
+					"authenticated": true
+				}
+			}
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"authenticate-0",
+				{
+					"status": "Success",
+					"meta": {
+						"entity": "user",
+						"authenticated": true,
+						"taskType":"authenticate"
+					}
+				}
+			],
+			"output": {}
+		}
+	]
+}

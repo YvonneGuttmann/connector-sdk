@@ -209,8 +209,31 @@ process.on('unhandledRejection', reason => {
 
             if(API.sendConnectorData) {
                 try {
+                    const publicKey = config.caprizaConfig && config.caprizaConfig.crypto && config.caprizaConfig.crypto.publicKey;
+                    const hasKey = publicKey && config.caprizaConfig.crypto.expiredAt && config.caprizaConfig.crypto.privateKey;
+
+                    if(taskTypes.includes("authenticate") && !hasKey) {
+                        logger.error("caprizaConfig.json must contains crypto data - run CLI command to generate keys: node_modules/@capriza/connector-controller/bin/as-cli gen-keys --update");
+                        process.exit();
+                    }
+
+                    if(config.caprizaConfig.crypto.expiredAt && (Date.parse(config.caprizaConfig.crypto.expiredAt) - Date.parse(new Date()) < 0)) {
+                        logger.error("You key pair is expired - run CLI command to generate new keys: node_modules/@capriza/connector-controller/bin/as-cli gen-keys --update");
+                        process.exit();
+                    }
+
+                    if(Date.parse(config.caprizaConfig.crypto.expiredAt) - Date.parse(new Date()) < 0) {
+                        logger.info()
+                    }
+
                     logger.info(`Sending connector info to the api. task types: ${taskTypes}`);
-                    await API.sendConnectorData({taskTypes, uiMappings: getUiMappings(), authRequired: taskTypes.includes("authenticate") })
+                    let authObject = taskTypes.includes("authenticate") ? {
+                        authRequired            : true,
+                        publicKey               : publicKey,
+                        publicKeyExpiredAt      : config.caprizaConfig.crypto.expiredAt
+                    } : { authRequired: false };
+
+                    await API.sendConnectorData(Object.assign({ taskTypes, uiMappings: getUiMappings() }, authObject));
                 } catch (ex) {
                     logger.error(`Failed to send connector info to the api: ${ex.stack || ex}`);
                 }

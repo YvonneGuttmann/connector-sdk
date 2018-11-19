@@ -11,6 +11,9 @@
     "index.js",
     "start.js"
   ],
+  "bin": {
+    "as-cli": "./bin/as-cli"
+  },
   "scripts": {
     "sdkTest": "node test/SDKTasks/start.js",
     "test": "./node_modules/.bin/mocha --exit --reporter spec",
@@ -50,7 +53,8 @@
     "proxying-agent": "^2.2.0",
     "syswide-cas": "^5.0.0",
     "util": "^0.11.0",
-    "ws": "^5.1.1"
+    "ws": "^5.1.1",
+    "yargs": "^12.0.2"
   },
   "devDependencies": {
     "chai": "^4.1.2",

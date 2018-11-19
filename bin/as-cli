@@ -1,0 +1,60 @@
+#!/usr/bin/env node
+const path = require('path');
+var fs = require('fs');
+const options = require('yargs')
+    .command("gen-keys", "Generate key pair for the connector ", yargs => {
+        return yargs.option("expires", {
+            describe: "Expired date in days",
+            type: "number",
+            default: 365 * 10
+        }).
+            option("update", {
+            describe: "Update keys in config file",
+            type: "boolean",
+            default: false
+        });
+    })
+    .demandCommand(1, "Please specify command")
+    .strict()
+    .argv;
+
+
+let command = options._[0];
+
+switch (command) {
+    case "gen-keys":
+        let cryptoData = generateKeys(options.expires, options.update);
+        if(cryptoData) {
+            console.log(JSON.stringify(cryptoData, null, 2));
+        }
+        break;
+}
+
+function generateKeys(expires = 365 * 10, update) {
+    if(isNaN(expires)) {
+        console.log("Invalid input: expires should be a number");
+        return false;
+    }
+    const cipher = require('../lib/encryption');
+    const cryptoData = Object.assign(cipher.generateKeys(), { expiredAt: new Date(Date.now() + 60000 * 60 * 24 * expires).toJSON() });
+
+    if(update) {
+        try{
+            let config = JSON.parse((fs.readFileSync(path.join('.','resources','config.json'))).toString('utf8'));
+            if(typeof config.caprizaConfig === "string") {
+                let caprizaConfig = JSON.parse((fs.readFileSync(config.caprizaConfig)).toString('utf8'));
+                fs.writeFileSync(config.caprizaConfig, JSON.stringify(Object.assign(caprizaConfig, { crypto: cryptoData }), null, 2));
+            } else if(typeof config.caprizaConfig === "object") {
+                config.caprizaConfig = Object.assign(config.caprizaConfig, { crypto: cryptoData });
+                fs.writeFileSync(path.join('.', 'resources', 'config.json'), JSON.stringify(config, null, 2));
+            } else {
+                throw {message: "Could not received caprizaConfig"};
+            }
+            console.log("Update keys succeeded")
+        } catch (ex) {
+            console.log(`Failed to update config file: ${ex.message}`);
+        }
+    }
+
+    return cryptoData;
+}
