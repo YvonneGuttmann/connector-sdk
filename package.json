@@ -12,7 +12,7 @@
     "start.js"
   ],
   "bin": {
-    "as-cli": "./bin/as-cli"
+    "as-cli": "bin/as-cli"
   },
   "scripts": {
     "sdkTest": "node test/SDKTasks/start.js",
