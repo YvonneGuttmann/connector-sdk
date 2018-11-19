@@ -222,8 +222,8 @@ process.on('unhandledRejection', reason => {
                         process.exit();
                     }
 
-                    if(Date.parse(config.caprizaConfig.crypto.expiredAt) - Date.parse(new Date()) < 0) {
-                        logger.info()
+                    if(Date.parse(config.caprizaConfig.crypto.expiredAt) - Date.parse(new Date()) < 1000*60*60*24*30 ) {
+                        logger.info("Warning: key pair will be expired soon (less than 1 month)!");
                     }
 
                     logger.info(`Sending connector info to the api. task types: ${taskTypes}`);
