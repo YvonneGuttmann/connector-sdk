@@ -217,13 +217,15 @@ process.on('unhandledRejection', reason => {
                         process.exit();
                     }
 
-                    if(config.caprizaConfig.crypto.expiredAt && (Date.parse(config.caprizaConfig.crypto.expiredAt) - Date.parse(new Date()) < 0)) {
-                        logger.error("You key pair is expired - run CLI command to generate new keys: node_modules/@capriza/connector-controller/bin/as-cli gen-keys --update");
-                        process.exit();
-                    }
+                    if(hasKey) {
+                        if(config.caprizaConfig.crypto.expiredAt && (Date.parse(config.caprizaConfig.crypto.expiredAt) - Date.parse(new Date()) < 0)) {
+                            logger.error("You key pair is expired - run CLI command to generate new keys: node_modules/@capriza/connector-controller/bin/as-cli gen-keys --update");
+                            process.exit();
+                        }
 
-                    if(Date.parse(config.caprizaConfig.crypto.expiredAt) - Date.parse(new Date()) < 1000*60*60*24*30 ) {
-                        logger.info("Warning: key pair will be expired soon (less than 1 month)!");
+                        if(Date.parse(config.caprizaConfig.crypto.expiredAt) - Date.parse(new Date()) < 1000*60*60*24*30 ) {
+                            logger.info("Warning: key pair will be expired soon (less than 1 month)!");
+                        }
                     }
 
                     logger.info(`Sending connector info to the api. task types: ${taskTypes}`);
