@@ -9,6 +9,7 @@ var LogCleaner = require ("./lib/logCleaner");
 var handlers = require("./lib/taskHandlers.js");
 var jslt = require('jslt');
 var TaskFactory =  require("./lib/task.js");
+var HttpUtils = require('@capriza/http-utils');
 var com, transform = jslt.transform;
 var API;
 var LocalAPI;
@@ -68,9 +69,11 @@ function startRemoteMode(controllerConfig) {
 	};
 	
 	const BackendAPI = require("./lib/backendAPI.js");
-	API = new BackendAPI(apiUrl, requestHeaders, {connectorId: controllerConfig.connectorId}, logger);
+	var httpUtils = new HttpUtils({baseUrl : apiUrl, headers : requestHeaders, limit : 20, interval : 60*1000, maxConcurrent : 10});
 
-    var TaskClasses = createTaskClasses(controllerConfig, (conf, logger)=>new BackendAPI(apiUrl, requestHeaders, conf, logger));
+	API = new BackendAPI(httpUtils, requestHeaders, {connectorId: controllerConfig.connectorId}, logger);
+
+    var TaskClasses = createTaskClasses(controllerConfig, (conf, logger)=>new BackendAPI(httpUtils, requestHeaders, conf, logger));
 	com = new ComManager({ apiUrl, requestHeaders, TaskClasses, logger, config: controllerConfig });
 }
 

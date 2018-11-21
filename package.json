@@ -1,6 +1,6 @@
 {
   "name": "@capriza/connector-controller",
-  "version": "2.0.31-beta.2",
+  "version": "2.0.31-beta.3",
   "description": "Capriza connectors controller",
   "license": "MIT",
   "main": "index.js",
@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@capriza/as-inspector": "^0.2.0",
+    "@capriza/http-utils": "^0.2.0-beta.2",
     "archiver": "2.1.1",
     "async-exit-hook": "2.0.1",
     "aws-sdk": "^2.279.1",
@@ -41,7 +42,6 @@
     "cors": "~2.8.4",
     "deepmerge": "2.0.1",
     "express": "4.16.3",
-    "form-data": "2.3.2",
     "jslt": "^0.2.4",
     "logrotator": "1.1.0",
     "minimist": "1.2.0",
