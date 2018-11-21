@@ -33,13 +33,13 @@ logger.startLogRotation();
 if (process.env.logStream == "file") {
 	if (!fs.existsSync(ARCHIVE_PATH)) fs.mkdirSync(ARCHIVE_PATH);
 	
-	let logCleaner = new LogCleaner("log", { hours : 1, size : 50, onlyDirs : true}, logger);
+	let logCleaner = new LogCleaner("log", { hours : 1, size : 50, ignoreFilesRE : /\.(log|gz)$/i }, logger);
 	logCleaner.removeFunc = filepath => new Promise(resolve => {
 		fs.rename(filepath, path.join(ARCHIVE_PATH, path.basename(filepath)), resolve);
 	});
 	logCleaner.startMonitor(32);
 	
-	logCleaner = new LogCleaner(ARCHIVE_PATH, { hours : 48, size : 50, onlyDirs : true }, logger);
+	logCleaner = new LogCleaner(ARCHIVE_PATH, { hours : 72, size : 128 }, logger);
 	logCleaner.startMonitor(30);
 }
 
