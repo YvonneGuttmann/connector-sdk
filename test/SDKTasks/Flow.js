@@ -80,6 +80,13 @@ Expected   : ${JSON.stringify(step.args[i])}`;
         }
 
         if(step.exception) throw step.exception;
+
+		if(step.callback && Array.isArray(step.callback)) {
+		    step.callback.forEach(c => {
+		        args[args.length-1](...c);
+            });
+        }
+
         if(step.outputType && step.outputType.indexOf('Result.') !== -1) {
             const status = step.outputType.split('.')[1];
             if(!step.output)

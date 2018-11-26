@@ -1,0 +1,79 @@
+{
+	"title": "fetching approvals (2 new) using callback",
+	"task": "sync",
+	"taskData": {
+		"type": "sync",
+		"id": "taskId"
+	},
+	"steps": [
+		{
+			"func": "getBackendApprovals",
+			"args": [
+				{}
+			],
+			"output": []
+		},
+		{
+			"func": "fetch",
+			"args": [
+				{
+					"signatureList": []
+				}
+			],
+			"callback": [
+				[null, { "approvals": ["rawApproval.json"] }, true],
+				[null, { "approvals": ["rawmoreApproval.json"] }, false]],
+			"outputType": "Result.Success",
+			"output": {}
+		},
+		{
+			"func": "sendApprovals",
+			"args": [
+				{
+					"approvals": [
+						"transformedApproval.json"
+					],
+					"rawApprovals": [
+						"rawApproval.json"
+					],
+					"transformedApprovals": [
+						"transformedApproval.json"
+					]
+				},
+				{}
+			],
+			"output": {}
+		},
+		{
+			"func": "sendApprovals",
+			"args": [
+				{
+					"approvals": [
+						"transformedmoreApproval.json"
+					],
+					"rawApprovals": [
+						"rawmoreApproval.json"
+					],
+					"transformedApprovals": [
+						"transformedmoreApproval.json"
+					]
+				},
+				{}
+			],
+			"output": {}
+		},
+		{
+			"func": "updateTask",
+			"args": [
+				"taskId",
+				{
+					"status": "Success",
+					"meta": {
+						"taskType": "sync"
+					}
+				}
+			],
+			"output": {}
+		}
+	]
+}
