@@ -37,7 +37,17 @@ var TestAPI = module.exports = class TestAPI {
 	}
 
     async sendFeedback() {
+        if(arguments[0]) {
+            arguments[0] = "filePath";
+        }
         return this.flow.exec('sendFeedback', arguments);
+    }
+
+    async uploadFeedback() {
+	    if(arguments[1]) {
+            arguments[1] = "filePath";
+        }
+        return this.flow.exec('uploadFeedback', arguments);
     }
 
     getUITemplate(schemaId) {

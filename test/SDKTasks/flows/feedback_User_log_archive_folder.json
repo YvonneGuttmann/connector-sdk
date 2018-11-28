@@ -1,0 +1,31 @@
+{
+  "title": "test User feedback: with 1 taskId from log archive folder",
+  "task": "sendFeedback",
+  "taskData": {
+    "type": "sendFeedback",
+    "id": "taskId",
+    "taskIds": ["approve-2"],
+    "uploadUrl": "url"
+  },
+  "steps": [
+    {
+      "func": "uploadFeedback",
+      "args": ["url", "filePath"],
+      "outputType": "Result.Success",
+      "output": []
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "taskId",
+        {
+          "status": "Success",
+          "meta": {
+            "taskType":"sendFeedback"
+          }
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

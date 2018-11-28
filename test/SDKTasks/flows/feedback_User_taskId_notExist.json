@@ -1,0 +1,26 @@
+{
+  "title": "Cant find log at all: with taskId not exist",
+  "task": "sendFeedback",
+  "taskData": {
+    "type": "sendFeedback",
+    "id": "taskId",
+    "taskIds": ["sync-invalid-3"],
+    "uploadUrl": "url"
+  },
+  "steps": [
+    {
+      "func": "updateTask",
+      "args": [
+        "taskId",
+        {
+          "status": "NotFound",
+          "meta": {
+            "message":"Logs doesn't exist at log & log_archive dirs",
+            "taskType":"sendFeedback"
+          }
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

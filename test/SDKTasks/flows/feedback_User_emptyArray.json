@@ -1,0 +1,26 @@
+{
+  "title": "test User feedback: with empty array",
+  "task": "sendFeedback",
+  "taskData": {
+    "type": "sendFeedback",
+    "id": "sync-empty-array-auto-feedback",
+    "taskIds": [],
+    "uploadUrl": "url"
+  },
+  "steps": [
+    {
+      "func": "updateTask",
+      "args": [
+        "sync-empty-array-auto-feedback",
+        {
+          "status": "NotFound",
+          "meta": {
+            "message":"Logs doesn't exist at log & log_archive dirs",
+            "taskType":"sendFeedback"
+          }
+        }
+      ],
+      "output": {}
+    }
+  ]
+}
