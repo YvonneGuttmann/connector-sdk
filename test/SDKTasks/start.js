@@ -35,7 +35,7 @@ async function runTestFlow(flowData) {
     } catch (ex) {
 
     }
-	
+
     postProcess(flow);
 	return flow;
 }
@@ -59,7 +59,12 @@ function postProcess(flow) {
     }
 
     if (error) {
-        console.log("Test status: " + chalk.red(`FAILED (step #${error && error.stepNumber})`));
+        if(error.stepNumber) {
+            console.log("Test status: " + chalk.red(`FAILED (step #${error.stepNumber})`));
+        } else {
+            console.log("Test status: " + chalk.red(`FAILED: ${error}`));
+        }
+
         testsFlowsErrors.push({ message: error });
     } else {
         console.log("Test status: " + chalk.green(`PASSED`));
@@ -77,7 +82,7 @@ async function start() {
 		"--ignore"	: 1,
 		"--fix"		: 0
 	};
-	
+
 	const args = {};
 	for (let i = 2; i < process.argv.length; ++i) {
 		let arg = process.argv[i];
@@ -87,11 +92,11 @@ async function start() {
 			console.error(`Unknown option: ${arg}`);
 			process.exit();
 			return;
-		}			
+		}
 	}
-	
+
 	ignoreFuncs = args["--ignore"] && args["--ignore"].split(",");
-	
+
     const flows = fs.readdirSync(path.join(__dirname,'./flows/'));
 
     var enableTests = flows
@@ -99,7 +104,7 @@ async function start() {
             return {
 				name	 : f.split(".json")[0],
 				data	 : require(path.join(__dirname, "flows", f)),
-				filename : path.join(__dirname, "flows", f) 
+				filename : path.join(__dirname, "flows", f)
 			};
 		})
         .filter( f => !f.data.disable);
@@ -110,15 +115,17 @@ async function start() {
     console.log(chalk.yellow(`Running tests flows`));
 
     for (var i = 0 ; i < enableTests.length ; i++) {
-        console.log("\n" + chalk.yellow(`Running test #${i + 1}: ${enableTests[i].name}`));
-        let flow = await runTestFlow(enableTests[i].data, i);
-		if (flow.ignoredError) {
-			if (args["--fix"]) {
-				console.log("Fixing...");
-				fs.writeFileSync(enableTests[i].filename, JSON.stringify(flow._origData, null, "\t"));
-			}
-		}
-		
+        process.env = Object.assign(process.env, enableTests[i].data.envVars);
+            console.log("\n" + chalk.yellow(`Running test #${i + 1}: ${enableTests[i].name}`));
+            let flow = await runTestFlow(enableTests[i].data, i);
+            if (flow.ignoredError) {
+                if (args["--fix"]) {
+                    console.log("Fixing...");
+                    fs.writeFileSync(enableTests[i].filename, JSON.stringify(flow._origData, null, "\t"));
+                }
+            }
+
+        (Object.keys(enableTests[i].data.envVars || {})).forEach(envVar => (delete process.env[envVar]));
     }
 
     testAnalyzer.writeReport();
