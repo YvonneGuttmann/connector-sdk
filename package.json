@@ -16,7 +16,7 @@
     "as-cli": "./bin/as-cli"
   },
   "scripts": {
-    "sdkTest": "node test/SDKTasks/start.js",
+    "sdkTest": "./test/SDKTasks/init.sh && node test/SDKTasks/start.js && rm -rf log*",
     "test": "./node_modules/.bin/mocha --exit --reporter spec",
     "test-jenkins": "npm run sdkTest | JUNIT_REPORT_PATH=./report.xml mocha --colors --reporter mocha-jenkins-reporter --exit",
     "run-inspector": "opn http://localhost:8080"
