@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@capriza/as-inspector": "^0.2.0",
-    "@capriza/http-utils": "^0.2.0-beta.2",
+    "@capriza/http-utils": "^0.2.0",
     "archiver": "2.1.1",
     "async-exit-hook": "2.0.1",
     "aws-sdk": "^2.279.1",
