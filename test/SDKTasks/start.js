@@ -32,6 +32,7 @@ async function runTestFlow(flowData) {
 
     try {
         await task.execute();
+		await new Promise(resolve => { setTimeout(resolve, 10); });
     } catch (ex) {
 
     }
