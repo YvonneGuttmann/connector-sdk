@@ -1,0 +1,64 @@
+{
+  "disable" : true,
+  "title": "test Auto feedback - Authenticate with Timeout Result",
+  "task": "authenticate",
+  "envVars" : {
+    "logStream" : "file"
+  },
+  "taskData": {
+    "type": "authenticate",
+    "id": "authenticate-gotTimeout-auto-feedback",
+    "volatile": {
+      "system": {
+        "username": "yehuda.livnoni",
+        "password": "123456"
+      }
+    }
+  },
+  "steps": [
+    {
+      "func": "authenticate",
+      "args": [
+        {
+          "username": "yehuda.livnoni",
+          "password": "123456"
+        }
+      ],
+      "outputType": "Result.Timeout",
+      "output": {
+        "meta": {
+          "message": "bad credentials"
+        }
+      }
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "authenticate-gotTimeout-auto-feedback",
+        {
+          "status": "Timeout",
+          "meta": {
+            "message": "bad credentials",
+            "entity": "user",
+            "authenticated": false,
+            "taskType": "authenticate"
+          }
+        }
+      ],
+      "output": {}
+    },
+    {
+      "func": "sendFeedback",
+      "args": [
+        "filePath",
+        {
+          "taskId": "authenticate-gotTimeout-auto-feedback",
+          "taskType": "authenticate",
+          "status": "Timeout",
+          "auto": true
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "disable" : true,
+  "title": "test Auto feedback - Authenticate with Internal Error Result",
+  "task": "authenticate",
+  "envVars" : {
+    "logStream" : "file"
+  },
+  "taskData": {
+    "type": "authenticate",
+    "id": "authenticate-gotInternalError-auto-feedback",
+    "volatile": {
+      "system": {
+        "username": "yehuda.livnoni",
+        "password": "123456"
+      }
+    }
+  },
+  "steps": [
+    {
+      "func": "authenticate",
+      "args": [
+        {
+          "username": "yehuda.livnoni",
+          "password": "123456"
+        }
+      ],
+      "outputType": "Result.InternalError",
+      "output": {
+        "meta": {
+          "message": "bad credentials"
+        }
+      }
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "authenticate-gotInternalError-auto-feedback",
+        {
+          "status": "InternalError",
+          "meta": {
+            "message": "bad credentials",
+            "entity": "user",
+            "authenticated": false,
+            "taskType": "authenticate"
+          }
+        }
+      ],
+      "output": {}
+    },
+    {
+      "func": "sendFeedback",
+      "args": [
+        "filePath",
+        {
+          "taskId": "authenticate-gotInternalError-auto-feedback",
+          "taskType": "authenticate",
+          "status": "InternalError",
+          "auto": true
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

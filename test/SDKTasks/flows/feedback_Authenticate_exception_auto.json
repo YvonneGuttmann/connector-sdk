@@ -1,0 +1,65 @@
+{
+  "disable" : true,
+  "title": "test Auto feedback - Authenticate with throw exception",
+  "task": "authenticate",
+  "envVars" : {
+    "logStream" : "file"
+  },
+  "taskData": {
+    "type": "authenticate",
+    "id": "authenticate-gotException-fail-auto-feedback",
+    "volatile": {
+      "system": {
+        "username": "yehuda.livnoni",
+        "password": "123456"
+      }
+    }
+  },
+  "steps": [
+    {
+      "func": "authenticate",
+      "args": [
+        {
+          "username": "yehuda.livnoni",
+          "password": "123456"
+        }
+      ],
+      "outputType": "Result.InternalError",
+      "output": {
+        "data": {
+          "authenticated": false,
+          "message": "bad credentials"
+        }
+      },
+      "exception": "CONNECTOR_ERROR"
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "authenticate-gotException-fail-auto-feedback",
+        {
+          "status": "InternalError",
+          "meta": {
+            "entity": "connector",
+            "message": "CONNECTOR_ERROR",
+            "taskType": "authenticate"
+          }
+        }
+      ],
+      "output": {}
+    },
+    {
+      "func": "sendFeedback",
+      "args": [
+        "filePath",
+        {
+          "taskId": "authenticate-gotException-fail-auto-feedback",
+          "taskType": "authenticate",
+          "status":"InternalError",
+          "auto": true
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

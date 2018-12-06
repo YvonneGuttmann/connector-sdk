@@ -1,0 +1,70 @@
+{
+  "disable" : true,
+  "title": "test Auto feedback - approve with throw exception",
+  "task": "approve",
+  "envVars" : {
+    "logStream" : "file"
+  },
+  "taskData": {
+    "type": "approve",
+    "id": "approve-gotException-auto-feedback",
+    "approval": "caprizaApproval.json"
+  },
+  "steps": [
+    {
+      "func": "getBackendApproval",
+      "args": [
+        {
+          "id": "approvalId"
+        }
+      ],
+      "output": [
+        "caprizaApproval.json"
+      ]
+    },
+    {
+      "func": "getApproval",
+      "args": [
+        "caprizaApproval.json"
+      ],
+      "outputType": "Result.InternalError",
+      "exception": "CONNECTOR_ERROR",
+      "output": {
+        "data": {
+          "approval": "rawApproval.json"
+        },
+        "meta":{
+          "taskType":"approve"
+        }
+      }
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "approve-gotException-auto-feedback",
+        {
+          "status": "InternalError",
+          "meta": {
+            "entity":"sdk",
+            "message":"Unexpected error: \"CONNECTOR_ERROR\"",
+            "taskType":"approve"
+          }
+        }
+      ],
+      "output": {}
+    },
+    {
+      "func": "sendFeedback",
+      "args": [
+        "filePath",
+        {
+          "taskId": "approve-gotException-auto-feedback",
+          "taskType": "approve",
+          "status":"InternalError",
+          "auto": true
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

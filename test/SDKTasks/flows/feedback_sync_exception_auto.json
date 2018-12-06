@@ -1,0 +1,59 @@
+{
+  "disable" : true,
+  "title": "test Auto feedback - sync with throw exception",
+  "task": "sync",
+  "envVars" : {
+    "logStream" : "file"
+  },
+  "taskData": {
+    "type": "sync",
+    "id": "sync-gotException-auto-feedback"
+  },
+  "steps": [
+    {
+      "func": "getBackendApprovals",
+      "args": [
+        {}
+      ],
+      "output": []
+    },
+    {
+      "func": "fetch",
+      "args": [
+        {
+          "signatureList": []
+        }
+      ],
+      "outputType": "Result.InternalError",
+      "output": {},
+      "exception": "CONNECTOR_ERROR"
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "sync-gotException-auto-feedback",
+        {
+          "status": "InternalError",
+          "meta": {
+           "entity":"sdk",
+            "message":"Unexpected error: \"CONNECTOR_ERROR\"",
+            "taskType":"sync"
+          }
+        }
+      ],
+      "output": {}
+    },
+    {
+      "func": "sendFeedback",
+      "args": ["filePath",
+        {
+          "taskId": "sync-gotException-auto-feedback",
+          "taskType": "sync",
+          "status": "InternalError",
+          "auto": true
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

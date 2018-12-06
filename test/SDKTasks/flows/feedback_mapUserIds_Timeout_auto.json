@@ -1,0 +1,58 @@
+{
+  "disable" : true,
+  "title": "test Auto feedback: mapUserIds with Timeout Result",
+  "task": "mapUserIds",
+  "envVars" : {
+    "logStream" : "file"
+  },
+  "taskData": {
+    "payload": {
+      "ids": [
+        "yehuda","ron"
+      ]
+    },
+    "type": "mapUserIds",
+    "id": "mapUserIds-gotTimeout-auto-feedback"
+  },
+  "steps": [
+    {
+      "func": "mapUserIds",
+      "args": [
+        {
+          "ids": [
+            "yehuda","ron"
+            ]
+        }
+      ],
+      "outputType": "Result.Timeout",
+      "output": [
+      ]
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "mapUserIds-gotTimeout-auto-feedback",
+        {
+          "status": "Timeout",
+          "meta": {
+            "taskType": "mapUserIds"
+          }
+        }
+      ],
+      "output": {}
+    },
+    {
+      "func": "sendFeedback",
+      "args": [
+        "filePath",
+        {
+          "taskId": "mapUserIds-gotTimeout-auto-feedback",
+          "taskType": "mapUserIds",
+          "status":"Timeout",
+          "auto": true
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

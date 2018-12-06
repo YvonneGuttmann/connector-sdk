@@ -1,0 +1,56 @@
+{
+  "disable" : true,
+  "title": "test Auto feedback: sync with Timeout Result",
+  "task": "sync",
+  "envVars" : {
+    "logStream" : "file"
+  },
+  "taskData": {
+    "type": "sync",
+    "id": "sync-gotTimeout-auto-feedback"
+  },
+  "steps": [
+    {
+      "func": "getBackendApprovals",
+      "args": [
+        {}
+      ],
+      "output": []
+    },
+    {
+      "func": "fetch",
+      "args": [
+        {
+          "signatureList": []
+        }
+      ],
+      "outputType": "Result.Timeout",
+      "output": {}
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "sync-gotTimeout-auto-feedback",
+        {
+          "status": "Timeout",
+          "meta":{
+            "taskType":"sync"
+          }
+        }
+      ],
+      "output": {}
+    },
+    {
+      "func": "sendFeedback",
+      "args": ["filePath",
+        {
+          "taskId": "sync-gotTimeout-auto-feedback",
+          "taskType": "sync",
+          "status":"Timeout",
+          "auto": true
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

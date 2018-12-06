@@ -1,0 +1,68 @@
+{
+  "disable" : true,
+  "title": "test Auto feedback - approve with Timeout Result",
+  "task": "approve",
+  "envVars" : {
+    "logStream" : "file"
+  },
+  "taskData": {
+    "type": "approve",
+    "id": "approve-gotTimeout-auto-feedback",
+    "approval": "caprizaApproval.json"
+
+  },
+  "steps": [
+    {
+      "func": "getBackendApproval",
+    "args": [
+      {
+        "id": "approvalId"
+      }
+    ],
+    "output": [
+      "caprizaApproval.json"
+    ]
+    },
+    {
+      "func": "getApproval",
+      "args": [
+        "caprizaApproval.json"
+      ],
+      "outputType": "Result.Timeout",
+      "output": {
+        "data": {
+          "approval": "rawApproval.json"
+        },
+        "meta":{
+          "taskType":"approve"
+        }
+      }
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "approve-gotTimeout-auto-feedback",
+        {
+          "status": "Timeout",
+          "meta":{
+            "taskType":"approve"
+          }
+        }
+      ],
+        "output": {}
+    },
+    {
+      "func": "sendFeedback",
+      "args": [
+        "filePath",
+        {
+          "taskId": "approve-gotTimeout-auto-feedback",
+          "taskType": "approve",
+          "status":"Timeout",
+          "auto": true
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

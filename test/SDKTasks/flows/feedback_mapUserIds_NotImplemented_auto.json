@@ -1,0 +1,58 @@
+{
+  "disable" : true,
+  "title": "test Auto feedback: mapUserIds with NotImplemented Result",
+  "task": "mapUserIds",
+  "envVars" : {
+    "logStream" : "file"
+  },
+  "taskData": {
+    "payload": {
+      "ids": [
+        "yehuda","ron"
+      ]
+    },
+    "type": "mapUserIds",
+    "id": "mapUserIds-gotNotImplemented-auto-feedback"
+  },
+  "steps": [
+    {
+      "func": "mapUserIds",
+      "args": [
+        {
+          "ids": [
+            "yehuda","ron"
+          ]
+        }
+      ],
+      "outputType": "Result.NotImplemented",
+      "output": [
+      ]
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "mapUserIds-gotNotImplemented-auto-feedback",
+        {
+          "status": "NotImplemented",
+          "meta": {
+            "taskType": "mapUserIds"
+          }
+        }
+      ],
+      "output": {}
+    },
+    {
+      "func": "sendFeedback",
+      "args": [
+        "filePath",
+        {
+          "taskId": "mapUserIds-gotNotImplemented-auto-feedback",
+          "taskType": "mapUserIds",
+          "status":"NotImplemented",
+          "auto": true
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

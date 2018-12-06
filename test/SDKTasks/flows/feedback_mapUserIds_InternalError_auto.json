@@ -1,0 +1,58 @@
+{
+  "disable" : true,
+  "title": "test Auto feedback: mapUserIds with Internal Error Result",
+  "task": "mapUserIds",
+  "envVars" : {
+    "logStream" : "file"
+  },
+  "taskData": {
+    "payload": {
+      "ids": [
+        "yehuda","ron"
+      ]
+    },
+    "type": "mapUserIds",
+    "id": "mapUserIds-gotInternalError-auto-feedback"
+  },
+  "steps": [
+    {
+      "func": "mapUserIds",
+      "args": [
+        {
+          "ids": [
+            "yehuda","ron"
+          ]
+        }
+      ],
+      "outputType": "Result.InternalError",
+      "output": [
+      ]
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "mapUserIds-gotInternalError-auto-feedback",
+        {
+          "status": "InternalError",
+          "meta": {
+            "taskType": "mapUserIds"
+          }
+        }
+      ],
+      "output": {}
+    },
+    {
+      "func": "sendFeedback",
+      "args": [
+        "filePath",
+        {
+          "taskId": "mapUserIds-gotInternalError-auto-feedback",
+          "taskType": "mapUserIds",
+          "status":"InternalError",
+          "auto": true
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

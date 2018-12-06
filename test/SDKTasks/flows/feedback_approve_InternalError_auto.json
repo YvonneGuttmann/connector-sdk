@@ -1,0 +1,67 @@
+{
+  "disable" : true,
+  "title": "test Auto feedback - approve with InternalError Result",
+  "task": "approve",
+  "envVars" : {
+    "logStream" : "file"
+  },
+  "taskData": {
+    "type": "approve",
+    "id": "approve-gotInternalError-auto-feedback",
+    "approval": "caprizaApproval.json"
+  },
+  "steps": [
+    {
+      "func": "getBackendApproval",
+      "args": [
+        {
+          "id": "approvalId"
+        }
+      ],
+      "output": [
+        "caprizaApproval.json"
+      ]
+    },
+    {
+      "func": "getApproval",
+      "args": [
+        "caprizaApproval.json"
+      ],
+      "outputType": "Result.InternalError",
+      "output": {
+        "data": {
+          "approval": "rawApproval.json"
+        },
+        "meta":{
+          "taskType":"approve"
+        }
+      }
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "approve-gotInternalError-auto-feedback",
+        {
+          "status": "InternalError",
+          "meta":{
+            "taskType":"approve"
+          }
+        }
+      ],
+      "output": {}
+    },
+    {
+      "func": "sendFeedback",
+      "args": [
+        "filePath",
+        {
+          "taskId": "approve-gotInternalError-auto-feedback",
+          "taskType": "approve",
+          "status":"InternalError",
+          "auto": true
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

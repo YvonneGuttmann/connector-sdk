@@ -1,0 +1,68 @@
+{
+  "disable" : true,
+  "title": "test Auto feedback - approve with NotImplemented Result",
+  "task": "approve",
+  "envVars" : {
+    "logStream" : "file"
+  },
+  "taskData": {
+    "type": "approve",
+    "id": "approve-gotNotImplemented-auto-feedback",
+    "approval": "caprizaApproval.json"
+
+  },
+  "steps": [
+    {
+      "func": "getBackendApproval",
+      "args": [
+        {
+          "id": "approvalId"
+        }
+      ],
+      "output": [
+        "caprizaApproval.json"
+      ]
+    },
+    {
+      "func": "getApproval",
+      "args": [
+        "caprizaApproval.json"
+      ],
+      "outputType": "Result.NotImplemented",
+      "output": {
+        "data": {
+          "approval": "rawApproval.json"
+        },
+        "meta":{
+          "taskType":"approve"
+        }
+      }
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "approve-gotNotImplemented-auto-feedback",
+        {
+          "status": "NotImplemented",
+          "meta":{
+            "taskType":"approve"
+          }
+        }
+      ],
+      "output": {}
+    },
+    {
+      "func": "sendFeedback",
+      "args": [
+        "filePath",
+        {
+          "taskId": "approve-gotNotImplemented-auto-feedback",
+          "taskType": "approve",
+          "status":"NotImplemented",
+          "auto": true
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

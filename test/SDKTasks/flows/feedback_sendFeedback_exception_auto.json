@@ -1,0 +1,51 @@
+{
+  "disable" : true,
+  "title": "test Auto feedback - sendFeedback with throw exception",
+  "task": "sendFeedback",
+  "envVars" : {
+    "logStream" : "file"
+  },
+  "taskData": {
+    "type": "sendFeedback",
+    "id": "sendFeedback-gotException-auto-feedback",
+    "taskIds": ["approve-2"],
+    "uploadUrl": "url"
+  },
+  "steps": [
+    {
+      "func": "uploadFeedback",
+      "args": ["url", "filePath"],
+      "outputType": "Result.InternalError",
+      "output": [],
+      "exception": "CONNECTOR_ERROR"
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "sendFeedback-gotException-auto-feedback",
+        {
+          "status": "InternalError",
+          "meta": {
+            "entity": "sdk",
+            "message": "Unexpected error: \"CONNECTOR_ERROR\"",
+            "taskType": "sendFeedback"
+          }
+        }
+      ],
+      "output": {}
+    },
+    {
+      "func": "sendFeedback",
+      "args": [
+        "filePath",
+        {
+          "taskId": "sendFeedback-gotException-auto-feedback",
+          "taskType": "sendFeedback",
+          "status": "InternalError",
+          "auto": true
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

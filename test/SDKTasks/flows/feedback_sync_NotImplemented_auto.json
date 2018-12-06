@@ -1,0 +1,56 @@
+{
+  "disable" : true,
+  "title": "test Auto feedback: sync with NotImplemented Result",
+  "task": "sync",
+  "envVars" : {
+    "logStream" : "file"
+  },
+  "taskData": {
+    "type": "sync",
+    "id": "sync-gotNotImplemented-auto-feedback"
+  },
+  "steps": [
+    {
+      "func": "getBackendApprovals",
+      "args": [
+        {}
+      ],
+      "output": []
+    },
+    {
+      "func": "fetch",
+      "args": [
+        {
+          "signatureList": []
+        }
+      ],
+      "outputType": "Result.NotImplemented",
+      "output": {}
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "sync-gotNotImplemented-auto-feedback",
+        {
+          "status": "NotImplemented",
+          "meta":{
+            "taskType":"sync"
+          }
+        }
+      ],
+      "output": {}
+    },
+    {
+      "func": "sendFeedback",
+        "args": ["filePath",
+          {
+            "taskId": "sync-gotNotImplemented-auto-feedback",
+            "taskType": "sync",
+            "status":"NotImplemented",
+            "auto": true
+          }
+        ],
+      "output": {}
+    }
+  ]
+}

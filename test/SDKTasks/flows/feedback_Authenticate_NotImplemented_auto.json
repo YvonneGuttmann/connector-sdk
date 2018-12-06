@@ -1,0 +1,65 @@
+{
+  "disable" : true,
+  "title": "test Auto feedback - Authenticate with NotImplemented Result",
+  "task": "authenticate",
+  "envVars" : {
+    "logStream" : "file"
+  },
+  "taskData": {
+    "type": "authenticate",
+    "id": "authenticate-gotNotImplemented-auto-feedback",
+    "volatile": {
+      "system": {
+        "username": "yehuda.livnoni",
+        "password": "123456"
+      }
+    }
+  },
+  "steps": [
+    {
+      "func": "authenticate",
+      "args": [
+        {
+          "username": "yehuda.livnoni",
+          "password": "123456"
+        }
+      ],
+      "outputType": "Result.NotImplemented",
+      "output": {
+        "meta": {
+          "message": "bad credentials"
+        }
+      }
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "authenticate-gotNotImplemented-auto-feedback",
+        {
+          "status": "NotImplemented",
+          "meta": {
+            "message": "bad credentials",
+            "entity": "user",
+            "authenticated": false,
+            "taskType": "authenticate"
+          }
+        }
+      ],
+      "output": {}
+    },
+    {
+      "func": "sendFeedback",
+      "args": [
+        "filePath",
+        {
+          "taskId": "authenticate-gotNotImplemented-auto-feedback",
+          "taskType": "authenticate",
+          "status":"NotImplemented",
+          "auto": true
+        }
+
+      ],
+      "output": {}
+    }
+  ]
+}

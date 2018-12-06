@@ -1,0 +1,61 @@
+{
+  "disable" : true,
+  "title": "test Auto feedback - mapUserIds with throw exception",
+  "task": "mapUserIds",
+  "envVars" : {
+    "logStream" : "file"
+  },
+  "taskData": {
+    "payload": {
+      "ids": [
+        "yehuda","ron"
+      ]
+    },
+    "type": "mapUserIds",
+    "id": "mapUserIds-gotException-auto-feedback"
+  },
+  "steps": [
+    {
+      "func": "mapUserIds",
+      "args": [
+        {
+          "ids": [
+            "yehuda","ron"
+          ]
+        }
+      ],
+      "outputType": "Result.InternalError",
+      "output": [
+      ],
+      "exception": "CONNECTOR_ERROR"
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "mapUserIds-gotException-auto-feedback",
+        {
+          "status": "InternalError",
+          "meta": {
+            "entity": "connector",
+            "message": "CONNECTOR_ERROR",
+            "taskType": "mapUserIds"
+          }
+        }
+      ],
+      "output": {}
+    },
+    {
+      "func": "sendFeedback",
+      "args": [
+        "filePath",
+        {
+          "taskId": "mapUserIds-gotException-auto-feedback",
+          "taskType": "mapUserIds",
+          "status": "InternalError",
+          "auto": true
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

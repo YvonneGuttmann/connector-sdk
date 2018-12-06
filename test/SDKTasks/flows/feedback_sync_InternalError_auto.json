@@ -1,0 +1,55 @@
+{
+  "disable" : true,
+  "title": "test Auto feedback: sync with InternalError Result",
+  "task": "sync",
+  "envVars" : {
+    "logStream" : "file"
+  },
+  "taskData": {
+    "type": "sync",
+    "id": "sync-gotInternalError-auto-feedback"
+  },
+  "steps": [
+    {
+      "func": "getBackendApprovals",
+      "args": [
+        {}
+      ],
+      "output": []
+    },
+    {
+      "func": "fetch",
+      "args": [
+        {
+          "signatureList": []
+        }
+      ],
+      "outputType": "Result.InternalError",
+      "output": {}
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "sync-gotInternalError-auto-feedback",
+        {
+          "status": "InternalError",
+          "meta":{
+            "taskType":"sync"
+          }
+        }
+      ],
+      "output": {}
+    },
+    {
+      "func": "sendFeedback",
+      "args": ["filePath",
+        {"taskId": "sync-gotInternalError-auto-feedback",
+          "taskType": "sync",
+          "status":"InternalError",
+          "auto": true
+        }
+      ],
+      "output": {}
+    }
+  ]
+}
