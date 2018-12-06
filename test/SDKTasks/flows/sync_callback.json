@@ -1,5 +1,5 @@
 {
-	"title": "fetching approvals (2 new) using callback",
+	"title": "Sync using callback - 2 callbacks",
 	"task": "sync",
 	"taskData": {
 		"type": "sync",

@@ -1,0 +1,63 @@
+{
+  "title": "Sync using callback - 2 callbacks, the second not an object",
+  "task": "sync",
+  "taskData": {
+    "type": "sync",
+    "id": "taskId"
+  },
+  "steps": [
+    {
+      "func": "getBackendApprovals",
+      "args": [
+        {}
+      ],
+      "output": []
+    },
+    {
+      "func": "fetch",
+      "args": [
+        {
+          "signatureList": []
+        }
+      ],
+      "callback": [
+        [null, { "approvals": ["rawApproval.json"] }, true],
+        [null, "Not Exists", false]],
+      "outputType": "Result.Success",
+      "output": {}
+    },
+    {
+      "func": "sendApprovals",
+      "args": [
+        {
+          "approvals": [
+            "transformedApproval.json"
+          ],
+          "rawApprovals": [
+            "rawApproval.json"
+          ],
+          "transformedApprovals": [
+            "transformedApproval.json"
+          ]
+        },
+        {}
+      ],
+      "output": {}
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "taskId",
+        {
+          "status": "InternalError",
+          "meta": {
+            "entity":"connector",
+            "message":"Failed to perform sync - there is no approvals property in BL result!",
+            "taskType":"sync"
+          }
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

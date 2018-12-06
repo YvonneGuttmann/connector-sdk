@@ -1,0 +1,78 @@
+{
+  "title": "Sync using callback - 2 callbacks, approval marked as error",
+  "task": "sync",
+  "taskData": {
+    "type": "sync",
+    "id": "taskId"
+  },
+  "steps": [
+    {
+      "func": "getBackendApprovals",
+      "args": [
+        {}
+      ],
+      "output": []
+    },
+    {
+      "func": "fetch",
+      "args": [
+        {
+          "signatureList": []
+        }
+      ],
+      "callback": [
+        [null, { "approvals": ["rawApproval.json"] }, true],
+        [null, { "approvals": ["errorApproval.json"] }, false]],
+      "outputType": "Result.Success",
+      "output": {}
+    },
+    {
+      "func": "sendApprovals",
+      "args": [
+        {
+          "approvals": [
+            "transformedApproval.json"
+          ],
+          "rawApprovals": [
+            "rawApproval.json"
+          ],
+          "transformedApprovals": [
+            "transformedApproval.json"
+          ]
+        },
+        {}
+      ],
+      "output": {}
+    },
+    {
+      "func": "sendApprovals",
+      "args": [
+        {
+          "approvals": [
+          ],
+          "rawApprovals": [
+            "errorApproval.json"
+          ],
+          "transformedApprovals": [
+            "errorApproval.json"
+          ]
+        },
+        {}
+      ],
+      "output":{}
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "taskId",
+        {
+          "status": "Success",
+          "meta": {
+            "taskType": "sync"
+          }
+        }
+      ],
+      "output": {}
+    }
+  ]
+}

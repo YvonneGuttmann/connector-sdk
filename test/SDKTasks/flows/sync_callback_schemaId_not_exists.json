@@ -1,0 +1,77 @@
+{
+  "title": "Sync using callback - 2 callbacks, the second without schemaId",
+  "task": "sync",
+  "taskData": {
+    "type": "sync",
+    "id": "taskId"
+  },
+  "steps": [
+    {
+      "func": "getBackendApprovals",
+      "args": [
+        {}
+      ],
+      "output": []
+    },
+    {
+      "func": "fetch",
+      "args": [
+        {
+          "signatureList": []
+        }
+      ],
+      "callback": [
+        [null, { "approvals": ["rawApproval.json"] }, true],
+        [null, { "approvals": ["privateWithoutSchemaId_rawApproval.json"] }, false]],
+      "outputType": "Result.Success",
+      "output": {}
+    },
+    {
+      "func": "sendApprovals",
+      "args": [
+        {
+          "approvals": [
+            "transformedApproval.json"
+          ],
+          "rawApprovals": [
+            "rawApproval.json"
+          ],
+          "transformedApprovals": [
+            "transformedApproval.json"
+          ]
+        },
+        {}
+      ],
+      "output": {}
+    },
+    {
+      "func": "sendApprovals",
+      "args": [
+        {
+          "approvals": [],
+          "rawApprovals": [
+            "privateWithoutSchemaId_rawApproval.json"
+          ],
+          "transformedApprovals": [
+            "privateWithoutSchemaId_transformedApproval.json"
+          ]
+        },
+        {}
+      ],
+      "output": {}
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "taskId",
+        {
+          "status": "Success",
+          "meta": {
+            "taskType": "sync"
+          }
+        }
+      ],
+      "output": {}
+    }
+  ]
+}
