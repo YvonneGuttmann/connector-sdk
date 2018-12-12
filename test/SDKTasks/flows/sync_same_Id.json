@@ -1,0 +1,69 @@
+{
+  "title": "Sync - 2 approvals with the same id - should return the first",
+  "task": "sync",
+  "taskData": {
+    "type": "sync",
+    "id": "taskId"
+  },
+  "steps": [
+    {
+      "func": "getBackendApprovals",
+      "args": [
+        {}
+      ],
+      "output": [
+      ]
+    },
+    {
+      "func": "fetch",
+      "args": [
+        {
+          "signatureList": [
+          ]
+        }
+      ],
+      "outputType": "Result.Success",
+      "output": {
+        "data": {
+          "approvals": [
+            "rawApproval.json",
+            "rawApprovalChanged.json"
+          ]
+        }
+      }
+    },
+    {
+      "func": "sendApprovals",
+      "args": [
+        {
+          "approvals": [
+            "transformedApproval.json"
+          ],
+          "rawApprovals": [
+            "rawApproval.json",
+            "rawApprovalChanged.json"
+          ],
+          "transformedApprovals": [
+            "transformedApproval.json",
+            "transformedApprovalChanged.json"
+          ]
+        },
+        {}
+      ],
+      "output": {}
+    },
+    {
+      "func": "updateTask",
+      "args": [
+        "taskId",
+        {
+          "status": "Success",
+          "meta": {
+            "taskType": "sync"
+          }
+        }
+      ],
+      "output": {}
+    }
+  ]
+}
